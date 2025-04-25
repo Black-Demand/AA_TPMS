@@ -1,0 +1,95 @@
+<mat-nav-list>
+    <div class="logo py-4">
+        <img src="../../assests/image/download.jpg" alt="">
+    </div>
+    <mat-divider></mat-divider>
+    <h2 matSubheader class="mt-2" style="color: white;">Black- <br> Diamond</h2>
+    
+    <a mat-list-item routerLink="/dashboard" routerLinkActive="list-item-active">
+        <mat-icon style="color: white;">dashboard</mat-icon>
+        <span style="color: white;">Dashboard</span>
+    </a>
+    <mat-accordion style="background-color: teal; ">
+        <mat-expansion-panel style="background-color: teal; border: none; box-shadow: none;">
+          <mat-expansion-panel-header style="background-color: teal; border: none;">
+            <mat-panel-title>
+                <mat-icon style="color: white;">miscellaneous_services</mat-icon>
+                <span style="color: white;">Service</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>
+            <div>
+                <a mat-list-item routerLink="/penalty-driver" routerLinkActive="list-item-active">
+                    <mat-icon>miscellaneous_services</mat-icon>
+                    <span style="color: white;">Penalty for Rule Violation(Driver)</span>
+                </a> 
+                <a mat-list-item routerLink="/penalty-dif" routerLinkActive="list-item-active">
+                    <mat-icon>miscellaneous_services</mat-icon>
+                    <span style="color: white;">Penalty for Rule Violation(Miscellaneous)</span>
+                </a> 
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+      
+      <mat-accordion style="background-color: teal; ">
+        <mat-expansion-panel style="background-color: teal; border: none; box-shadow: none;">
+          <mat-expansion-panel-header style="background-color: teal; border: none;">
+            <mat-panel-title>
+                <mat-icon style="color: white;">directions_car</mat-icon>
+                <span style="color: white;">Driver</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>
+            <div>
+                <a mat-list-item routerLink="/service" routerLinkActive="list-item-active">
+                    <mat-icon>directions_car</mat-icon>
+                    <span style="color: white;">Driver Information</span>
+                </a>
+                <a mat-list-item routerLink="/temporary-registration" routerLinkActive="list-item-active">
+                    <mat-icon>directions_car</mat-icon>
+                    <span style="color: white;">Temporary Registraion</span>
+                </a>
+                <a mat-list-item routerLink="/service" routerLinkActive="list-item-active">
+                    <mat-icon>directions_car</mat-icon>
+                    <span style="color: white;">Information Entry(Traffic)</span>
+                </a>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="list-item-active">
+        <mat-icon style="color: white;">block</mat-icon>
+        <span style="color: white;">Punishment Monitoring</span>
+      </a>
+
+      <mat-accordion style="background-color: teal; ">
+        <mat-expansion-panel style="background-color: teal; border: none; box-shadow: none;">
+          <mat-expansion-panel-header style="background-color: teal; border: none;">
+            <mat-panel-title>
+                <mat-icon style="color: white;">edit</mat-icon>
+        <span style="color: white;">Composition</span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div>
+            <div>
+                <a mat-list-item routerLink="/dashboard" routerLinkActive="list-item-active">
+                    <mat-icon>edit</mat-icon>
+                    <span style="color: white;">Register of Various penalties</span>
+                </a>
+                <a mat-list-item routerLink="/service" routerLinkActive="list-item-active">
+                    <mat-icon>edit</mat-icon>
+                    <span style="color: white;">Driver information upload </span>
+                </a>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </mat-accordion>
+
+      <a mat-list-item routerLink="/dashboard" routerLinkActive="list-item-active">
+        <mat-icon style="color: white;">report</mat-icon>
+        <span style="color: white;">Report</span>
+      </a>
+
+</mat-nav-list>

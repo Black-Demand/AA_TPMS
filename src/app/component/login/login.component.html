@@ -1,0 +1,46 @@
+<app-header></app-header>
+<router-outlet />
+<div class="container d-flex justify-content-center align-items-center min-vh-100">
+    <div class="row border rounded-5 p-3 bg-white shadow box-area">
+        <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" style="background: #1087be;">
+                <div class="featured-image mb-3">
+                    <img src="assets/images/Logo.jpg"  class="img-fluid logo" style="width: 250px;">
+                </div>
+                <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 600;">For Help</p>
+                <small class="text-white text-wrap text-center">
+                    <mat-icon>phone</mat-icon>
+                    (251)115519397
+                </small>
+        </div>
+        <div class="col-md-6 right-box">
+            <div class="row align-items-center">
+                <div class="header-text mb-4">
+                    <h2>Hello, Welcome</h2>
+                    <p>TPS.</p>
+                </div>
+                <form [formGroup]="form" (ngSubmit)="onLogin()">
+                    <mat-form-field appearance="fill">
+                        <mat-label>UserName</mat-label>
+                        <mat-icon matPrefix>person</mat-icon>
+                        <input matInput formControlName="username" type="text" placeholder="Enter UserName">
+                        <mat-error *ngIf="form.get('username')?.invalid && form.get('username')?.touched">Username is required</mat-error>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill">
+                        <mat-label>Password</mat-label>
+                        <mat-icon matPrefix>lock</mat-icon>
+                        <input matInput type="password" formControlName="password"  [type]="showPassword ? 'text' : 'password'"  placeholder="Enter Password">
+                        <button mat-icon-button matSuffix (click)="passVis()" type="button">
+                            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="form.get('password')?.invalid">Password is Required</mat-error>
+                    </mat-form-field>
+
+                    <div class="input-group mb-3">
+                        <button [disabled]="form.invalid" class="btn btn-lg btn-primary w-100 fs-6">Login</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

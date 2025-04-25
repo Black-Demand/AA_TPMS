@@ -1,0 +1,213 @@
+<div class="driver-license-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Penality form</mat-card-title>
+        <div class="spacer"></div>
+        <button mat-raised-button [routerLink]="['/penality-driver']" class="back-button">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Back</span>
+        </button>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <!-- Stepper for forms -->
+        <mat-stepper [linear]="isLinear" *ngIf="!showResults">
+          <!-- First Form Step -->
+          <mat-step [stepControl]="firstFormGroup">
+            <form [formGroup]="firstFormGroup">
+              <ng-template matStepLabel>Basic Information</ng-template>
+              
+              <div class="form-grid" style="margin-top: 10px;">
+                <mat-form-field appearance="outline">
+                  <mat-label>Full Name</mat-label>
+                  <input matInput formControlName="fullName" readonly>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>Driver License ID</mat-label>
+                  <input matInput formControlName="licenseId" readonly>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>Yetket Number</mat-label>
+                  <input matInput formControlName="yetketNumber" required>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Yetfesmbte Ken</mat-label>
+                  <input matInput [matDatepicker]="yet_Ken" formControlName="yetfesmbteKen" required>
+                  <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
+                  <mat-datepicker #yet_Ken></mat-datepicker>
+                  <mat-error>{{getErrorMessageForYetfesmbetKen()}}</mat-error>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline" class="form-field">
+                  <mat-label>Yetkessbt Ken</mat-label>
+                  <input matInput [matDatepicker]="yetss_Ken" formControlName="yetkessbtKen" required>
+                  <mat-datepicker-toggle matSuffix [for]="yetss_Ken"></mat-datepicker-toggle>
+                  <mat-datepicker #yetss_Ken></mat-datepicker>
+                  <mat-error>{{getErrorMessageForYetfessmbetKen()}}</mat-error>
+                </mat-form-field>
+
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Yetefate Level</mat-label>
+                  <mat-select formControlName="yetefateLevel" required>
+                    <mat-option *ngFor="let level of levels" [value]="level">
+                       {{level}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+               
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>Yetefate Code</mat-label>
+                  <input matInput formControlName="yetefateCode" required>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Yeselade Region</mat-label>
+                  <mat-select formControlName="yeseladeRegion" required>
+                    <mat-option *ngFor="let region of regions" [value]="region">
+                      {{region}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Yeselade Code</mat-label>
+                  <mat-select formControlName="yeseladeCode" required>
+                    <mat-option *ngFor="let code of codes" [value]="code">
+                        {{code}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Yeselade Number</mat-label>
+                  <input matInput formControlName="yeseladeNumber" required>
+                </mat-form-field>
+              </div>
+  
+              <div class="form-actions">
+                <button mat-raised-button color="primary" matStepperNext 
+                        [disabled]="firstFormGroup.invalid">
+                  Next
+                </button>
+              </div>
+            </form>
+          </mat-step>
+  
+          <!-- Second Form Step -->
+           
+          <mat-step [stepControl]="secondFormGroup">
+            <form [formGroup]="secondFormGroup">
+              <ng-template matStepLabel>Evaluation</ng-template>
+              
+              <div class="form-grid" style="margin-top: 10px;">
+                <mat-form-field appearance="outline">
+                  <mat-label>Yeerken Point</mat-label>
+                  <input matInput type="number" formControlName="yeerkenPoint" required>
+                </mat-form-field>
+                
+                <mat-form-field appearance="outline">
+                  <mat-label>Yeerken Kefya</mat-label>
+                  <input matInput formControlName="yeerkenKefya" required>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Zegyto Yemekefel Point</mat-label>
+                  <input matInput type="number" formControlName="zegytoYemekefelPoint" required>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Zegyto Yemekefel Kefya</mat-label>
+                  <input matInput formControlName="zegytoYemekefelKefya" required>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Wozef Point</mat-label>
+                  <input matInput type="number" formControlName="wozefPoint" required>
+                </mat-form-field>
+  
+                <mat-form-field appearance="outline">
+                  <mat-label>Total Point</mat-label>
+                  <input matInput formControlName="totalPoint" readonly>
+                </mat-form-field>
+              </div>
+  
+              <div class="form-actions">
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-raised-button color="primary" 
+                        (click)="saveSecondForm()"
+                        [disabled]="secondFormGroup.invalid">
+                  Save
+                </button>
+              </div>
+            </form>
+          </mat-step>
+        </mat-stepper>
+  
+        <!-- Results Table -->
+        <div *ngIf="showResults" class="results-section">
+          <div class="table-header">
+            <h2>Driver License Records</h2>
+          </div>
+  
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+            <!-- Number Column -->
+            <ng-container matColumnDef="number">
+              <th mat-header-cell *matHeaderCellDef>No.</th>
+              <td mat-cell *matCellDef="let element; let i = index">{{i + 1}}</td>
+            </ng-container>
+  
+            <!-- Yekefya Day Column -->
+            <ng-container matColumnDef="yekefyaDay">
+              <th mat-header-cell *matHeaderCellDef>Yekefya Day</th>
+              <td mat-cell *matCellDef="let element">{{formatDate(element.yekefyaDay)}}</td>
+            </ng-container>
+  
+            <!-- Yedersge Number Column -->
+            <ng-container matColumnDef="yedersgeNumber">
+              <th mat-header-cell *matHeaderCellDef>Yedersge Number</th>
+              <td mat-cell *matCellDef="let element">{{element.yedersgeNumber}}</td>
+            </ng-container>
+  
+            <!-- Yecke Number Column -->
+            <ng-container matColumnDef="yeckeNumber">
+              <th mat-header-cell *matHeaderCellDef>Yecke Number</th>
+              <td mat-cell *matCellDef="let element">{{element.yeckeNumber}}</td>
+            </ng-container>
+  
+            <!-- Full Name Column -->
+            <ng-container matColumnDef="fullName">
+              <th mat-header-cell *matHeaderCellDef>Full Name</th>
+              <td mat-cell *matCellDef="let element">{{element.fullName}}</td>
+            </ng-container>
+  
+            <!-- Kefya Column -->
+            <ng-container matColumnDef="kefya">
+              <th mat-header-cell *matHeaderCellDef>Kefya</th>
+              <td mat-cell *matCellDef="let element">{{element.kefya}}</td>
+            </ng-container>
+  
+            <!-- Action Column -->
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <td mat-cell *matCellDef="let element">
+                <button mat-icon-button color="primary" (click)="printRecord(element)">
+                  <mat-icon>print</mat-icon>
+                </button>
+              </td>
+            </ng-container>
+  
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+  
+          <mat-paginator [pageSizeOptions]="[5, 10, 25]" showFirstLastButtons></mat-paginator>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>

@@ -1,0 +1,17 @@
+mat-toolbar{
+    position: slicky;
+    top: 0;
+    z-index: 100;
+    background: #f2f2f2;
+}
+::ng-deep{
+    mat-menu-content{
+        width: 160px;
+    }
+}
+body{
+    top: 0;
+}
+.example-spacer{
+    flex: 1 1 auto;
+}

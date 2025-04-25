@@ -1,0 +1,256 @@
+<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+        <mat-card class="form-card">
+          <mat-card-header>
+            <mat-card-title>Driver's License Registration</mat-card-title>
+          </mat-card-header>
+      
+          <mat-card-content>
+            <!-- Section 1: Issuer Information -->
+            <h3 class="section-title">Issuer Information</h3>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Issuer Region</mat-label>
+                <mat-select formControlName="issuerRegion" (selectionChange)="updateIssuerStations()" required>
+                  <mat-option *ngFor="let region of regions" [value]="region">
+                    {{region}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Issuer Station</mat-label>
+                <mat-select formControlName="issuerStation" required>
+                  <mat-option *ngFor="let station of issuerStations" [value]="station">
+                    {{station}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>License Level</mat-label>
+                <mat-select formControlName="licenseLevel" required>
+                  <mat-option *ngFor="let level of licenseLevels" [value]="level">
+                    {{level}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+            </div>
+      
+            <!-- Section 2: License Information -->
+            <h3 class="section-title">License Information</h3>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Driver's License Number</mat-label>
+                <input matInput 
+                        formControlName="licenseNumber" 
+                        required
+                        minlength="6"
+                        maxlength="6"
+                        #licenseNumberInput>
+                
+                <!-- Character counter -->
+                <mat-hint align="end">
+                  {{licenseNumberInput.value?.length || 0}}/6
+                </mat-hint>
+                
+                <!-- Error messages -->
+                <mat-error *ngIf="registrationForm.get('licenseNumber')?.hasError('required')">
+                  Driver's License Number is required
+                </mat-error>
+                <mat-error *ngIf="registrationForm.get('licenseNumber')?.hasError('minlength') || 
+                                  registrationForm.get('licenseNumber')?.hasError('maxlength')">
+                  License number must be exactly 6 characters
+                </mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Date of Issue</mat-label>
+                <input matInput [matDatepicker]="issueDatePicker" formControlName="issueDate" required>
+                <mat-datepicker-toggle matSuffix [for]="issueDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #issueDatePicker></mat-datepicker>
+                <mat-error>{{ getErrorForIssueDate() }}</mat-error>
+              </mat-form-field>
+                </div>
+      
+            <!-- Section 3: Personal Information -->
+            <h3 class="section-title">Personal Information</h3>
+            <div class="form-row">
+              <!-- Amharic Names -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>ስም (Name)</mat-label>
+                <input matInput formControlName="nameAmharic" required>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>የአባት ስም (Father's Name)</mat-label>
+                <input matInput formControlName="fatherNameAmharic" required>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>የአያት ስም (Grandfather's Name)</mat-label>
+                <input matInput formControlName="grandfatherNameAmharic" required>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+            </div>
+      
+            <div class="form-row">
+              <!-- English Names -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>First Name</mat-label>
+                <input matInput formControlName="firstName" required>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Father's Name</mat-label>
+                <input matInput formControlName="fatherName" required>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Grandfather's Name</mat-label>
+                <input matInput formControlName="grandfatherName" required>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+            </div>
+      
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Nationality</mat-label>
+                <mat-select formControlName="nationality" required>
+                  <mat-option *ngFor="let country of nationalities" [value]="country">
+                    {{country}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Gender</mat-label>
+                <mat-select formControlName="gender" required>
+                  <mat-option *ngFor="let gender of genders" [value]="gender">
+                    {{gender}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <!-- <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" required>
+                <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dobPicker></mat-datepicker>
+                <mat-error>eee</mat-error>
+              </mat-form-field> -->
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" required>
+                <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dobPicker></mat-datepicker>
+              
+                <mat-error *ngIf="registrationForm.get('dateOfBirth')?.hasError('required') && registrationForm.get('dateOfBirth')?.touched">
+                  Date of Birth is required
+                </mat-error>
+                <mat-error *ngIf="registrationForm.get('dateOfBirth')?.hasError('minAge') && registrationForm.get('dateOfBirth')?.touched">
+                  You must be at least 18 years old
+                </mat-error>
+              </mat-form-field>
+              
+            </div>
+      
+            <!-- Section 4: Address Information -->
+            <h3 class="section-title">Address Information</h3>
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Region</mat-label>
+                <mat-select formControlName="region" (selectionChange)="updateZones()" required>
+                  <mat-option *ngFor="let region of regions" [value]="region">
+                    {{region}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Zone/City</mat-label>
+                <mat-select formControlName="zone" (selectionChange)="updateDistricts()" required>
+                  <mat-option *ngFor="let zone of zones" [value]="zone">
+                    {{zone}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>District/Subdistrict</mat-label>
+                <mat-select formControlName="district" (selectionChange)="updateKebeles()" required>
+                  <mat-option *ngFor="let district of districts" [value]="district">
+                    {{district}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+            </div>
+      
+            <div class="form-row">
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Kebele/Wereda</mat-label>
+                <mat-select formControlName="kebele" required>
+                  <mat-option *ngFor="let kebele of kebeles" [value]="kebele">
+                    {{kebele}}
+                  </mat-option>
+                </mat-select>
+                <mat-error>Required field</mat-error>
+              </mat-form-field>
+      
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>House Number</mat-label>
+                <input matInput formControlName="houseNumber">
+              </mat-form-field>
+              
+              <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Remark</mat-label>
+                <input matInput formControlName="remark" rows="2">
+              </mat-form-field>
+            </div>
+      
+            <!-- Section 5: Photo Upload -->
+            <h3 class="section-title">Photograph</h3>
+            <div class="image-upload-container">
+              <input type="file" 
+                      accept="image/*" 
+                      (change)="onFileSelected($event)" 
+                      style="display: none;" 
+                      #fileInput>
+              
+              <div class="image-upload-preview" 
+                    (click)="fileInput.click()"
+                    [class.has-error]="registrationForm.get('photo')?.invalid && registrationForm.get('photo')?.touched">
+                <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview">
+                <div class="upload-placeholder" *ngIf="!imagePreview">
+                  <mat-icon class="upload-icon">add_a_photo</mat-icon>
+                  <div class="upload-text">Click to upload photo</div>
+                  <div class="upload-requirements">(JPEG or PNG, max 5MB)</div>
+                </div>
+              </div>
+              
+              <mat-error *ngIf="registrationForm.get('photo')?.invalid && registrationForm.get('photo')?.touched">
+                <span *ngIf="registrationForm.get('photo')?.hasError('required')">Photo is required</span>
+                <span *ngIf="registrationForm.get('photo')?.hasError('fileSize')">File is too large (max 5MB)</span>
+                <span *ngIf="registrationForm.get('photo')?.hasError('fileType')">Only JPEG or PNG images allowed</span>
+              </mat-error>
+            </div>
+          </mat-card-content>
+      
+          <mat-card-actions align="end">
+            <button mat-button type="button" (click)="onReset()">Reset</button>
+            <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Submit</button>
+          </mat-card-actions>
+        </mat-card>
+                    
+</form>

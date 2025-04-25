@@ -1,0 +1,86 @@
+<form [formGroup]="penaltyForm" (ngSubmit)="onSubmit()" class="registration-form">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Driver's License Registration</mat-card-title>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <!-- Section 1: Issuer Information -->
+        <h3 class="section-title">Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullName" required>
+            <mat-error>Required field</mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Penalty Type</mat-label>
+            <mat-select formControlName="penaltyType" required>
+              <mat-option *ngFor="let penaltyTyp of penaltyTypes" [value]="penaltyTyp">
+                {{penaltyTyp}}
+              </mat-option>
+            </mat-select>
+            <mat-error>Required field</mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Yetefate Code</mat-label>
+            <mat-select formControlName="yetCode" required>
+              <mat-option *ngFor="let code of codes" [value]="code">
+                {{code}}
+              </mat-option>
+            </mat-select>
+            <mat-error>Required field</mat-error>
+          </mat-form-field>
+        </div>
+  
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Amount of Payment</mat-label>
+            <input matInput  formControlName="payment" required>
+             <mat-error>sdd</mat-error>      
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Yetfesmbte Ken</mat-label>
+            <input matInput [matDatepicker]="issueDatePicker" formControlName="yetfesmbteKen" required>
+            <mat-datepicker-toggle matSuffix [for]="issueDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #issueDatePicker></mat-datepicker>
+            <mat-error>{{ getErrorForIssueDate() }}</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Yetkessbte Ken</mat-label>
+            <input matInput [matDatepicker]="issueDatePicker" formControlName="yetkessbteKen" required>
+            <mat-datepicker-toggle matSuffix [for]="issueDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #issueDatePicker></mat-datepicker>
+            <mat-error>{{ getErrorForIssueDate() }}</mat-error>
+          </mat-form-field>
+            </div>
+  
+        
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Ticket Number</mat-label>
+            <input matInput formControlName="ticketNo" required>
+            <mat-error>Required field</mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Description</mat-label>
+            <input matInput formControlName="desc" required>
+            <mat-error>Required field</mat-error>
+          </mat-form-field>
+  
+        </div>
+  
+      </mat-card-content>
+  
+      <mat-card-actions align="end">
+        <button mat-button type="button" (click)="onReset()">Reset</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="penaltyForm.invalid">Submit</button>
+      </mat-card-actions>
+    </mat-card>
+                
+</form>

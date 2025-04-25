@@ -1,0 +1,66 @@
+body{
+    font-family: "Poppins", sans-serif;
+    background: #ececec;
+}
+.box-area{
+    width: 800px;
+}
+.right-box
+{
+    padding: 40px 30px 40px 40px;
+}
+::placeholder{
+    font-size: 16px;
+}
+
+.rounded-4{
+    border-radius: 20px;
+}
+.rounded-5 {
+    border-radius: 30px;
+}
+mat-form-field{
+    width: 100%;
+}
+.logo {
+    width: 85px;
+    height: 85px;
+    transition: transform 0.3s;
+  }
+  .page{
+    color: white;
+    padding: 0 1rem;
+    background: #f1f5f9;
+    .page__box{
+        min-height: 120px;
+        background: teal;
+        margin: 0 -1rem;
+        font-size: 36px;
+    }
+   .page__content{
+    min-height: calc(100vh - 160px);
+    border-radius: 10px;
+    margin-top: -2rem;
+    background: white;
+    color: black;
+    font-size: 2rem;
+    .page__content-data{
+     top: 50%;
+     left: 50%;
+     transform: translate(-50%, -50%);
+    }
+   }
+}
+  
+@media-only screen and (max-width: 768px){
+    .box-area{
+        margin: 0 10px;
+    }
+    .left-box{
+        height: 100px;
+        overflow: hidden;
+    }
+    .right-box{
+        padding: 20px;
+    }
+}

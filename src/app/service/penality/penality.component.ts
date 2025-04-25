@@ -1,0 +1,214 @@
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatTableDataSource } from '@angular/material/table';
+import { dateNotTheFuture, dateNotTheFutures } from '../date.validate';
+import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { SharedServiceService } from '../../services/shared/shared-service.service';
+import { NgModule } from "@angular/core";
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from "@angular/material/radio";
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTabsModule } from '@angular/material/tabs';
+
+interface DriverLicense {
+  id: number;
+  fullName: string;
+  licenseId: string;
+  yetketNumber: string;
+  yetfesmbteKen: string;
+  yetkessbtKen: string;
+  yetefateLevel: string;
+  yetefateCode: string;
+  yeseladeRegion: string;
+  yeseladeCode: string;
+  yeseladeNumber: string;
+  yeerkenPoint: number;
+  yeerkenKefya: string;
+  zegytoYemekefelPoint: number;
+  zegytoYemekefelKefya: string;
+  wozefPoint: number;
+  totalPoint: number;
+  yekefyaDay: Date;
+  yedersgeNumber: string;
+  yeckeNumber: string;
+}
+@Component({
+  selector: 'app-penality',
+  imports: [
+    CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule,
+        MatRadioModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatStepperModule,
+        MatTabsModule,
+    RouterLink
+  ],
+  templateUrl: './penality.component.html',
+  styleUrl: './penality.component.css'
+})
+export class PenalityComponent implements OnInit {
+
+
+ private router = inject(Router);
+  // Form steps
+  isLinear = true;
+  firstFormGroup!: FormGroup;
+  secondFormGroup!: FormGroup;
+  showResults = false;
+
+  levels = ['1','2','3'];
+  // Ethiopian regions
+  regions = [
+    'Addis Ababa', 'Amhara', 'Afar', 'Oromia', 'Somali', 
+    'Benishangul-Gumuz', 'Southern Nations', 'Tigray', 'Gambela', 'Harari'
+  ];
+
+  codes = ['01','02','03','04'];
+
+  // Table data
+  displayedColumns: string[] = [
+    'number', 'yekefyaDay', 'yedersgeNumber', 'yeckeNumber', 
+    'fullName', 'kefya', 'action'
+  ];
+  dataSource: any[] = [];  
+
+  constructor(private fb: FormBuilder,
+    private sharedData: SharedServiceService
+  ) {
+    this.createForms();
+  }
+  ngOnInit() {
+    const data = this.sharedData.getDriverData();
+    if (data) {
+      this.firstFormGroup.patchValue({
+        fullName: data.fullName,
+        licenseId: data.licenseId
+      });
+    }
+  }
+
+  createForms(): void {
+    // First form (basic information)
+    this.firstFormGroup = this.fb.group({
+      fullName: [{value: '', disabled: true}, Validators.required],
+      licenseId: [{value: '', disabled: true}, Validators.required],
+      yetketNumber: ['', Validators.required],
+      yetfesmbteKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
+      yetkessbtKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
+      yetefateLevel: ['', Validators.required],
+      yetefateCode: ['', Validators.required],
+      yeseladeRegion: ['', Validators.required],
+      yeseladeCode: ['', Validators.required],
+      yeseladeNumber: ['', Validators.required]
+    });
+
+    // Second form (evaluation)
+    this.secondFormGroup = this.fb.group({
+      yeerkenPoint: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      yeerkenKefya: ['', Validators.required],
+      zegytoYemekefelPoint: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      zegytoYemekefelKefya: ['', Validators.required],
+      wozefPoint: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      totalPoint: [{value: 0, disabled: true}]
+    });
+
+    // Calculate total when points change
+    this.secondFormGroup.valueChanges.subscribe(() => {
+      this.calculateTotal();
+    });
+  }
+
+  getErrorMessageForYetfesmbetKen():string{
+    let field = this.firstFormGroup.get('yetfesmbteKen');
+    
+    if(field?.hasError('required')){
+      return 'The field is Required';
+    }
+    if(field?.hasError('dateNotTheFuture')){
+      return field.getError('dateNotTheFuture').message;
+    }
+    return "";
+  }
+  getErrorMessageForYetfessmbetKen():string{
+    let field = this.firstFormGroup.get('yetkessbtKen');
+    
+    if(field?.hasError('required')){
+      return 'The field is Required';
+    }
+    if(field?.hasError('dateNotTheFuture')){
+      return field.getError('dateNotTheFuture').message;
+    }
+    return "";
+  }
+
+  calculateTotal(): void {
+    const values = this.secondFormGroup.getRawValue();
+    const total = values.yeerkenPoint + values.zegytoYemekefelPoint + values.wozefPoint;
+    this.secondFormGroup.patchValue({ totalPoint: total });
+  }
+
+  saveFirstForm(): void {
+    if (this.firstFormGroup.invalid) {
+      return;
+    }
+    // Proceed to next form
+  }
+
+ 
+
+  saveSecondForm() {
+    if (this.secondFormGroup.valid) {
+      // Calculate total points
+      const totalPoints = 
+        +this.secondFormGroup.value.yeerkenPoint +
+        +this.secondFormGroup.value.zegytoYemekefelPoint +
+        +this.secondFormGroup.value.wozefPoint;
+
+      this.secondFormGroup.patchValue({ totalPoint: totalPoints });
+
+      // Prepare data for the results table
+      const resultData = {
+        yekefyaDay: new Date(),  // Today's date
+        yedersgeNumber: this.firstFormGroup.value.yetketNumber,
+        yeckeNumber: this.firstFormGroup.value.yetefateCode,
+        fullName: this.firstFormGroup.value.fullName,  // <-- FullName from first form
+        kefya: this.secondFormGroup.value.yeerkenKefya
+      };
+
+      this.dataSource = [resultData];  // Assign to table data
+      this.showResults = true;         // Show the results table
+    }
+  }
+
+  formatDate(date: Date): string {
+    return date.toLocaleDateString();
+  }
+
+  // Print a record (example function)
+  printRecord(record: any) {
+    console.log('Printing:', record);
+    // Implement actual printing logic here
+  }
+
+}

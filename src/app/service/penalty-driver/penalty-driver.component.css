@@ -1,0 +1,165 @@
+.page{
+    color: white;
+    padding: 0 1rem;
+    background: #f1f5f9;
+    .page__box{
+        min-height: 0px;
+        background: teal;
+        margin: 0 -1rem;
+        font-size: 26px;
+    }
+}
+/* 
+.search-container {
+  display: flex;
+  justify-content: center;
+  padding: 24px;
+}
+
+.search-card {
+  width: 100%;
+  max-width: 800px;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.search-type-section {
+  margin-bottom: 24px;
+  padding: 16px;
+  background-color: #fafafa;
+  border-radius: 4px;
+}
+
+.search-type-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.search-type-radio {
+  flex: 1 1 200px;
+  padding: 12px 16px;
+  border-radius: 4px;
+  background-color: white;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  
+  .mat-radio-label-content {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}
+
+.search-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.search-field {
+  width: 100%;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.search-button, .reset-button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+ /* Responsive adjustments 
+ @media (max-width: 600px) {
+    .search-container {
+      padding: 16px;
+    }
+    
+    .search-fields {
+      grid-template-columns: 1fr;
+    }
+    
+    .search-type-radio {
+      flex: 1 1 100%;
+    }
+  } */
+
+
+.search-system-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.search-card {
+  margin-bottom: 24px;
+}
+
+.search-type-section {
+  margin-bottom: 24px;
+  
+  mat-radio-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    
+    .search-type-radio {
+      flex: 1 1 200px;
+    }
+  }
+}
+
+.search-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.results-section {
+  margin-top: 32px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  
+  th.mat-header-cell {
+    font-weight: bold;
+    background-color: #f5f5f5;
+  }
+  
+  .mat-column-actions {
+    width: 120px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-system-container {
+    padding: 16px;
+  }
+  
+  .search-fields {
+    grid-template-columns: 1fr;
+  }
+  
+  .mat-column-issuerCity, .mat-column-issuerDate {
+    display: none;
+  }
+}

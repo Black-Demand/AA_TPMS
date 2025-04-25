@@ -1,0 +1,111 @@
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { dateCannotBeTheFuture, minAgeValidator } from '../../driver/age.validate';
+import { NgModule } from "@angular/core";
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatCardModule } from '@angular/material/card';
+import { MatRadioModule } from "@angular/material/radio";
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTabsModule } from '@angular/material/tabs';
+
+@Component({
+  selector: 'app-penalty-dif',
+  imports: [
+     CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatButtonModule,
+        MatIconModule,
+        MatCardModule,
+        MatRadioModule,
+        MatTableModule,
+        MatPaginatorModule,
+        MatStepperModule,
+        MatTabsModule
+  ],
+  templateUrl: './penalty-dif.component.html',
+  styleUrl: './penalty-dif.component.css'
+})
+export class PenaltyDifComponent implements OnInit{
+
+  penaltyForm: FormGroup;
+  penaltyTypes = ['Miscellaneous punishment', 'Pedestrian punishment'];
+  codes = ['1','2','3'];
+
+  constructor(
+    private fb: FormBuilder,
+  ) {
+    this.penaltyForm = this.fb.group({
+      fullName: ['', Validators.required],
+      penaltyType: ['', Validators.required],
+      yetCode: ['', Validators.required],
+      payment: [null, [Validators.required, Validators.min(0)]],
+      yetfesmbteKen: ['', Validators.required],
+      yetkessbteKen: ['', Validators.required],
+      ticketNo: ['', Validators.required],
+      desc: ['', Validators.required]
+    });
+  }
+  ngOnInit(): void {
+  }
+
+
+
+
+  getErrorForIssueDate(): string {
+    const field = this.penaltyForm.get('issueDate');
+  
+    if (field?.hasError('required')) {
+      return 'The issue date is required';
+    }
+  
+    if (field?.hasError('dateCannotBeTheFuture')) {
+      return field.getError('dateCannotBeTheFuture').message;
+    }
+  
+    return '';
+  }
+  
+
+ 
+
+  updateIssuerStations(): void {
+ 
+  }
+
+  updateZones(): void {
+   
+  }
+
+  updateDistricts(): void {
+   
+  }
+
+  updateKebeles(): void {
+ 
+  }
+
+  onSubmit(): void {
+   
+  }
+
+  onReset(): void {
+    this.penaltyForm.reset();
+  }
+
+}
+

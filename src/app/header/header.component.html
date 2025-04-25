@@ -1,0 +1,41 @@
+<mat-toolbar>
+    <mat-toolbar-row >
+        <button mat-icon-button (click)="Sidenav()"><mat-icon>menu</mat-icon></button>
+        <span>Traffic Penality System
+        </span>
+        <span class="example-spacer"></span>
+        <div style="margin-right: 68px;">
+        
+            <mat-select
+               style="font-weight: bold;"
+              placeholder="Language"
+            >
+              <mat-option value="am">Amharic</mat-option>
+              <mat-option value="en">English</mat-option>
+            </mat-select>
+  
+            <button
+              mat-icon-button
+              [matMenuTriggerFor]="profileMenu"
+              class="profile-menu-trigger"
+            >
+              <mat-icon>account_circle</mat-icon>
+            </button>
+  
+            <mat-menu #profileMenu="matMenu">
+              <button mat-menu-item>
+                <mat-icon>person</mat-icon>
+                <span>Profile</span>
+              </button>
+              <button mat-menu-item>
+                <mat-icon>person</mat-icon>
+                <span>ChangePassword</span>
+              </button>
+              <button mat-menu-item [routerLink]="['/login']">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Logout</span>
+              </button>
+            </mat-menu>
+          </div>
+    </mat-toolbar-row>
+</mat-toolbar>
