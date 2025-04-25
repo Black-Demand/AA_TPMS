@@ -1,10 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component,NgModule, inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { InputImageComponent } from "../input-image/input-image.component";
 import { TemporaryDriverRegistrationService } from '../../services/temporary-driver-registration.service';
 import { TemporaryDriverRegistration } from '../../Models/TemporaryDriverRegistration';
 import { dateCannotBeTheFuture, minAgeValidator } from '../age.validate';
-import { NgModule } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';

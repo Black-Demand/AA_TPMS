@@ -140,13 +140,7 @@
                 <mat-error>Required field</mat-error>
               </mat-form-field>
       
-              <!-- <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Date of Birth</mat-label>
-                <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" required>
-                <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
-                <mat-datepicker #dobPicker></mat-datepicker>
-                <mat-error>eee</mat-error>
-              </mat-form-field> -->
+             
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Date of Birth</mat-label>
                 <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" required>
@@ -248,7 +242,8 @@
           </mat-card-content>
       
           <mat-card-actions align="end">
-            <button mat-button type="button" (click)="onReset()">Reset</button>
+            <button mat-button type="button" (click)="onReset()">
+              <mat-icon>refresh</mat-icon>Reset</button>
             <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Submit</button>
           </mat-card-actions>
         </mat-card>
