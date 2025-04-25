@@ -44,20 +44,20 @@
   
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Yetfesmbte Ken</mat-label>
-            <input matInput [matDatepicker]="issueDatePicker" formControlName="yetfesmbteKen" required>
-            <mat-datepicker-toggle matSuffix [for]="issueDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #issueDatePicker></mat-datepicker>
-            <mat-error>{{ getErrorForIssueDate() }}</mat-error>
+            <input matInput [matDatepicker]="yet_Ken" formControlName="yetfesmbteKen" required>
+            <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
+            <mat-datepicker #yet_Ken></mat-datepicker>
+            <mat-error>{{getErrorForYetfesmbetKen()}}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>Yetkessbte Ken</mat-label>
-            <input matInput [matDatepicker]="issueDatePicker" formControlName="yetkessbteKen" required>
-            <mat-datepicker-toggle matSuffix [for]="issueDatePicker"></mat-datepicker-toggle>
-            <mat-datepicker #issueDatePicker></mat-datepicker>
-            <mat-error>{{ getErrorForIssueDate() }}</mat-error>
+            <input matInput [matDatepicker]="yetss_ken" formControlName="yetkessbteKen" required>
+            <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
+            <mat-datepicker #yetss_ken></mat-datepicker>
+            <mat-error>{{getErrorForYetkessbteKen()}}</mat-error>
           </mat-form-field>
-            </div>
+        </div>
   
         
         <div class="form-row">

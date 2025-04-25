@@ -16,13 +16,9 @@ export function minAgeValidator(minAge: number) {
 }
 
 export function dateCannotBeTheFuture(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      if (!control.value) return null;
-  
+    return (control: AbstractControl): ValidationErrors | null => { 
       const selectedDate = new Date(control.value);
       const today = new Date();
-  
-      
   
       if (selectedDate > today) {
         return {

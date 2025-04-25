@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { dateCannotBeTheFuture, minAgeValidator } from '../../driver/age.validate';
-import { NgModule } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,32 +15,33 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+import { dateCannotBeTheFuture } from '../../driver/age.validate';
 
 @Component({
   selector: 'app-penalty-dif',
   imports: [
-     CommonModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatButtonModule,
-        MatIconModule,
-        MatCardModule,
-        MatRadioModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatStepperModule,
-        MatTabsModule
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatRadioModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatStepperModule,
+    MatTabsModule
   ],
   templateUrl: './penalty-dif.component.html',
   styleUrl: './penalty-dif.component.css'
 })
 export class PenaltyDifComponent implements OnInit{
 
-  penaltyForm: FormGroup;
+  penaltyForm!: FormGroup;
   penaltyTypes = ['Miscellaneous punishment', 'Pedestrian punishment'];
   codes = ['1','2','3'];
 
@@ -53,9 +52,9 @@ export class PenaltyDifComponent implements OnInit{
       fullName: ['', Validators.required],
       penaltyType: ['', Validators.required],
       yetCode: ['', Validators.required],
-      payment: [null, [Validators.required, Validators.min(0)]],
-      yetfesmbteKen: ['', Validators.required],
-      yetkessbteKen: ['', Validators.required],
+      payment: ['', [Validators.required]],
+      yetfesmbteKen: ['', [Validators.required, dateCannotBeTheFuture()]],
+      yetkessbteKen: ['', [Validators.required, dateCannotBeTheFuture()]],
       ticketNo: ['', Validators.required],
       desc: ['', Validators.required]
     });
@@ -66,11 +65,11 @@ export class PenaltyDifComponent implements OnInit{
 
 
 
-  getErrorForIssueDate(): string {
-    const field = this.penaltyForm.get('issueDate');
+  getErrorForYetfesmbetKen(): string {
+    const field = this.penaltyForm.get('yetfesmbteKen');
   
     if (field?.hasError('required')) {
-      return 'The issue date is required';
+      return 'The Yetfesmbte Ken is required';
     }
   
     if (field?.hasError('dateCannotBeTheFuture')) {
@@ -80,6 +79,19 @@ export class PenaltyDifComponent implements OnInit{
     return '';
   }
   
+  getErrorForYetkessbteKen(): string {
+    const field = this.penaltyForm.get('yetkessbteKen');
+  
+    if (field?.hasError('required')) {
+      return 'The Yetkessbte Ken is required';
+    }
+  
+    if (field?.hasError('dateCannotBeTheFuture')) {
+      return field.getError('dateCannotBeTheFuture').message;
+    }
+  
+    return '';
+  }
 
  
 
@@ -100,7 +112,7 @@ export class PenaltyDifComponent implements OnInit{
   }
 
   onSubmit(): void {
-   
+    console.log(this.penaltyForm.value);
   }
 
   onReset(): void {

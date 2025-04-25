@@ -1,4 +1,4 @@
-import { Component,NgModule, inject, OnInit } from '@angular/core';
+import { Component, NgModule,inject, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { TemporaryDriverRegistrationService } from '../../services/temporary-driver-registration.service';
 import { TemporaryDriverRegistration } from '../../Models/TemporaryDriverRegistration';
@@ -18,24 +18,25 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+
 @Component({
   selector: 'app-temporary-registraion',
   imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatButtonModule,
-        MatIconModule,
-        MatCardModule,
-        MatRadioModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatStepperModule,
-        MatTabsModule
+    CommonModule,
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatRadioModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatStepperModule,
+    MatTabsModule
 ],
   templateUrl: './temporary-registraion.component.html',
   styleUrl: './temporary-registraion.component.css'
@@ -211,6 +212,7 @@ export class TemporaryRegistraionComponent implements OnInit{
   }
 
   onSubmit(): void {
+    //console.log(this.registrationForm.value);
     if (this.registrationForm.valid) {
       const formValue: TemporaryDriverRegistration = {
         ...this.registrationForm.value,
