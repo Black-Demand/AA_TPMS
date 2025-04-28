@@ -113,7 +113,7 @@ export class PenalityComponent implements OnInit {
     this.firstFormGroup = this.fb.group({
       fullName: [{value: '', disabled: true}, Validators.required],
       licenseId: [{value: '', disabled: true}, Validators.required],
-      yetketNumber: ['', Validators.required],
+      yetketNumber: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       yetfesmbteKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
       yetkessbtKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
       yetefateLevel: ['', Validators.required],
@@ -179,6 +179,16 @@ export class PenalityComponent implements OnInit {
     }
     return "";
   }
+  getNumberErrorMessage(): string{
+    let field = this.firstFormGroup.get('yetketNumber');
+    if(field?.hasError('required')){
+      return 'Yetket Number is Required';
+    }
+    if(field?.hasError('pattern')){
+      return 'Only Numbers are allowed';
+    }
+    return "";
+  }
 
   calculateTotal(): void {
     const values = this.secondFormGroup.getRawValue();
@@ -193,6 +203,20 @@ export class PenalityComponent implements OnInit {
     // Proceed to next form
   }
 
+  onKeyDown(event: KeyboardEvent){
+    const allowKey = ['Enter','Backspace', 'Escape', 'Delete','Tab','Dot'];
+    if(allowKey.includes(event.key)){
+      return;
+    }
+    
+    if(event.ctrlKey && ['a','c','v','x'].includes(event.key.toLowerCase())){
+      return;
+    }
+
+    if(isNaN(Number(event.key))){
+      event.preventDefault();
+    }
+  }
  
 
   saveSecondForm() {

@@ -52,10 +52,10 @@ export class PenaltyDifComponent implements OnInit{
       fullName: ['', Validators.required],
       penaltyType: ['', Validators.required],
       yetCode: ['', Validators.required],
-      payment: ['', [Validators.required]],
+      payment: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       yetfesmbteKen: ['', [Validators.required, dateCannotBeTheFuture()]],
       yetkessbteKen: ['', [Validators.required, dateCannotBeTheFuture()]],
-      ticketNo: ['', Validators.required],
+      yetketNumber: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       desc: ['']
     },
     { validators: this.dateRangeValidator }
@@ -108,7 +108,40 @@ export class PenaltyDifComponent implements OnInit{
   
     return '';
   }
+  getPaymentErrorMessage(): string{
+    let field = this.penaltyForm.get('payment');
+    if(field?.hasError('required')){
+      return 'Payment is Required';
+    }
+    if(field?.hasError('pattern')){
+      return 'Only Numbers are allowed';
+    }
+    return "";
+  }
+  getNumberErrorMessage(): string{
+    let field = this.penaltyForm.get('yetketNumber');
+    if(field?.hasError('required')){
+      return 'Yetket Number is Required';
+    }
+    if(field?.hasError('pattern')){
+      return 'Only Numbers are allowed';
+    }
+    return "";
+  }
+  onKeyDown(event: KeyboardEvent){
+    const allowKey = ['Enter','Backspace', 'Escape', 'Delete','Tab','Dot'];
+    if(allowKey.includes(event.key)){
+      return;
+    }
+    
+    if(event.ctrlKey && ['a','c','v','x'].includes(event.key.toLowerCase())){
+      return;
+    }
 
+    if(isNaN(Number(event.key))){
+      event.preventDefault();
+    }
+  }
  
 
   updateIssuerStations(): void {
