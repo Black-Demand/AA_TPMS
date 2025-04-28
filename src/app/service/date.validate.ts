@@ -31,3 +31,13 @@ export function dateNotTheFutures(): ValidatorFn {
         return null;
     }
 }
+
+// export function dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+//     const yetKen = group.get('yetfesmbteKen')?.value;
+//     const yetsKen = group.get('yetkessbteKen')?.value;
+
+//     if(yetKen && yetsKen && yetKen > yetsKen){
+//         return { dateRangeInvalid: true };
+//     }
+//     return null;
+// }

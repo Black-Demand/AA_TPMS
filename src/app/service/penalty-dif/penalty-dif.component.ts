@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -56,14 +56,27 @@ export class PenaltyDifComponent implements OnInit{
       yetfesmbteKen: ['', [Validators.required, dateCannotBeTheFuture()]],
       yetkessbteKen: ['', [Validators.required, dateCannotBeTheFuture()]],
       ticketNo: ['', Validators.required],
-      desc: ['', Validators.required]
-    });
+      desc: ['']
+    },
+    { validators: this.dateRangeValidator }
+  );
   }
   ngOnInit(): void {
   }
 
+  dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const yetKen = group.get('yetfesmbteKen')?.value;
+    const yetsKen = group.get('yetkessbteKen')?.value;
 
+    if(yetKen && yetsKen && yetKen > yetsKen){
+        return { dateRangeInvalid: true };
+    }
+    return null;
+}
 
+  get minEndDate(): Date | null {
+    return this.penaltyForm.get('yetfesmbteKen')?.value;
+  }
 
   getErrorForYetfesmbetKen(): string {
     const field = this.penaltyForm.get('yetfesmbteKen');
@@ -88,6 +101,9 @@ export class PenaltyDifComponent implements OnInit{
   
     if (field?.hasError('dateCannotBeTheFuture')) {
       return field.getError('dateCannotBeTheFuture').message;
+    }
+    if(this.penaltyForm.hasError('dateRangeInvalid')) {
+      return 'Yetkessbte Ken must be greater than or equal to Yetfesmbte Ken';
     }
   
     return '';

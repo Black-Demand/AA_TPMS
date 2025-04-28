@@ -1,5 +1,5 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { dateNotTheFuture, dateNotTheFutures } from '../date.validate';
 import { RouterLink } from '@angular/router';
@@ -121,7 +121,8 @@ export class PenalityComponent implements OnInit {
       yeseladeRegion: ['', Validators.required],
       yeseladeCode: ['', Validators.required],
       yeseladeNumber: ['', Validators.required]
-    });
+    },
+   { validators: this.dateRangeValidator });
 
     // Second form (evaluation)
     this.secondFormGroup = this.fb.group({
@@ -137,6 +138,20 @@ export class PenalityComponent implements OnInit {
     this.secondFormGroup.valueChanges.subscribe(() => {
       this.calculateTotal();
     });
+  }
+
+  dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const yetKen = group.get('yetfesmbteKen')?.value;
+    const yetsKen = group.get('yetkessbtKen')?.value;
+
+    if(yetKen && yetsKen && yetKen > yetsKen){
+        return { dateRangeInvalid: true };
+    }
+    return null;
+}
+
+  get minEndDate(): Date | null {
+    return this.firstFormGroup.get('yetfesmbteKen')?.value;
   }
 
   getErrorMessageForYetfesmbetKen():string{
@@ -158,6 +173,9 @@ export class PenalityComponent implements OnInit {
     }
     if(field?.hasError('dateNotTheFuture')){
       return field.getError('dateNotTheFuture').message;
+    }
+    if(this.firstFormGroup.hasError('dateRangeInvalid')) {
+      return 'Yetkessbte Ken must be greater than or equal to Yetfesmbte Ken';
     }
     return "";
   }

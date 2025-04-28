@@ -35,20 +35,19 @@
   
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Yetfesmbte Ken</mat-label>
-                  <input matInput [matDatepicker]="yet_Ken" formControlName="yetfesmbteKen" required>
+                  <input matInput [matDatepicker]="yet_Ken" formControlName="yetfesmbteKen" required (dateChange)="firstFormGroup.updateValueAndValidity()">
                   <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
                   <mat-datepicker #yet_Ken></mat-datepicker>
                   <mat-error>{{getErrorMessageForYetfesmbetKen()}}</mat-error>
                 </mat-form-field>
-  
+      
                 <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Yetkessbt Ken</mat-label>
-                  <input matInput [matDatepicker]="yetss_Ken" formControlName="yetkessbtKen" required>
-                  <mat-datepicker-toggle matSuffix [for]="yetss_Ken"></mat-datepicker-toggle>
-                  <mat-datepicker #yetss_Ken></mat-datepicker>
+                  <mat-label>Yetkessbte Ken</mat-label>
+                  <input matInput [matDatepicker]="yetss_ken" formControlName="yetkessbtKen" [min]="minEndDate" required (dateChange)="firstFormGroup.updateValueAndValidity()">
+                  <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
+                  <mat-datepicker #yetss_ken></mat-datepicker>
                   <mat-error>{{getErrorMessageForYetfessmbetKen()}}</mat-error>
                 </mat-form-field>
-
 
                 <mat-form-field appearance="outline">
                   <mat-label>Yetefate Level</mat-label>
