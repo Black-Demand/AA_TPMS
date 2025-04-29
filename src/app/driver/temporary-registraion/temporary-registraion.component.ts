@@ -1,10 +1,9 @@
-import { Component, NgModule,inject, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { TemporaryDriverRegistrationService } from '../../services/temporary-driver-registration.service';
-import { TemporaryDriverRegistration } from '../../Models/TemporaryDriverRegistration';
 import { dateCannotBeTheFuture, minAgeValidator } from '../age.validate';
-import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule } from '@angular/forms';
+
+// Material Modules
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
@@ -18,6 +17,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-temporary-registraion',
@@ -37,11 +38,11 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule
-],
+  ],
   templateUrl: './temporary-registraion.component.html',
-  styleUrl: './temporary-registraion.component.css'
+  styleUrls: ['./temporary-registraion.component.css']
 })
-export class TemporaryRegistraionComponent implements OnInit{
+export class TemporaryRegistraionComponent implements OnInit {
 
   registrationForm: FormGroup;
   regions: string[] = [];
@@ -53,7 +54,7 @@ export class TemporaryRegistraionComponent implements OnInit{
   districts: string[] = [];
   kebeles: string[] = [];
   imagePreview: string | ArrayBuffer | null = null;
-  selectedPhotoFile: any;
+  selectedPhotoFile: File | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -66,7 +67,7 @@ export class TemporaryRegistraionComponent implements OnInit{
       licenseLevel: ['', Validators.required],
       
       // License Information
-      licenseNumber: ['', Validators.required, Validators.maxLength(6), Validators.minLength(6)],
+      licenseNumber: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
       issueDate: ['', [Validators.required, dateCannotBeTheFuture()]],
       
       // Personal Information (Amharic)
@@ -84,7 +85,6 @@ export class TemporaryRegistraionComponent implements OnInit{
       gender: ['', Validators.required],
       dateOfBirth: ['', [Validators.required, minAgeValidator(18)]],
       phone: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
-      //dateOfBirth: ['', Validators.required],
       
       // Address Information
       region: ['', Validators.required],
@@ -99,16 +99,34 @@ export class TemporaryRegistraionComponent implements OnInit{
     });
   }
 
-  get licenseNumber() {
+  onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
+    
+    // Ensure we don't exceed max length
+    if (value.length > 9) {
+      value = value.substring(0, 9);
+    }
+    
+    input.value = value;
+    this.registrationForm.get('phone')?.setValue(value, { emitEvent: false });
+  }
+
+  getFullPhoneNumber(): string {
+    const phoneControl = this.registrationForm.get('phone');
+    return phoneControl?.value ? `+251${phoneControl.value}` : '';
+  }
+
+  get licenseNumberControl() {
     return this.registrationForm.get('licenseNumber');
   }
 
-  getLicenseError() {
-    if (this.licenseNumber?.hasError('required')) {
+  getErrorForLicenseNumber(): string {
+    if (this.licenseNumberControl?.hasError('required')) {
       return 'Driver\'s License Number is required';
     }
-    if (this.licenseNumber?.hasError('minlength') || 
-        this.licenseNumber?.hasError('maxlength')) {
+    if (this.licenseNumberControl?.hasError('minlength') || 
+        this.licenseNumberControl?.hasError('maxlength')) {
       return 'Must be exactly 6 characters';
     }
     return '';
@@ -122,12 +140,11 @@ export class TemporaryRegistraionComponent implements OnInit{
     }
   
     if (field?.hasError('dateCannotBeTheFuture')) {
-      return field.getError('dateCannotBeTheFuture').message;
+      return 'Issue date cannot be in the future';
     }
   
     return '';
   }
-  
 
   ngOnInit(): void {
     this.loadDropdownData();
@@ -188,18 +205,20 @@ export class TemporaryRegistraionComponent implements OnInit{
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
       
-      // Validate file type and size
-      if (!file.type.match('image/jpeg|image/png')) {
+      // Validate file type
+      if (!['image/jpeg', 'image/png'].includes(file.type)) {
         this.registrationForm.get('photo')?.setErrors({ fileType: true });
         return;
       }
       
-      if (file.size > 5 * 1024 * 1024) { // 5MB
+      // Validate file size (5MB)
+      if (file.size > 5 * 1024 * 1024) {
         this.registrationForm.get('photo')?.setErrors({ fileSize: true });
         return;
       }
       
       // Update form control
+      this.selectedPhotoFile = file;
       this.registrationForm.patchValue({ photo: file });
       this.registrationForm.get('photo')?.updateValueAndValidity();
       
@@ -212,48 +231,41 @@ export class TemporaryRegistraionComponent implements OnInit{
     }
   }
 
-  onPhoneInput(event: Event): void{
-    const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, '');
-    if(value.length > 9){
-      value = value.substring(0, 9);
-    }
-    input.value = value;
-    this.registrationForm.get('phone')?.setValue(value);
-  }
-
-  getFullPhoneNumber(): string {
-    const phoneControl = this.registrationForm.get('phone');
-
-    if(!phoneControl?.value){
-      return '';
-    }
-    return `+251${phoneControl.value}`;
-  }
-
-  getValidPhoneNumber(): string | null {
-    const phoneControl = this.registrationForm.get('phone');
-    return phoneControl?.valid ? `+251${phoneControl.value}` : null;
-  }
-
   onSubmit(): void {
     console.log(this.registrationForm.value);
     // if (this.registrationForm.valid) {
-    //   const formValue: TemporaryDriverRegistration = {
-    //     ...this.registrationForm.value,
-    //     photo: this.selectedPhotoFile
-    //   };
-
-    //   this.tdrs.registerDriver(formValue).subscribe({
-    //     next: () => alert('License registered successfully'),
-    //     error: (err) => alert('Error: ' + err.message)
+    //   const formData = new FormData();
+      
+    //   // Append all form values to FormData
+    //   Object.keys(this.registrationForm.value).forEach(key => {
+    //     if (key !== 'photo') {
+    //       formData.append(key, this.registrationForm.get(key)?.value);
+    //     }
     //   });
+      
+    //   // Append the photo file
+    //   if (this.selectedPhotoFile) {
+    //     formData.append('photo', this.selectedPhotoFile);
+    //   }
+
+    //   this.tdrs.registerDriver(formData).subscribe({
+    //     next: () => {
+    //       alert('License registered successfully');
+    //       this.onReset();
+    //     },
+    //     error: (err) => {
+    //       console.error('Registration error:', err);
+    //       alert('Error: ' + (err.error?.message || err.message || 'Unknown error'));
+    //     }
+    //   });
+    // } else {
+    //   this.registrationForm.markAllAsTouched();
     // }
   }
 
   onReset(): void {
     this.registrationForm.reset();
     this.imagePreview = null;
+    this.selectedPhotoFile = null;
   }
-
 }
