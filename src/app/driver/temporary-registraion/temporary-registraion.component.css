@@ -113,6 +113,15 @@
       text-align: center;
     }
   }
+  .phone-input-container{
+    width: 100%;
+  }
+  input{
+    padding-left: 10px;
+  }
+  .mat-mdc-form-field-error {
+    white-space: nowrap;
+  }
   
   @media (max-width: 768px) {
     .registration-form {

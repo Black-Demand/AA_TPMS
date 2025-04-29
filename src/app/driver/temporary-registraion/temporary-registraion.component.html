@@ -153,7 +153,15 @@
                   You must be at least 18 years old
                 </mat-error>
               </mat-form-field>
-              
+
+              <mat-form-field appearance="outline" class="form-field phone-input-container">
+                 <mat-label>Phone Number</mat-label>
+                 <span matPrefix>+251 &nbsp;</span>
+                 <input matInput formControlName="phone" required maxlength="9"
+                 (input)="onPhoneInput($event)" placeholder="912345678" type="tel">
+                 <mat-error *ngIf="registrationForm.get('phone')?.hasError('required')">Phone Number is required</mat-error>
+                 <mat-error *ngIf="registrationForm.get('phone')?.hasError('pattern')">Please enter exactly 9 digits (after +251)</mat-error>
+              </mat-form-field>
             </div>
       
             <!-- Section 4: Address Information -->

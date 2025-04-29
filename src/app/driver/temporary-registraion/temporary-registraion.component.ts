@@ -83,6 +83,7 @@ export class TemporaryRegistraionComponent implements OnInit{
       nationality: ['', Validators.required],
       gender: ['', Validators.required],
       dateOfBirth: ['', [Validators.required, minAgeValidator(18)]],
+      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
       //dateOfBirth: ['', Validators.required],
       
       // Address Information
@@ -211,19 +212,43 @@ export class TemporaryRegistraionComponent implements OnInit{
     }
   }
 
-  onSubmit(): void {
-    //console.log(this.registrationForm.value);
-    if (this.registrationForm.valid) {
-      const formValue: TemporaryDriverRegistration = {
-        ...this.registrationForm.value,
-        photo: this.selectedPhotoFile
-      };
-
-      this.tdrs.registerDriver(formValue).subscribe({
-        next: () => alert('License registered successfully'),
-        error: (err) => alert('Error: ' + err.message)
-      });
+  onPhoneInput(event: Event): void{
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, '');
+    if(value.length > 9){
+      value = value.substring(0, 9);
     }
+    input.value = value;
+    this.registrationForm.get('phone')?.setValue(value);
+  }
+
+  getFullPhoneNumber(): string {
+    const phoneControl = this.registrationForm.get('phone');
+
+    if(!phoneControl?.value){
+      return '';
+    }
+    return `+251${phoneControl.value}`;
+  }
+
+  getValidPhoneNumber(): string | null {
+    const phoneControl = this.registrationForm.get('phone');
+    return phoneControl?.valid ? `+251${phoneControl.value}` : null;
+  }
+
+  onSubmit(): void {
+    console.log(this.registrationForm.value);
+    // if (this.registrationForm.valid) {
+    //   const formValue: TemporaryDriverRegistration = {
+    //     ...this.registrationForm.value,
+    //     photo: this.selectedPhotoFile
+    //   };
+
+    //   this.tdrs.registerDriver(formValue).subscribe({
+    //     next: () => alert('License registered successfully'),
+    //     error: (err) => alert('Error: ' + err.message)
+    //   });
+    // }
   }
 
   onReset(): void {
