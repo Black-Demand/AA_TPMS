@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TemporaryDriverRegistrationService } from '../../services/temporary-driver-registration.service';
+import { TemporaryDriverRegistrationService } from '../../services/temporary/temporary-driver-registration.service';
 import { dateCannotBeTheFuture, minAgeValidator } from '../age.validate';
 
 // Material Modules
@@ -22,6 +22,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-temporary-registraion',
+  standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule,

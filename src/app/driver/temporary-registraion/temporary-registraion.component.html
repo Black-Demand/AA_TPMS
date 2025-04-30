@@ -1,7 +1,7 @@
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
         <mat-card class="form-card">
           <mat-card-header>
-            <mat-card-title>Driver's License Registration</mat-card-title>
+            <mat-card-title>Temporary Driver Registration</mat-card-title>
           </mat-card-header>
       
           <mat-card-content>
@@ -80,19 +80,19 @@
             <div class="form-row">
               <!-- Amharic Names -->
               <mat-form-field appearance="outline" class="form-field">
-                <mat-label>ስም</mat-label>
+                <mat-label>ስም (Name)</mat-label>
                 <input matInput formControlName="nameAmharic" required>
                 <mat-error>Required field</mat-error>
               </mat-form-field>
       
               <mat-form-field appearance="outline" class="form-field">
-                <mat-label>የአባት ስም</mat-label>
+                <mat-label>የአባት ስም (Father's Name)</mat-label>
                 <input matInput formControlName="fatherNameAmharic" required>
                 <mat-error>Required field</mat-error>
               </mat-form-field>
       
               <mat-form-field appearance="outline" class="form-field">
-                <mat-label>የአያት ስም</mat-label>
+                <mat-label>የአያት ስም (Grandfather's Name)</mat-label>
                 <input matInput formControlName="grandfatherNameAmharic" required>
                 <mat-error>Required field</mat-error>
               </mat-form-field>
@@ -140,6 +140,13 @@
                 <mat-error>Required field</mat-error>
               </mat-form-field>
       
+              <!-- <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Date of Birth</mat-label>
+                <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" required>
+                <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
+                <mat-datepicker #dobPicker></mat-datepicker>
+                <mat-error>eee</mat-error>
+              </mat-form-field> -->
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Date of Birth</mat-label>
                 <input matInput [matDatepicker]="dobPicker" formControlName="dateOfBirth" required>
@@ -153,15 +160,31 @@
                   You must be at least 18 years old
                 </mat-error>
               </mat-form-field>
-
+              <!-- <mat-form-field appearance="outline" class="form-field">
+                <mat-label>Phone No</mat-label>
+                <input matInput formControlName="phone" required>
+                <mat-error>Required field</mat-error>
+              </mat-form-field> -->
+              
               <mat-form-field appearance="outline" class="form-field phone-input-container">
-                 <mat-label>Phone Number</mat-label>
-                 <span matPrefix>+251 &nbsp;</span>
-                 <input matInput formControlName="phone" required maxlength="9"
-                 (input)="onPhoneInput($event)" placeholder="912345678" type="tel">
-                 <mat-error *ngIf="registrationForm.get('phone')?.hasError('required')">Phone Number is required</mat-error>
-                 <mat-error *ngIf="registrationForm.get('phone')?.hasError('pattern')">Please enter exactly 9 digits (after +251)</mat-error>
+                <mat-label>Phone No</mat-label>
+                <span matPrefix>+251 &nbsp;</span>
+                <input matInput 
+                       formControlName="phone" 
+                       required
+                       maxlength="9"
+                       (input)="onPhoneInput($event)"
+                       placeholder="912345678"
+                       type="tel">
+                <mat-error *ngIf="registrationForm.get('phone')?.hasError('required')">
+                  Phone number is required
+                </mat-error>
+                <mat-error *ngIf="registrationForm.get('phone')?.hasError('pattern')">
+                  Please enter exactly 9 digits (after +251)
+                </mat-error>
               </mat-form-field>
+
+
             </div>
       
             <!-- Section 4: Address Information -->
