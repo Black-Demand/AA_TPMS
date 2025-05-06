@@ -71,13 +71,22 @@ letter-spacing: 1px;
   } */
 
 
-  .logo{
+  .logo {
     text-align: center;
-    padding: 2.6rem 1rem;
-    img{
-        width: 200px;
+    padding: 2rem 1rem 1rem; 
+  
+    img {
+      width: 210px;          
+      /* height: 200px;      */
+      object-fit: contain;
+      margin: 0 auto;
+      display: block; 
     }
   }
+  .logo-divider {
+    margin-top: 6rem;         
+  }
+  
   .sidenav-container {
     height: 100vh;
   }

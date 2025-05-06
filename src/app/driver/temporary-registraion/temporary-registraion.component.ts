@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { TemporaryDriverRegistrationService } from '../../services/temporary/temporary-driver-registration.service';
 import { dateCannotBeTheFuture, minAgeValidator } from '../age.validate';
 
 // Material Modules
@@ -19,6 +18,12 @@ import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import Lookup from '../../Models/lookup';
+import { privateDecrypt } from 'crypto';
+import { LookupService } from '../../services/lookup.service';
+import { Gender, GenderDescriptions } from '../../Enums/gender';
+import { DriverDTO } from '../../Models/driver';
+import { TempDriverService } from '../../services/temp-driver.service';
 
 @Component({
   selector: 'app-temporary-registraion',
@@ -46,57 +51,62 @@ import { ReactiveFormsModule } from '@angular/forms';
 export class TemporaryRegistraionComponent implements OnInit {
 
   registrationForm: FormGroup;
-  regions: string[] = [];
-  issuerStations: string[] = [];
-  licenseLevels: string[] = [];
-  nationalities: string[] = [];
-  genders: string[] = [];
-  zones: string[] = [];
-  districts: string[] = [];
-  kebeles: string[] = [];
   imagePreview: string | ArrayBuffer | null = null;
   selectedPhotoFile: File | null = null;
 
+  
+  
+  genderEnum = Gender;
+  genderOptions = [
+    { value: Gender.Male, label: GenderDescriptions[Gender.Male] },
+    { value: Gender.Female, label: GenderDescriptions[Gender.Female] }
+  ];  regions: Lookup.RegionDTO[] = [];
+  zones: Lookup.ZoneDTO[] = [];
+  woredas: Lookup.WoredaDTO[] = [];
+  kebeles: Lookup.KebeleDTO[] = [];
+  licenceRegions: Lookup.LicenceRegionDTO[] = [];
+  licenceAreas: Lookup.LicenceAreaDTO[] = [];
+  licenceCatagories: Lookup.LicenceCategoryDTO[] = [];
+  nationalities: Lookup.LookupDTO[] = [];
+
+  selectedRegionCode!: number;
+  selectedZoneCode!: number;
+  selectedWoredaCode!: number;
+  selectedLicenceRegionCode: number = 0;
+
+
+
+  
+
   constructor(
     private fb: FormBuilder,
-    private tdrs: TemporaryDriverRegistrationService
+    private tdrs: TempDriverService,
+    private lookupservice: LookupService
+    
   ) {
     this.registrationForm = this.fb.group({
-      // Issuer Information
-      issuerRegion: ['', Validators.required],
-      issuerStation: ['', Validators.required],
-      licenseLevel: ['', Validators.required],
-      
-      // License Information
-      licenseNumber: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
-      issueDate: ['', [Validators.required, dateCannotBeTheFuture()]],
-      
-      // Personal Information (Amharic)
-      nameAmharic: ['', Validators.required],
-      fatherNameAmharic: ['', Validators.required],
-      grandfatherNameAmharic: ['', Validators.required],
-      
-      // Personal Information (English)
+      licenceRegion: ['', Validators.required],
+      licenceArea: ['', Validators.required],
+      licenceGrade: ['', Validators.required],
+      licenceNo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
+      // issueDate: ['', [Validators.required, dateCannotBeTheFuture()]],      
+      firstNameAmh: ['', Validators.required],
+      fatherNameAmh: ['', Validators.required],
+      grandNameAmh: ['', Validators.required],      
       firstName: ['', Validators.required],
       fatherName: ['', Validators.required],
-      grandfatherName: ['', Validators.required],
-      
-      // Personal Details
+      grandName: ['', Validators.required],      
       nationality: ['', Validators.required],
-      gender: ['', Validators.required],
-      dateOfBirth: ['', [Validators.required, minAgeValidator(18)]],
-      phone: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
-      
-      // Address Information
+      sex: ['', Validators.required],
+      birthDate: ['', [Validators.required, minAgeValidator(18)]],
+      tel1: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],      
       region: ['', Validators.required],
       zone: ['', Validators.required],
-      district: ['', Validators.required],
+      woreda: ['', Validators.required],
       kebele: ['', Validators.required],
-      houseNumber: [''],
-      remark: [''],
-      
-      // Photo
-      photo: [null, Validators.required]
+      houseNo: [''],
+      remark: [''],      
+      // photo: [null, Validators.required]
     });
   }
 
@@ -148,58 +158,104 @@ export class TemporaryRegistraionComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadDropdownData();
+    this.loadRegions();
+    this.loadCategories();
+    this.loadLicenceRegions();
+    this.loadNationality();
+  }
+   
+  onRegionChange(regionCode: number) {
+    this.selectedRegionCode = regionCode; // store if needed
+    this.loadZones(regionCode);
+  }
+  
+  onZoneChange(zoneCode: number) {
+    console.log('Zone changed:', zoneCode); // Check this in the browser console
+    this.selectedZoneCode = zoneCode;
+    this.loadWoredas(zoneCode);
+  }
+  
+
+  onWoredaChange(woredaCode: number) {
+    console.log('Woreda changed:', woredaCode);
+    this.selectedWoredaCode = woredaCode;
+    this.loadKebeles(woredaCode);
+  }
+  
+
+
+  loadRegions() {
+    this.lookupservice.getRegions().subscribe(data => {
+      this.regions = data;
+      this.zones = [];
+      this.woredas = [];
+      this.kebeles = [];
+    });
+  }
+  
+  loadZones(regionCode: number) {
+    this.lookupservice.getZonesByRegion(regionCode).subscribe(data => {
+      this.zones = data;
+      this.woredas = [];
+      this.kebeles = [];
+    });
+  }
+  
+  loadWoredas(zoneCode: number) {
+    this.lookupservice.getWoredasByZone(zoneCode).subscribe(data => {
+      this.woredas = data;
+      this.kebeles = [];
+    });
+  }
+  
+  
+  loadKebeles(woredaCode: number) {
+    this.lookupservice.getKebelesByWoreda(woredaCode).subscribe(data => {
+      this.kebeles = data;
+    });
   }
 
-  loadDropdownData(): void {
-    this.tdrs.getRegions().subscribe(regions => this.regions = regions);
-    this.tdrs.getLicenseLevels().subscribe(levels => this.licenseLevels = levels);
-    this.tdrs.getNationalities().subscribe(countries => this.nationalities = countries);
-    this.tdrs.getGenders().subscribe(genders => this.genders = genders);
+  loadLicenceRegions(): void {
+    this.lookupservice.getAllRegions().subscribe(data => {
+      console.log('Loaded Regions:', data);
+      this.licenceRegions = data;
+    });
   }
-
-  updateIssuerStations(): void {
-    const region = this.registrationForm.get('issuerRegion')?.value;
-    if (region) {
-      this.tdrs.getIssuerStations(region).subscribe(stations => {
-        this.issuerStations = stations;
-        this.registrationForm.get('issuerStation')?.reset();
-      });
+  onIssuerRegionChange(regionCode: number): void {
+    console.log('Selected Region Code:', regionCode); // Should NOT be undefined
+    if (regionCode != null) {
+      this.selectedLicenceRegionCode = regionCode;
+      this.loadAreasByLicenceRegion(regionCode);
     }
   }
+  
+  loadAreasByLicenceRegion(regionCode: number): void {
+    this.lookupservice.getAllAreas(regionCode).subscribe(data => {
+      this.licenceAreas = data;
+    });
+  }
+  
+  
 
-  updateZones(): void {
-    const region = this.registrationForm.get('region')?.value;
-    if (region) {
-      this.tdrs.getZones(region).subscribe(zones => {
-        this.zones = zones;
-        this.registrationForm.get('zone')?.reset();
-        this.districts = [];
-        this.kebeles = [];
-      });
-    }
+  loadCategories() {
+    this.lookupservice.getAllCategories().subscribe(data => {
+      this.licenceCatagories = data;
+    })
+  }
+  loadNationality() {
+    this.lookupservice.getAllLookups().subscribe(
+      data => {
+        this.nationalities = data;
+      },
+      error => {
+        console.error('Error fetching categories:', error);
+      }
+    );
   }
 
-  updateDistricts(): void {
-    const zone = this.registrationForm.get('zone')?.value;
-    if (zone) {
-      this.tdrs.getDistricts(zone).subscribe(districts => {
-        this.districts = districts;
-        this.registrationForm.get('district')?.reset();
-        this.kebeles = [];
-      });
-    }
-  }
 
-  updateKebeles(): void {
-    const district = this.registrationForm.get('district')?.value;
-    if (district) {
-      this.tdrs.getKebeles(district).subscribe(kebeles => {
-        this.kebeles = kebeles;
-        this.registrationForm.get('kebele')?.reset();
-      });
-    }
-  }
+
+  
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -234,36 +290,26 @@ export class TemporaryRegistraionComponent implements OnInit {
 
   onSubmit(): void {
     console.log(this.registrationForm.value);
-    // if (this.registrationForm.valid) {
-    //   const formData = new FormData();
-      
-    //   // Append all form values to FormData
-    //   Object.keys(this.registrationForm.value).forEach(key => {
-    //     if (key !== 'photo') {
-    //       formData.append(key, this.registrationForm.get(key)?.value);
-    //     }
-    //   });
-      
-    //   // Append the photo file
-    //   if (this.selectedPhotoFile) {
-    //     formData.append('photo', this.selectedPhotoFile);
-    //   }
-
-    //   this.tdrs.registerDriver(formData).subscribe({
-    //     next: () => {
-    //       alert('License registered successfully');
-    //       this.onReset();
-    //     },
-    //     error: (err) => {
-    //       console.error('Registration error:', err);
-    //       alert('Error: ' + (err.error?.message || err.message || 'Unknown error'));
-    //     }
-    //   });
-    // } else {
-    //   this.registrationForm.markAllAsTouched();
-    // }
+  
+    if (this.registrationForm.valid) {
+      const driver: DriverDTO = this.registrationForm.value;
+  
+      this.tdrs.createDriver(driver).subscribe({
+        next: (response) => {
+          alert('Driver created successfully');
+          this.onReset(); 
+        },
+        error: (err) => {
+          console.error('Error creating driver:', err);
+          alert('Error: ' + (err.error?.message || err.message || 'Unknown error'));
+        }
+      });
+    } else {
+      this.registrationForm.markAllAsTouched(); // Highlight validation errors
+    }
   }
-
+  
+  
   onReset(): void {
     this.registrationForm.reset();
     this.imagePreview = null;
