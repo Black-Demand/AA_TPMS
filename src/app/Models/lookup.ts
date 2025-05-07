@@ -52,8 +52,8 @@ namespace Lookup {
   }
 
   export interface OffenceGradeDTO {
-    Id: number;
-    Code: string;
+    id: number;
+    code: string;
     AmDescription: string;
     Description: string;
     FineAmount: number;
@@ -91,9 +91,9 @@ namespace Lookup {
 
   export interface OffenceNewDTO {
     OffenceId: number;
-    Code: string;
+    code: string;
     Description: string;
-    AmDescription: string;
+    amDescription: string;
     Parent: number;
     FineAmount: number;
   }

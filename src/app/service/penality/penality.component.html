@@ -53,19 +53,25 @@
 
                 <mat-form-field appearance="outline">
                   <mat-label>Violation Grade</mat-label>
-                  <mat-select formControlName="yetefateLevel" required>
-                    <mat-option *ngFor="let level of levels" [value]="level">
-                       {{level}}
+                  <mat-select formControlName="yetefateLevel" required (selectionChange)="loadViolationTypeByGrade($event.value)">
+                    <mat-option *ngFor="let violationgrade of violationgrades" [value]="violationgrade.id">
+                      {{ violationgrade.code }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
+                
                
                 
                 <mat-form-field appearance="outline">
-                  <mat-label>Yetefate Code</mat-label>
-                  <input matInput formControlName="yetefateCode" required>
+                  <mat-label>Violation Grade Type</mat-label>
+                  <mat-select formControlName="yetefateLevel" required>
+                    <mat-option *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
+                       {{violationtype.amDescription}}
+                    </mat-option>
+                  </mat-select>
                 </mat-form-field>
-  
+
+                
                 <mat-form-field appearance="outline">
                   <mat-label>Plate Region</mat-label>
                   <mat-select formControlName="yeseladeRegion" required>

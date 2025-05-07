@@ -79,12 +79,12 @@ export class PenalityComponent implements OnInit {
   secondFormGroup!: FormGroup;
   showResults = false;
 
-  levels = ['1','2','3'];
 
 
   regions: Lookup.LicenceRegionDTO[] = [];
   majors: Lookup.Majors[] =[];
-
+  violationgrades: Lookup.OffenceGradeDTO[] =[];
+  violationtypes: Lookup.OffenceNewDTO[] =[];
 
 
   // Table data
@@ -103,6 +103,7 @@ export class PenalityComponent implements OnInit {
   ngOnInit() {
     this.loadRegions();
     this.loadMajors();
+    this.loadViolationGrade();
     const data = this.sharedData.getDriverData();
     if (data) {
       this.firstFormGroup.patchValue({
@@ -156,6 +157,18 @@ export class PenalityComponent implements OnInit {
        this.majors = data;
     });
   }
+
+  loadViolationGrade() {
+    this.lookupservice.getAllOffences().subscribe(data => {
+       this.violationgrades = data;
+    });
+  }
+  loadViolationTypeByGrade(gradeCode: string) {
+    this.lookupservice.getAllOffenceNew([gradeCode]).subscribe(data => {
+      this.violationtypes = data;
+    });
+  }
+  
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
     const yetKen = group.get('yetfesmbteKen')?.value;
