@@ -23,6 +23,7 @@ export interface DriverDTO {
   woreda?: string | null;
   kebele?: string | null;
   remark?: string | null;
+  issuanceDate?: string | null;
 
   // issuanceDate?: string | null; // Date string in ISO format
   // town?: string | null;
