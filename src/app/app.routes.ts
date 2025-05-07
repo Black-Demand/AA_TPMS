@@ -2,7 +2,6 @@ import { Routes } from '@angular/router';
 import { LoginComponent } from './component/login/login.component';
 import { MenuComponent } from './component/menu/menu.component';
 import { NavMenuComponent } from './component/nav-menu/nav-menu.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { TemporaryRegistraionComponent } from './driver/temporary-registraion/temporary-registraion.component';
 import { PenaltyDriverComponent } from './service/penalty-driver/penalty-driver.component';
 import { PenalityComponent } from './service/penality/penality.component';
@@ -29,7 +28,6 @@ export const routes: Routes = [
                 component: NavMenuComponent,
                 title: 'menud'
             }, 
-            {path: 'dashboard', component: DashboardComponent},
             {path: 'penalty-driver', component: PenaltyDriverComponent},
             {path: 'temporary-registration', component: TemporaryRegistraionComponent},
             {path: 'penality', component: PenalityComponent},
