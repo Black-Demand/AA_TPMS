@@ -89,7 +89,7 @@ export class TemporaryRegistraionComponent implements OnInit {
       licenceArea: ['', Validators.required],
       licenceGrade: ['', Validators.required],
       licenceNo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
-      // issueDate: ['', [Validators.required, dateCannotBeTheFuture()]],      
+      issuanceDate: ['', [Validators.required, dateCannotBeTheFuture()]],      
       firstNameAmh: ['', Validators.required],
       fatherNameAmh: ['', Validators.required],
       grandNameAmh: ['', Validators.required],      
@@ -106,7 +106,7 @@ export class TemporaryRegistraionComponent implements OnInit {
       kebele: ['', Validators.required],
       houseNo: [''],
       remark: [''],      
-      // photo: [null, Validators.required]
+      photo: [null, Validators.required]
     });
   }
 
@@ -144,7 +144,7 @@ export class TemporaryRegistraionComponent implements OnInit {
   }
 
   getErrorForIssueDate(): string {
-    const field = this.registrationForm.get('issueDate');
+    const field = this.registrationForm.get('issuanceDate');
   
     if (field?.hasError('required')) {
       return 'The issue date is required';

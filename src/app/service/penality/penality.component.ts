@@ -68,6 +68,12 @@ interface DriverLicense {
   styleUrl: './penality.component.css'
 })
 export class PenalityComponent implements OnInit {
+  public get sharedData(): SharedServiceService {
+    return this._sharedData;
+  }
+  public set sharedData(value: SharedServiceService) {
+    this._sharedData = value;
+  }
 
 
  private router = inject(Router);
@@ -94,7 +100,7 @@ export class PenalityComponent implements OnInit {
   dataSource: any[] = [];  
 
   constructor(private fb: FormBuilder,
-    private sharedData: SharedServiceService
+    private _sharedData: SharedServiceService
   ) {
     this.createForms();
   }
