@@ -78,6 +78,7 @@ export class PenalityComponent implements OnInit {
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
   showResults = false;
+  violationTypeDisabled = false;
 
 
 
@@ -121,8 +122,8 @@ export class PenalityComponent implements OnInit {
       yetketNumber: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       yetfesmbteKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
       yetkessbtKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
-      yetefateLevel: ['', Validators.required],
-      yetefateCode: ['', Validators.required],
+      violationGrade: ['', Validators.required],
+      violationType: [{ value: '', disabled: false }, Validators.required],
       yeseladeRegion: ['', Validators.required],
       yeseladeCode: ['', Validators.required],
       yeseladeNumber: ['', Validators.required]
@@ -163,12 +164,26 @@ export class PenalityComponent implements OnInit {
        this.violationgrades = data;
     });
   }
+
+
   loadViolationTypeByGrade(gradeCode: string) {
-    this.lookupservice.getAllOffenceNew([gradeCode]).subscribe(data => {
-      this.violationtypes = data;
-    });
+    const numericGradeCode = Number(gradeCode);
+  
+    if (numericGradeCode > 3) {
+      this.violationTypeDisabled = true;
+      this.firstFormGroup.get('violationType')?.reset();
+      this.firstFormGroup.get('violationType')?.disable();
+      this.violationtypes = [];
+    } else {
+      this.violationTypeDisabled = false;
+      this.firstFormGroup.get('violationType')?.enable();
+      this.lookupservice.getAllOffenceNew([gradeCode]).subscribe(data => {
+        this.violationtypes = data;
+      });
+    }
   }
   
+
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
     const yetKen = group.get('yetfesmbteKen')?.value;
