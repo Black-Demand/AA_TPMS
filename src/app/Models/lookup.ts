@@ -98,6 +98,13 @@ namespace Lookup {
     FineAmount: number;
   }
 
+  export interface Majors {
+    codeId: string;
+    majorCode: string;
+    ServiceType: string;
+    AmServiceType: string;
+  }
+
 }
 export default Lookup;
 

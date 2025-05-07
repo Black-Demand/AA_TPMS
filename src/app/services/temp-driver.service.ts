@@ -31,20 +31,25 @@ export class TempDriverService {
     return this.http.delete<void>(`${this.baseUrl}/${licenseNo}`);
   }
 
-  searchByLicense(licenseCategory: number, licenseNumber: string): Observable<DriverDTO> {
+  searchByLicense(licenceRegion: number, licenseCategory: number, licenseNumber: string): Observable<DriverDTO> {
+    if (!licenseNumber || !licenseNumber.trim()) {
+      throw new Error('License number is required.');
+    }
+  
     const params = new HttpParams()
-      .set('licenseCategory', licenseCategory)
-      .set('licenseNumber', licenseNumber.trim());
-
-    return this.http.get<DriverDTO>(`${this.baseUrl}/search-by-license`, { params });
+    .set('licenseRegion', licenceRegion.toString())  
+    .set('licenseCategory', licenseCategory.toString())
+    .set('licenseNumber', licenseNumber.trim());
+  
+    return this.http.get<DriverDTO>(`${this.baseUrl}/Driver/search-by-license`, { params });
   }
-
+  
   searchByName(firstName: string, middleName?: string, lastName?: string): Observable<DriverDTO> {
     let params = new HttpParams().set('firstName', firstName.trim());
 
     if (middleName) params = params.set('middleName', middleName.trim());
     if (lastName) params = params.set('lastName', lastName.trim());
 
-    return this.http.get<DriverDTO>(`${this.baseUrl}/search-by-name`, { params });
+    return this.http.get<DriverDTO>(`${this.baseUrl}/Driver/search-by-name`, { params });
   }
 }

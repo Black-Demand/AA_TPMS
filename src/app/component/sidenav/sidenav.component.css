@@ -77,10 +77,12 @@ letter-spacing: 1px;
   
     img {
       width: 210px;          
-      /* height: 200px;      */
+      height: 400px;     
       object-fit: contain;
       margin: 0 auto;
       display: block; 
+      margin-left: -40px;
+      margin-top: 80px;
     }
   }
   .logo-divider {

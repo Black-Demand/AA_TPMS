@@ -44,19 +44,20 @@
           <div *ngIf="searchType === 'license'" class="search-fields license-fields">
             <mat-form-field appearance="outline">
               <mat-label>Region</mat-label>
-              <mat-select formControlName="region">
-                <mat-option *ngFor="let region of regions" [value]="region.code">
-                  {{region.name}}
+              <mat-select formControlName="region" placeholder="Region">
+                <mat-option *ngFor="let region of licenseRegions" [value]="region.code">
+                  {{ region.amDescription }}
                 </mat-option>
               </mat-select>
+              
               <mat-error *ngIf="searchForm.get('region')?.invalid">Required</mat-error>
             </mat-form-field>
   
             <mat-form-field appearance="outline">
               <mat-label>License Level</mat-label>
-              <mat-select formControlName="level">
+              <mat-select formControlName="level" placeholder="License Category">
                 <mat-option *ngFor="let level of licenseLevels" [value]="level.code">
-                  {{level.name}}
+                  {{ level.displayName }}
                 </mat-option>
               </mat-select>
               <mat-error *ngIf="searchForm.get('level')?.invalid">Required</mat-error>

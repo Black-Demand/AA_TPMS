@@ -60,7 +60,8 @@ export class TemporaryRegistraionComponent implements OnInit {
   genderOptions = [
     { value: Gender.Male, label: GenderDescriptions[Gender.Male] },
     { value: Gender.Female, label: GenderDescriptions[Gender.Female] }
-  ];  regions: Lookup.RegionDTO[] = [];
+  ];
+  regions: Lookup.RegionDTO[] = [];
   zones: Lookup.ZoneDTO[] = [];
   woredas: Lookup.WoredaDTO[] = [];
   kebeles: Lookup.KebeleDTO[] = [];
@@ -69,7 +70,7 @@ export class TemporaryRegistraionComponent implements OnInit {
   licenceCatagories: Lookup.LicenceCategoryDTO[] = [];
   nationalities: Lookup.LookupDTO[] = [];
 
-  selectedRegionCode!: number;
+  selectedRegionCode!: number;  
   selectedZoneCode!: number;
   selectedWoredaCode!: number;
   selectedLicenceRegionCode: number = 0;

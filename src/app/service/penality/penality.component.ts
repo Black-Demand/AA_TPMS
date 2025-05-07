@@ -21,6 +21,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+import Lookup from '../../Models/lookup';
+import { LookupService } from '../../services/lookup.service';
 
 interface DriverLicense {
   id: number;
@@ -78,13 +80,12 @@ export class PenalityComponent implements OnInit {
   showResults = false;
 
   levels = ['1','2','3'];
-  // Ethiopian regions
-  regions = [
-    'Addis Ababa', 'Amhara', 'Afar', 'Oromia', 'Somali', 
-    'Benishangul-Gumuz', 'Southern Nations', 'Tigray', 'Gambela', 'Harari'
-  ];
 
-  codes = ['01','02','03','04'];
+
+  regions: Lookup.LicenceRegionDTO[] = [];
+  majors: Lookup.Majors[] =[];
+
+
 
   // Table data
   displayedColumns: string[] = [
@@ -94,11 +95,14 @@ export class PenalityComponent implements OnInit {
   dataSource: any[] = [];  
 
   constructor(private fb: FormBuilder,
-    private sharedData: SharedServiceService
+              private sharedData: SharedServiceService,
+              private lookupservice: LookupService
   ) {
     this.createForms();
   }
   ngOnInit() {
+    this.loadRegions();
+    this.loadMajors();
     const data = this.sharedData.getDriverData();
     if (data) {
       this.firstFormGroup.patchValue({
@@ -137,6 +141,19 @@ export class PenalityComponent implements OnInit {
     // Calculate total when points change
     this.secondFormGroup.valueChanges.subscribe(() => {
       this.calculateTotal();
+    });
+  }
+
+
+  loadRegions() {
+    this.lookupservice.getAllRegions().subscribe(data => {
+       this.regions = data;
+    });
+  }
+
+  loadMajors() {
+    this.lookupservice.getAllMajors().subscribe(data => {
+       this.majors = data;
     });
   }
 
