@@ -1,109 +1,13 @@
-/* .logo{
-  text-align: center;
-  padding: 2.6rem 1rem;
-  img{
-      width: 200px;
-  }
-}
-mat-nav-list {
-width: 420px;
-}
-mat-icon{
-  vertical-align: center;
-  margin-right: 1rem;
-}
-mat-divider{
-  border-top-width: 2px;
-  border-color: white;
-}
-mat-list-item{
-  color: #94a3b8 !important;
-  font-size: 0.8rem;
-  height: 44px !important;
-  margin-bottom: 4px;
-  ::ng-deep{
-      mat-list-item-contant{
-          border-radius: 5px;
-          margin: 0 8px;
-       &:hover{
-          background: #2c3344 !important;
-        }
-      }
-  }
-}
-.report-link:hover {
-  text-decoration: underline;
-}
-.report-link1:hover {
-  text-decoration: underline;
-}
-
-::ng-deep .mat-list-item {
-  border: none !important;
-  box-shadow: none !important;
-}
-
-list-item-active{
-  color: #f2f3f7;
-  ::ng-deep{
-      mat-list-item-contant{
-         background:  #2c3344 !important;
-       &:hover{
-          background: #2c3344 !important;
-        }
-      }
-  }
-}
-mat-subheader{
-color: #818cf8;
-font-size: 0.6rem;
-font-weight: 100;
-letter-spacing: 1px;
-}
-.page__box{
-  color: white;
-  padding: 0 1rem;
-  background: #f1f5f9;
-      min-height: 120px;
-      background: #1e293b;
-      margin: 0 -1rem;
-      font-size: 36px;
-  } */
-
-
-  .logo {
+.logo {
     text-align: center;
-    padding: 2rem 1rem 1rem; 
+    padding: 2.6rem 1rem; 
   
     img {
-      width: 210px;          
-      height: 400px;     
+      width: 200px;   
       object-fit: contain;
       margin: 0 auto;
       display: block; 
-      margin-left: -40px;
-      margin-top: 80px;
     }
-  }
-  .logo-divider {
-    margin-top: 6rem;         
-  }
-  
-  .sidenav-container {
-    height: 100vh;
-  }
-  
-  .sidenav {
-    width: 200px;
-    box-shadow: none;
-  }
-  
-  .sidenav-toolbar {
-    height: 64px;
-    display: flex;
-    align-items: center;
-    background-color: #3f51b5;
-    color: white;
   }
   
   .menu-label {
@@ -131,4 +35,7 @@ letter-spacing: 1px;
   
   mat-icon {
     margin-right: 8px;
+  }
+  mat-nav-list{
+    border-radius: none;
   }

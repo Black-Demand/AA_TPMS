@@ -29,7 +29,7 @@ interface Driver {
   issuerRegion: string;
   issuerCity: string;
   // id: string;
-  // licenseId: string;
+  // licenseNumber: string;
   // issuerDate: Date;
 }
 

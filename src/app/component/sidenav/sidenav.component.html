@@ -1,15 +1,9 @@
-<mat-sidenav-container class="sidenav-container">
-  <mat-sidenav #drawer mode="side" opened class="sidenav" fixedInViewport="true">
-    <mat-toolbar>
+<mat-nav-list>
+
       <div class="logo py-4">
         <img src="assets/logo.jpeg" alt="Logo">
       </div>
-      
-    </mat-toolbar>
-    
-    <mat-divider class="logo-divider"></mat-divider>
-   <!-- <h2 matSubheader class="mt-2" style="color: black;">Black- <br> Diamond</h2> -->
-    <mat-nav-list>
+      <mat-divider class="logo-divider"></mat-divider>
       <!-- Dashboard -->
       <mat-list-item routerLink="/nav-menu" routerLinkActive="active">
         <mat-icon>dashboard</mat-icon>
@@ -76,5 +70,3 @@
         <span class="menu-label">Report</span>
       </mat-list-item>
     </mat-nav-list>
-  </mat-sidenav>
-</mat-sidenav-container>

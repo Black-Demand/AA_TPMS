@@ -4,8 +4,7 @@
     height: 100%;
 }
 mat-drawer{
-    width: 200px;
-    background: teal;
+    width: 260px;
 }
 mat-drawer-container{
     height: 100%;
