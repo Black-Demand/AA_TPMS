@@ -7,10 +7,18 @@ import { environment } from '../../environments/environment.development';
   providedIn: 'root'
 })
 export class TempDriverService {
-
+  
+  private driverData: any;
   private baseUrl = environment.baseUrl;
   constructor(private http: HttpClient) { }
-
+ 
+  setDriverData(data: any) {
+    this.driverData = data;
+  }
+   
+  getDriverData() {
+    return this.driverData;
+  }
   getAllDrivers(): Observable<DriverDTO[]> {
     return this.http.get<DriverDTO[]>(`${this.baseUrl}`);
   }
