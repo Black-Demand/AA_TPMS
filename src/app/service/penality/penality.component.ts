@@ -1,10 +1,9 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { dateNotTheFuture, dateNotTheFutures } from '../date.validate';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
-import { SharedServiceService } from '../../services/shared/shared-service.service';
 import { NgModule } from "@angular/core";
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -19,15 +18,19 @@ import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from "@angular/material/radio";
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatStepperModule } from '@angular/material/stepper';
+import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import Lookup from '../../Models/lookup';
 import { LookupService } from '../../services/lookup.service';
+import { TempDriverService } from '../../services/temp-driver.service';
+import { PenalityService } from '../../services/penality.service';
+
+
 
 interface DriverLicense {
   id: number;
   fullName: string;
-  licenseId: string;
+  licenseNumber: string;
   yetketNumber: string;
   yetfesmbteKen: string;
   yetkessbtKen: string;
@@ -70,13 +73,14 @@ interface DriverLicense {
   styleUrl: './penality.component.css'
 })
 export class PenalityComponent implements OnInit {
-  public get sharedData(): SharedServiceService {
-    return this._sharedData;
-  }
-  public set sharedData(value: SharedServiceService) {
-    this._sharedData = value;
-  }
+  // public get sharedData(): SharedServiceService {
+  //   return this._sharedData;
+  // }
+  // public set sharedData(value: SharedServiceService) {
+  //   this._sharedData = value;
+  // }
 
+  @ViewChild('stepper') stepper!: MatStepper;
 
  private router = inject(Router);
   // Form steps
@@ -102,25 +106,32 @@ export class PenalityComponent implements OnInit {
   dataSource: any[] = [];  
 
   constructor(private fb: FormBuilder,
-<<<<<<< HEAD
-    private _sharedData: SharedServiceService
-=======
-              private sharedData: SharedServiceService,
-              private lookupservice: LookupService
->>>>>>> 67920db1ffbf318a9e71a9cbd35f60c701c879f1
+
+              private lookupservice: LookupService,
+              private penalityService: PenalityService,
+              private driverService: TempDriverService
   ) {
-    this.createForms();
+
   }
   ngOnInit() {
     this.loadRegions();
     this.loadMajors();
     this.loadViolationGrade();
-    const data = this.sharedData.getDriverData();
+    const data = this.driverService.getDriverData();
+
+    this.createForms();
+
     if (data) {
       this.firstFormGroup.patchValue({
         fullName: data.fullName,
-        licenseId: data.licenseId
+        licenseNumber: data.licenseNumber
       });
+    }
+    if(data) {
+      this.secondFormGroup.patchValue({
+        yeerkenPoint: data.offencePoint
+        
+      })
     }
   }
 
@@ -128,7 +139,7 @@ export class PenalityComponent implements OnInit {
     // First form (basic information)
     this.firstFormGroup = this.fb.group({
       fullName: [{value: '', disabled: true}, Validators.required],
-      licenseId: [{value: '', disabled: true}, Validators.required],
+      licenseNumber: [{value: '', disabled: true}, Validators.required],
       yetketNumber: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       yetfesmbteKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
       yetkessbtKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
@@ -142,11 +153,11 @@ export class PenalityComponent implements OnInit {
 
     // Second form (evaluation)
     this.secondFormGroup = this.fb.group({
-      yeerkenPoint: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      yeerkenKefya: ['', Validators.required],
-      zegytoYemekefelPoint: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
-      zegytoYemekefelKefya: ['', Validators.required],
-      wozefPoint: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+      yeerkenPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      yeerkenKefya: [{value: '' , disabled: true}, Validators.required],
+      zegytoYemekefelPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      zegytoYemekefelKefya: [{value: '' , disabled: true}, Validators.required],
+      wozefPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
       totalPoint: [{value: 0, disabled: true}]
     });
 
@@ -251,12 +262,19 @@ export class PenalityComponent implements OnInit {
     this.secondFormGroup.patchValue({ totalPoint: total });
   }
 
-  saveFirstForm(): void {
-    if (this.firstFormGroup.invalid) {
-      return;
+  submitFirstForm() {
+    if (this.firstFormGroup.valid) {
+      this.penalityService.createPenality(this.firstFormGroup.value).subscribe({
+        next: (res) => {
+          this.stepper.next();
+        },
+        error: (err) => {
+          console.error('Error submitting form:', err);
+        }
+      });
     }
-    // Proceed to next form
   }
+  
 
   onKeyDown(event: KeyboardEvent){
     const allowKey = ['Enter','Backspace', 'Escape', 'Delete','Tab','Dot'];

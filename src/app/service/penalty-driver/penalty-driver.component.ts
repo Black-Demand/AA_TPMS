@@ -3,7 +3,6 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatTableDataSource } from '@angular/material/table';
 import { Router, RouterLink } from '@angular/router';
-import { SharedServiceService } from '../../services/shared/shared-service.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -28,9 +27,8 @@ interface Driver {
   fullName: string;
   issuerRegion: string;
   issuerCity: string;
-  // id: string;
-  // licenseNumber: string;
-  // issuerDate: Date;
+  licenseNumber: string;
+  issuerDate: string;
 }
 
 @Component({
@@ -60,24 +58,23 @@ export class PenaltyDriverComponent {
   searchForm!: FormGroup;
   searchType: 'name' | 'license' = 'name';
   showResults = false;
-
+  licenseAreas: Lookup.LicenceAreaDTO[] = [];
   licenseRegions: Lookup.LicenceRegionDTO[] = [];
   licenseLevels: Lookup.LicenceCategoryDTO[] = [];
 
   // Results Table
   displayedColumns: string[] = [
     'fullName',
-    // 'licenseId',
+    'licenseNumber',
     'issuerRegion',
     'issuerCity',
-    // 'issuerDate',
+    'issuerDate',
     'actions',
   ];
   dataSource = new MatTableDataSource<Driver>();
 
   constructor(
     private fb: FormBuilder,
-    private sharedData: SharedServiceService,
     private driverService: TempDriverService,
     private licenceLookupService: LookupService, // <-- Inject your service
     private router: Router
@@ -88,6 +85,12 @@ export class PenaltyDriverComponent {
   ngOnInit(): void {
     this.loadRegions();
     this.loadCategories();
+
+    this.searchForm.get('region')?.valueChanges.subscribe((regionCode: number) => {
+      if (regionCode) {
+        this.loadLicenseAreas(regionCode);
+      }
+    })    
   }
 
   private loadRegions(): void {
@@ -103,6 +106,15 @@ export class PenaltyDriverComponent {
       error: (err) => console.error('Failed to load categories', err),
     });
   }
+
+  
+  private loadLicenseAreas(code : number): void {
+    this.licenceLookupService.getAllAreas(code).subscribe({
+      next: (data) => (this.licenseAreas = data),
+      error: (err) => console.error('Failed to load license areas', err),
+    });
+  }
+
   createForm(): void {
     this.searchForm = this.fb.group({
       searchType: ['name'],
@@ -150,6 +162,9 @@ export class PenaltyDriverComponent {
       });
     }
   }
+
+
+
 
   onSubmit(): void {
     if (this.searchForm.invalid) {
@@ -201,22 +216,29 @@ export class PenaltyDriverComponent {
     return {
       fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
       issuerRegion: dto.licenceRegion ? this.getRegionName(dto.licenceRegion) : 'Unknown',
-      issuerCity: dto.licenceArea || 'N/A',
+      issuerCity: dto.licenceArea ? this.getCityName(dto.licenceArea) : 'Unknown',
+      issuerDate: dto.issuanceDate || '',  // Let formatter handle fallback
+      licenseNumber: dto.licenceNo?.trim() || ''
     };
   }
   
   
+  
 
   private getRegionName(code: string): string {
-    return this.licenseRegions.find((r) => r.code === code)?.Description || code;
+    return this.licenseRegions.find((r) => r.code === code)?.amDescription || code;
+  }
+
+  private getCityName(code: string) : string {
+    return this.licenseAreas.find((c) => c.code === code)?.amDescription || code;
   }
   
   
 
   navigateToPenaltyForm(driver: any) {
-    this.sharedData.setDriverData({
+    this.driverService.setDriverData({
       fullName: driver.fullName,
-      licenseId: driver.licenseId,
+      licenseNumber: driver.licenseNumber,
     });
     this.router.navigate(['/penality']);
   }
