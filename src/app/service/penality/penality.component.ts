@@ -21,6 +21,8 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
+import Lookup from '../../Models/lookup';
+import { LookupService } from '../../services/lookup.service';
 
 interface DriverLicense {
   id: number;
@@ -82,15 +84,15 @@ export class PenalityComponent implements OnInit {
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
   showResults = false;
+  violationTypeDisabled = false;
 
-  levels = ['1','2','3'];
-  // Ethiopian regions
-  regions = [
-    'Addis Ababa', 'Amhara', 'Afar', 'Oromia', 'Somali', 
-    'Benishangul-Gumuz', 'Southern Nations', 'Tigray', 'Gambela', 'Harari'
-  ];
 
-  codes = ['01','02','03','04'];
+
+  regions: Lookup.LicenceRegionDTO[] = [];
+  majors: Lookup.Majors[] =[];
+  violationgrades: Lookup.OffenceGradeDTO[] =[];
+  violationtypes: Lookup.OffenceNewDTO[] =[];
+
 
   // Table data
   displayedColumns: string[] = [
@@ -100,11 +102,19 @@ export class PenalityComponent implements OnInit {
   dataSource: any[] = [];  
 
   constructor(private fb: FormBuilder,
+<<<<<<< HEAD
     private _sharedData: SharedServiceService
+=======
+              private sharedData: SharedServiceService,
+              private lookupservice: LookupService
+>>>>>>> 67920db1ffbf318a9e71a9cbd35f60c701c879f1
   ) {
     this.createForms();
   }
   ngOnInit() {
+    this.loadRegions();
+    this.loadMajors();
+    this.loadViolationGrade();
     const data = this.sharedData.getDriverData();
     if (data) {
       this.firstFormGroup.patchValue({
@@ -122,8 +132,8 @@ export class PenalityComponent implements OnInit {
       yetketNumber: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
       yetfesmbteKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
       yetkessbtKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
-      yetefateLevel: ['', Validators.required],
-      yetefateCode: ['', Validators.required],
+      violationGrade: ['', Validators.required],
+      violationType: [{ value: '', disabled: false }, Validators.required],
       yeseladeRegion: ['', Validators.required],
       yeseladeCode: ['', Validators.required],
       yeseladeNumber: ['', Validators.required]
@@ -145,6 +155,45 @@ export class PenalityComponent implements OnInit {
       this.calculateTotal();
     });
   }
+
+
+  loadRegions() {
+    this.lookupservice.getAllRegions().subscribe(data => {
+       this.regions = data;
+    });
+  }
+
+  loadMajors() {
+    this.lookupservice.getAllMajors().subscribe(data => {
+       this.majors = data;
+    });
+  }
+
+  loadViolationGrade() {
+    this.lookupservice.getAllOffences().subscribe(data => {
+       this.violationgrades = data;
+    });
+  }
+
+
+  loadViolationTypeByGrade(gradeCode: string) {
+    const numericGradeCode = Number(gradeCode);
+  
+    if (numericGradeCode > 3) {
+      this.violationTypeDisabled = true;
+      this.firstFormGroup.get('violationType')?.reset();
+      this.firstFormGroup.get('violationType')?.disable();
+      this.violationtypes = [];
+    } else {
+      this.violationTypeDisabled = false;
+      this.firstFormGroup.get('violationType')?.enable();
+      this.lookupservice.getAllOffenceNew([gradeCode]).subscribe(data => {
+        this.violationtypes = data;
+      });
+    }
+  }
+  
+
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
     const yetKen = group.get('yetfesmbteKen')?.value;
