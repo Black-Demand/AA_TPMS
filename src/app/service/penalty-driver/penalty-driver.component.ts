@@ -22,6 +22,7 @@ import { TempDriverService } from '../../services/temp-driver.service';
 import { DriverDTO } from '../../Models/driver';
 import Lookup from '../../Models/lookup';
 import { LookupService } from '../../services/lookup.service';
+import { ToastrModule, ToastrService } from 'ngx-toastr';
 
 interface Driver {
   fullName: string;
@@ -42,14 +43,16 @@ interface Driver {
     MatDatepickerModule,
     MatNativeDateModule,
     MatButtonModule,
-    MatIconModule,
     MatCardModule,
     MatRadioModule,
     MatTableModule,
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule,
+    MatIconModule,
+    ToastrModule
   ],
+  standalone: true,  
   templateUrl: './penalty-driver.component.html',
   styleUrl: './penalty-driver.component.css',
 })
@@ -76,12 +79,16 @@ export class PenaltyDriverComponent {
   constructor(
     private fb: FormBuilder,
     private driverService: TempDriverService,
-    private licenceLookupService: LookupService, // <-- Inject your service
-    private router: Router
-  ) // <-- Add this line
+    private licenceLookupService: LookupService, 
+    private router: Router,
+    private notiService: ToastrService
+  ) 
   {
     this.createForm();
   }
+
+    private toastr = inject(ToastrService); // ✅ inject instead of constructor
+
   ngOnInit(): void {
     this.loadRegions();
     this.loadCategories();
@@ -118,11 +125,9 @@ export class PenaltyDriverComponent {
   createForm(): void {
     this.searchForm = this.fb.group({
       searchType: ['name'],
-      // Name fields
       firstName: ['', Validators.required],
       fatherName: ['', Validators.required],
       grandfatherName: ['', Validators.required],
-      // License fields
       region: [''],
       level: [''],
       licenseNumber: [''],
@@ -163,13 +168,15 @@ export class PenaltyDriverComponent {
     }
   }
 
-
+ 
 
 
   onSubmit(): void {
     if (this.searchForm.invalid) {
       return;
     }
+
+     
   
     const formValue = this.searchForm.value;
   
@@ -189,6 +196,8 @@ export class PenaltyDriverComponent {
             console.error('Search by name failed:', err);
             this.dataSource.data = [];
             this.showResults = false;
+            this.notiService.error("Driver not found with this information")
+
           },
         });
     } else {
@@ -204,6 +213,7 @@ export class PenaltyDriverComponent {
             this.showResults = true;
           },
           error: (err) => {
+            this.notiService.error("Driver not found with this information");
             console.error('Search by license failed:', err);
             this.dataSource.data = [];
             this.showResults = false;
@@ -217,7 +227,7 @@ export class PenaltyDriverComponent {
       fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
       issuerRegion: dto.licenceRegion ? this.getRegionName(dto.licenceRegion) : 'Unknown',
       issuerCity: dto.licenceArea ? this.getCityName(dto.licenceArea) : 'Unknown',
-      issuerDate: dto.issuanceDate || '',  // Let formatter handle fallback
+      issuerDate: dto.issuanceDate || '',  
       licenseNumber: dto.licenceNo?.trim() || ''
     };
   }
@@ -245,7 +255,6 @@ export class PenaltyDriverComponent {
 
   onNext(driver: Driver): void {
     console.log('Proceeding with driver:', driver);
-    // Navigate to next form or perform action
   }
 
   formatDate(date: Date): string {

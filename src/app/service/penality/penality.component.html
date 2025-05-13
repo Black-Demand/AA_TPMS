@@ -30,14 +30,14 @@
 
               <mat-form-field appearance="outline">
                 <mat-label>Ticket Number</mat-label>
-                <input matInput formControlName="yetketNumber" required (keydown)="onKeyDown($event)"
+                <input matInput formControlName="ticketNo" required (keydown)="onKeyDown($event)"
                   placeholder="Enter Numbers only">
                 <mat-error>{{getNumberErrorMessage()}}</mat-error>
               </mat-form-field>
 
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Violation Date</mat-label>
-                <input matInput [matDatepicker]="yet_Ken" formControlName="yetfesmbteKen" required
+                <input matInput [matDatepicker]="yet_Ken" formControlName="violationDate" required
                   (dateChange)="firstFormGroup.updateValueAndValidity()">
                 <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
                 <mat-datepicker #yet_Ken></mat-datepicker>
@@ -46,7 +46,7 @@
 
               <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Accused Date</mat-label>
-                <input matInput [matDatepicker]="yetss_ken" formControlName="yetkessbtKen" [min]="minEndDate" required
+                <input matInput [matDatepicker]="yetss_ken" formControlName="dateAccused" [min]="minEndDate" required
                   (dateChange)="firstFormGroup.updateValueAndValidity()">
                 <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
                 <mat-datepicker #yetss_ken></mat-datepicker>
@@ -77,7 +77,7 @@
 
               <mat-form-field appearance="outline">
                 <mat-label>Plate Region</mat-label>
-                <mat-select formControlName="yeseladeRegion" required>
+                <mat-select formControlName="plateRegion" required>
                   <mat-option *ngFor="let region of regions" [value]="region.code">
                     {{region.amDescription}}
                   </mat-option>
@@ -86,7 +86,7 @@
 
               <mat-form-field appearance="outline">
                 <mat-label>Major Code</mat-label>
-                <mat-select formControlName="yeseladeCode" required>
+                <mat-select formControlName="NewPlateCode" required>
                   <mat-option *ngFor="let major of majors" [value]="major.codeId">
                     {{major.majorCode}}
                   </mat-option>
@@ -96,7 +96,7 @@
 
               <mat-form-field appearance="outline">
                 <mat-label>Plate Number</mat-label>
-                <input matInput formControlName="yeseladeNumber" required>
+                <input matInput formControlName="NewPlateNo" required>
               </mat-form-field>
             </div>
 
@@ -117,22 +117,22 @@
             <div class="form-grid" style="margin-top: 10px;">
               <mat-form-field appearance="outline">
                 <mat-label>Offence Point</mat-label>
-                <input matInput type="number" formControlName="yeerkenPoint" >
+                <input matInput type="number" formControlName="PenalityPoints" >
               </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <mat-label>Offence payment amount</mat-label>
-                <input matInput formControlName="yeerkenKefya" >
+                <input matInput formControlName="Amount" >
               </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <mat-label>Delay Paied Point</mat-label>
-                <input matInput type="number" formControlName="zegytoYemekefelPoint" >
+                <input matInput type="number" formControlName="DelayPoints" >
               </mat-form-field>
 
               <mat-form-field appearance="outline">
                 <mat-label>Delay paied amount</mat-label>
-                <input matInput formControlName="zegytoYemekefelKefya" >
+                <input matInput formControlName="DelayAmount" >
               </mat-form-field>
 
               <mat-form-field appearance="outline">
@@ -142,7 +142,7 @@
 
               <mat-form-field appearance="outline">
                 <mat-label>Total Point</mat-label>
-                <input matInput formControlName="totalPoint" >
+                <input matInput formControlName="TotalAmount" >
               </mat-form-field>
             </div>
 

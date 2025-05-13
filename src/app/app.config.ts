@@ -1,14 +1,19 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-
 import { routes } from './app.routes';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-
-export const appConfig: ApplicationConfig = {
-  providers: [provideZoneChangeDetection({ eventCoalescing: true }), provideHttpClient(withFetch()),
+import { provideAnimations } from '@angular/platform-browser/animations';
+import { provideToastr, ToastrModule } from 'ngx-toastr';  // Import ToastrModule
+export const appConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideHttpClient(withFetch()),
     provideRouter(routes),
+provideToastr({
+  closeButton: true,
+  positionClass: 'toast-bottom-right', // <- set desired position
+})   , provideAnimations() ,
     provideMomentDateAdapter({
       parse: {
         dateInput: ['DD-MM-YYYY'],
@@ -20,8 +25,8 @@ export const appConfig: ApplicationConfig = {
         dateA11yLabel: 'LL',
         monthYearA11yLabel: 'MMMM YYYY',
         timeInput: undefined,
-        timeOptionLabel: undefined
-      }
-    })
-  ]
+        timeOptionLabel: undefined,
+      },
+    }),
+  ],
 };
