@@ -109,7 +109,7 @@ export class TemporaryRegistraionComponent implements OnInit {
       kebele: ['', Validators.required],
       houseNo: [''],
       remark: [''],      
-      // photo: [null, Validators.required]
+      photo: [null, Validators.required]
     });
   }
 

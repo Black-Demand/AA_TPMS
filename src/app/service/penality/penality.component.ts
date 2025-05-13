@@ -53,6 +53,12 @@ import { Penality } from '../../Models/penality';
   styleUrl: './penality.component.css'
 })
 export class PenalityComponent implements OnInit {
+  // public get sharedData(): SharedServiceService {
+  //   return this._sharedData;
+  // }
+  // public set sharedData(value: SharedServiceService) {
+  //   this._sharedData = value;
+  // }
 
   @ViewChild('stepper') stepper!: MatStepper;
 
@@ -80,6 +86,7 @@ export class PenalityComponent implements OnInit {
   dataSource: any[] = [];  
 
   constructor(private fb: FormBuilder,
+
               private lookupservice: LookupService,
               private penalityService: PenalityService,
               private driverService: TempDriverService
