@@ -7,6 +7,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from "../../header/header.component";
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,7 @@ export class LoginComponent {
   private router = inject(Router);
   showPassword = false;
 
+  constructor(private toastr: ToastrService){}
   
   form = this.fb.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
@@ -45,7 +47,10 @@ export class LoginComponent {
     if(username === 'Admin' && password === '123456') {
       this.router.navigate(['/nav-menu'])
     } else {
-      alert('Incorrect username or password');
+       this.toastr.error('UserName or Password Wrong!!!', 'Error', {
+      timeOut: 2000,
+      progressBar: true
+    });
     }
   }
 }

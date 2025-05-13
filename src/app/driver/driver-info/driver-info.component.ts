@@ -22,7 +22,6 @@ import { TempDriverService } from '../../services/temp-driver.service';
 import { DriverDTO } from '../../Models/driver';
 import Lookup from '../../Models/lookup';
 import { LookupService } from '../../services/lookup.service';
-import { ToastrService } from 'ngx-toastr';
 
 interface Driver {
   fullName: string;
@@ -33,7 +32,7 @@ interface Driver {
 }
 
 @Component({
-  selector: 'app-penalty-driver',
+  selector: 'app-driver-info',
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -51,11 +50,10 @@ interface Driver {
     MatStepperModule,
     MatTabsModule,
   ],
-  templateUrl: './penalty-driver.component.html',
-  styleUrl: './penalty-driver.component.css',
+  templateUrl: './driver-info.component.html',
+  styleUrl: './driver-info.component.css'
 })
-export class PenaltyDriverComponent {
-  // Search Form
+export class DriverInfoComponent {
   searchForm!: FormGroup;
   searchType: 'name' | 'license' = 'name';
   showResults = false;
@@ -79,7 +77,7 @@ export class PenaltyDriverComponent {
     private driverService: TempDriverService,
     private licenceLookupService: LookupService, // <-- Inject your service
     private router: Router,
-    private toastr: ToastrService
+    
   ) // <-- Add this line
   {
     this.createForm();
@@ -206,10 +204,7 @@ export class PenaltyDriverComponent {
             this.showResults = true;
           },
           error: (err) => {
-                this.toastr.error('Search by license ID failed!!!', 'Error', {
-                timeOut: 2000,
-                progressBar: true
-              });
+            console.error('Search by license failed:', err);
             this.dataSource.data = [];
             this.showResults = false;
           },
@@ -238,15 +233,7 @@ export class PenaltyDriverComponent {
     return this.licenseAreas.find((c) => c.code === code)?.amDescription || code;
   }
   
-  
 
-  navigateToPenaltyForm(driver: any) {
-    this.driverService.setDriverData({
-      fullName: driver.fullName,
-      licenseNumber: driver.licenseNumber,
-    });
-    this.router.navigate(['/penality']);
-  }
 
   onNext(driver: Driver): void {
     console.log('Proceeding with driver:', driver);
@@ -266,4 +253,5 @@ export class PenaltyDriverComponent {
     this.createForm();
     this.showResults = false;
   }
+
 }

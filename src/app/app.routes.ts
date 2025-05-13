@@ -6,6 +6,7 @@ import { TemporaryRegistraionComponent } from './driver/temporary-registraion/te
 import { PenaltyDriverComponent } from './service/penalty-driver/penalty-driver.component';
 import { PenalityComponent } from './service/penality/penality.component';
 import { PenaltyDifComponent } from './service/penalty-dif/penalty-dif.component';
+import { DriverInfoComponent } from './driver/driver-info/driver-info.component';
 
 export const routes: Routes = [
     {
@@ -26,13 +27,14 @@ export const routes: Routes = [
             {
                 path: 'nav-menu',
                 component: NavMenuComponent,
-                title: 'menud'
+                title: 'TPMS'
             }, 
             {path: 'penalty-driver', component: PenaltyDriverComponent},
             {path: 'temporary-registration', component: TemporaryRegistraionComponent},
             {path: 'penality', component: PenalityComponent},
             {path: 'penality-driver', component: PenaltyDriverComponent},
-            {path: 'penalty-dif', component: PenaltyDifComponent}
+            {path: 'penalty-dif', component: PenaltyDifComponent},
+            {path: 'driver-info', component: DriverInfoComponent}
         ]
     }
 ];

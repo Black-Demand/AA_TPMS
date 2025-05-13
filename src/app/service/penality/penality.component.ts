@@ -73,12 +73,6 @@ interface DriverLicense {
   styleUrl: './penality.component.css'
 })
 export class PenalityComponent implements OnInit {
-  // public get sharedData(): SharedServiceService {
-  //   return this._sharedData;
-  // }
-  // public set sharedData(value: SharedServiceService) {
-  //   this._sharedData = value;
-  // }
 
   @ViewChild('stepper') stepper!: MatStepper;
 

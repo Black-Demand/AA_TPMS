@@ -28,7 +28,7 @@ export class MenuComponent implements OnInit {
   ngOnInit(): void {
  
   }
-  title = 'TPSS';
+  title = 'TPMS';
 
   sideBarOpen = true;
 
