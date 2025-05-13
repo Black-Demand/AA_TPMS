@@ -22,6 +22,7 @@ import { TempDriverService } from '../../services/temp-driver.service';
 import { DriverDTO } from '../../Models/driver';
 import Lookup from '../../Models/lookup';
 import { LookupService } from '../../services/lookup.service';
+import { ToastrService } from 'ngx-toastr';
 
 interface Driver {
   fullName: string;
@@ -77,6 +78,7 @@ export class DriverInfoComponent {
     private driverService: TempDriverService,
     private licenceLookupService: LookupService, // <-- Inject your service
     private router: Router,
+    private toastr: ToastrService
     
   ) // <-- Add this line
   {
@@ -189,6 +191,10 @@ export class DriverInfoComponent {
             console.error('Search by name failed:', err);
             this.dataSource.data = [];
             this.showResults = false;
+             this.toastr.error('Search by name failed!!!', 'Error', {
+                timeOut: 2000,
+                progressBar: true
+              });
           },
         });
     } else {
@@ -207,6 +213,10 @@ export class DriverInfoComponent {
             console.error('Search by license failed:', err);
             this.dataSource.data = [];
             this.showResults = false;
+             this.toastr.error('Search by license ID failed!!!', 'Error', {
+                timeOut: 2000,
+                progressBar: true
+              });
           },
         });
     }
