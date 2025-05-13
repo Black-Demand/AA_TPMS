@@ -43,14 +43,15 @@ interface Driver {
     MatDatepickerModule,
     MatNativeDateModule,
     MatButtonModule,
-    MatIconModule,
     MatCardModule,
     MatRadioModule,
     MatTableModule,
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule,
+    MatIconModule
   ],
+  standalone: true,  
   templateUrl: './penalty-driver.component.html',
   styleUrl: './penalty-driver.component.css',
 })
@@ -84,6 +85,9 @@ export class PenaltyDriverComponent {
   {
     this.createForm();
   }
+
+    
+
   ngOnInit(): void {
     this.loadRegions();
     this.loadCategories();
@@ -120,11 +124,9 @@ export class PenaltyDriverComponent {
   createForm(): void {
     this.searchForm = this.fb.group({
       searchType: ['name'],
-      // Name fields
       firstName: ['', Validators.required],
       fatherName: ['', Validators.required],
       grandfatherName: ['', Validators.required],
-      // License fields
       region: [''],
       level: [''],
       licenseNumber: [''],
@@ -165,13 +167,15 @@ export class PenaltyDriverComponent {
     }
   }
 
-
+ 
 
 
   onSubmit(): void {
     if (this.searchForm.invalid) {
       return;
     }
+
+     
   
     const formValue = this.searchForm.value;
   
@@ -191,6 +195,8 @@ export class PenaltyDriverComponent {
             console.error('Search by name failed:', err);
             this.dataSource.data = [];
             this.showResults = false;
+            this.toastr.error("Driver not found with this information")
+
           },
         });
     } else {
@@ -222,7 +228,7 @@ export class PenaltyDriverComponent {
       fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
       issuerRegion: dto.licenceRegion ? this.getRegionName(dto.licenceRegion) : 'Unknown',
       issuerCity: dto.licenceArea ? this.getCityName(dto.licenceArea) : 'Unknown',
-      issuerDate: dto.issuanceDate || '',  // Let formatter handle fallback
+      issuerDate: dto.issuanceDate || '',  
       licenseNumber: dto.licenceNo?.trim() || ''
     };
   }
@@ -250,7 +256,6 @@ export class PenaltyDriverComponent {
 
   onNext(driver: Driver): void {
     console.log('Proceeding with driver:', driver);
-    // Navigate to next form or perform action
   }
 
   formatDate(date: Date): string {

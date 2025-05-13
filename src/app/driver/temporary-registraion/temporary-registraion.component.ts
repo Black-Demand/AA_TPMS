@@ -24,6 +24,7 @@ import { LookupService } from '../../services/lookup.service';
 import { Gender, GenderDescriptions } from '../../Enums/gender';
 import { DriverDTO } from '../../Models/driver';
 import { TempDriverService } from '../../services/temp-driver.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-temporary-registraion',
@@ -82,7 +83,8 @@ export class TemporaryRegistraionComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private tdrs: TempDriverService,
-    private lookupservice: LookupService
+    private lookupservice: LookupService,
+    private toastr: ToastrService
     
   ) {
     this.registrationForm = this.fb.group({
@@ -166,12 +168,12 @@ export class TemporaryRegistraionComponent implements OnInit {
   }
    
   onRegionChange(regionCode: number) {
-    this.selectedRegionCode = regionCode; // store if needed
+    this.selectedRegionCode = regionCode; 
     this.loadZones(regionCode);
   }
   
   onZoneChange(zoneCode: number) {
-    console.log('Zone changed:', zoneCode); // Check this in the browser console
+    console.log('Zone changed:', zoneCode);
     this.selectedZoneCode = zoneCode;
     this.loadWoredas(zoneCode);
   }
@@ -223,7 +225,7 @@ export class TemporaryRegistraionComponent implements OnInit {
     });
   }
   onIssuerRegionChange(regionCode: number): void {
-    console.log('Selected Region Code:', regionCode); // Should NOT be undefined
+    console.log('Selected Region Code:', regionCode); 
     if (regionCode != null) {
       this.selectedLicenceRegionCode = regionCode;
       this.loadAreasByLicenceRegion(regionCode);
@@ -297,7 +299,8 @@ export class TemporaryRegistraionComponent implements OnInit {
   
       this.tdrs.createDriver(driver).subscribe({
         next: (response) => {
-          alert('Driver created successfully');
+          // alert('Driver created successfully');
+          this.toastr.success("Driver created successfully");
           this.onReset(); 
         },
         error: (err) => {

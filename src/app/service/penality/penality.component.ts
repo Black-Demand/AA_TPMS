@@ -24,31 +24,10 @@ import Lookup from '../../Models/lookup';
 import { LookupService } from '../../services/lookup.service';
 import { TempDriverService } from '../../services/temp-driver.service';
 import { PenalityService } from '../../services/penality.service';
+import { Penality } from '../../Models/penality';
 
 
 
-interface DriverLicense {
-  id: number;
-  fullName: string;
-  licenseNumber: string;
-  yetketNumber: string;
-  yetfesmbteKen: string;
-  yetkessbtKen: string;
-  yetefateLevel: string;
-  yetefateCode: string;
-  yeseladeRegion: string;
-  yeseladeCode: string;
-  yeseladeNumber: string;
-  yeerkenPoint: number;
-  yeerkenKefya: string;
-  zegytoYemekefelPoint: number;
-  zegytoYemekefelKefya: string;
-  wozefPoint: number;
-  totalPoint: number;
-  yekefyaDay: Date;
-  yedersgeNumber: string;
-  yeckeNumber: string;
-}
 @Component({
   selector: 'app-penality',
   imports: [
@@ -69,6 +48,7 @@ interface DriverLicense {
         MatTabsModule,
     RouterLink
   ],
+  standalone: true,
   templateUrl: './penality.component.html',
   styleUrl: './penality.component.css'
 })
@@ -134,25 +114,25 @@ export class PenalityComponent implements OnInit {
     this.firstFormGroup = this.fb.group({
       fullName: [{value: '', disabled: true}, Validators.required],
       licenseNumber: [{value: '', disabled: true}, Validators.required],
-      yetketNumber: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
-      yetfesmbteKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
-      yetkessbtKen: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
+      ticketNo: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
+      violationDate: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
+      dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
       violationGrade: ['', Validators.required],
       violationType: [{ value: '', disabled: false }, Validators.required],
-      yeseladeRegion: ['', Validators.required],
-      yeseladeCode: ['', Validators.required],
-      yeseladeNumber: ['', Validators.required]
+      plateRegion: ['', Validators.required],
+      NewPlateCode: ['', Validators.required],
+      NewPlateNo: ['', Validators.required]
     },
    { validators: this.dateRangeValidator });
 
     // Second form (evaluation)
     this.secondFormGroup = this.fb.group({
-      yeerkenPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      yeerkenKefya: [{value: '' , disabled: true}, Validators.required],
-      zegytoYemekefelPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      zegytoYemekefelKefya: [{value: '' , disabled: true}, Validators.required],
+      PenalityPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      Amount: [{value: '' , disabled: true}, Validators.required],
+      DelayPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      DelayAmount: [{value: '' , disabled: true}, Validators.required],
       wozefPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      totalPoint: [{value: 0, disabled: true}]
+      TotalAmount: [{value: 0, disabled: true}]
     });
 
     // Calculate total when points change
@@ -201,8 +181,8 @@ export class PenalityComponent implements OnInit {
 
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const yetKen = group.get('yetfesmbteKen')?.value;
-    const yetsKen = group.get('yetkessbtKen')?.value;
+    const yetKen = group.get('violationDate')?.value;
+    const yetsKen = group.get('dateAccused')?.value;
 
     if(yetKen && yetsKen && yetKen > yetsKen){
         return { dateRangeInvalid: true };
@@ -211,11 +191,11 @@ export class PenalityComponent implements OnInit {
 }
 
   get minEndDate(): Date | null {
-    return this.firstFormGroup.get('yetfesmbteKen')?.value;
+    return this.firstFormGroup.get('violationDate')?.value;
   }
 
   getErrorMessageForYetfesmbetKen():string{
-    let field = this.firstFormGroup.get('yetfesmbteKen');
+    let field = this.firstFormGroup.get('violationDate');
     
     if(field?.hasError('required')){
       return 'The field is Required';
@@ -226,7 +206,7 @@ export class PenalityComponent implements OnInit {
     return "";
   }
   getErrorMessageForYetfessmbetKen():string{
-    let field = this.firstFormGroup.get('yetkessbtKen');
+    let field = this.firstFormGroup.get('dateAccused');
     
     if(field?.hasError('required')){
       return 'The field is Required';
@@ -240,7 +220,7 @@ export class PenalityComponent implements OnInit {
     return "";
   }
   getNumberErrorMessage(): string{
-    let field = this.firstFormGroup.get('yetketNumber');
+    let field = this.firstFormGroup.get('ticketNo');
     if(field?.hasError('required')){
       return 'Yetket Number is Required';
     }
@@ -258,7 +238,14 @@ export class PenalityComponent implements OnInit {
 
   submitFirstForm() {
     if (this.firstFormGroup.valid) {
-      this.penalityService.createPenality(this.firstFormGroup.value).subscribe({
+      const formValue = this.firstFormGroup.value;
+  
+      const payload: Penality = {
+        penalityId: 0,
+        ...formValue
+      };
+  
+      this.penalityService.createPenality(payload).subscribe({
         next: (res) => {
           this.stepper.next();
         },

@@ -27,7 +27,7 @@ export const routes: Routes = [
             {
                 path: 'nav-menu',
                 component: NavMenuComponent,
-                title: 'TPMS'
+                title: 'AATPMS'
             }, 
             {path: 'penalty-driver', component: PenaltyDriverComponent},
             {path: 'temporary-registration', component: TemporaryRegistraionComponent},

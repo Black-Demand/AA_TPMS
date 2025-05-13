@@ -23,7 +23,7 @@ export class PenalityService {
   }
 
   createPenality(penality: Penality): Observable<Penality> {
-    return this.http.post<Penality>(this.baseUrl, penality);
+    return this.http.post<Penality>(`${this.baseUrl}/Penality` , penality);
   }
 
   updatePenality(penality: Penality): Observable<void> {
