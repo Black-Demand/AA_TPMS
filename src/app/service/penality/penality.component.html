@@ -58,7 +58,7 @@
                 <mat-label>Violation Grade</mat-label>
                 <mat-select formControlName="violationGrade" required
                   (selectionChange)="loadViolationTypeByGrade($event.value)">
-                  <mat-option *ngFor="let violationgrade of violationgrades" [value]="violationgrade.id">
+                  <mat-option *ngFor="let violationgrade of violationgrades" [value]="violationgrade.id.toString()">
                     {{ violationgrade.code }}
                   </mat-option>
                 </mat-select>
@@ -67,7 +67,7 @@
               <!-- Violation Type -->
               <mat-form-field appearance="outline">
                 <mat-label>Violation Type</mat-label>
-                <mat-select formControlName="violationType" [disabled]="violationTypeDisabled">
+                <mat-select formControlName="offenceId" [disabled]="violationTypeDisabled">
                   <mat-option *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
                     {{ violationtype.amDescription }}
                   </mat-option>
@@ -87,7 +87,7 @@
               <mat-form-field appearance="outline">
                 <mat-label>Major Code</mat-label>
                 <mat-select formControlName="NewPlateCode" required>
-                  <mat-option *ngFor="let major of majors" [value]="major.codeId">
+                  <mat-option *ngFor="let major of majors" [value]="major.codeId.toString()">
                     {{major.majorCode}}
                   </mat-option>
                 </mat-select>

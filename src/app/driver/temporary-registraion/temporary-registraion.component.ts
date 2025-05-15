@@ -306,6 +306,7 @@ export class TemporaryRegistraionComponent implements OnInit {
         error: (err) => {
           console.error('Error creating driver:', err);
           alert('Error: ' + (err.error?.message || err.message || 'Unknown error'));
+          this.toastr.error("'Error creating driver:" , err);
         }
       });
     } else {

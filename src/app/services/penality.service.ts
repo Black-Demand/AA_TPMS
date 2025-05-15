@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment.development';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { Penality } from '../Models/penality';
 
 @Injectable({
@@ -21,10 +21,17 @@ export class PenalityService {
   getPenalityById(id: number): Observable<Penality> {
     return this.http.get<Penality>(`${this.baseUrl}/${id}`);
   }
-
-  createPenality(penality: Penality): Observable<Penality> {
-    return this.http.post<Penality>(`${this.baseUrl}/Penality` , penality);
+createPenality(dto: any, licenseNumber: string): Observable<any> {
+  if (!licenseNumber) {
+    throw new Error('Missing required driver information (licenseNumber).');
   }
+
+  const params = new HttpParams()
+    .set('licenseNumber', licenseNumber);
+
+  return this.http.post(`${this.baseUrl}/Penality`, dto, { params });
+}
+
 
   updatePenality(penality: Penality): Observable<void> {
     return this.http.put<void>(`${this.baseUrl}/${penality.penalityId}`, penality);

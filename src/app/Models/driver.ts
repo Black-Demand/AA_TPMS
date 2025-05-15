@@ -1,4 +1,7 @@
 export interface DriverDTO {
+  licenseNumber: any;
+  licenseCategory: any;
+  issuerRegion: any;
   firstNameAmh?: string | null;
   fatherNameAmh?: string | null;
   grandNameAmh?: string | null;
@@ -24,6 +27,7 @@ export interface DriverDTO {
   kebele?: string | null;
   remark?: string | null;
   issuanceDate?: string | null;
+  mainGuid: string;
 
   // issuanceDate?: string | null; // Date string in ISO format
   // town?: string | null;

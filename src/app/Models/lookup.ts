@@ -54,7 +54,7 @@ namespace Lookup {
   export interface OffenceGradeDTO {
     id: number;
     code: string;
-    AmDescription: string;
+    amDescription: string;
     Description: string;
     FineAmount: number;
     OffenceGrade: string;

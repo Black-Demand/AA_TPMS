@@ -25,11 +25,13 @@ import { LookupService } from '../../services/lookup.service';
 import { ToastrService } from 'ngx-toastr';
 
 interface Driver {
+  mainGuid: string;
   fullName: string;
   issuerRegion: string;
   issuerCity: string;
   licenseNumber: string;
   issuerDate: string;
+  licenseCategory?: number;
 }
 
 @Component({
@@ -63,6 +65,7 @@ export class PenaltyDriverComponent {
   licenseAreas: Lookup.LicenceAreaDTO[] = [];
   licenseRegions: Lookup.LicenceRegionDTO[] = [];
   licenseLevels: Lookup.LicenceCategoryDTO[] = [];
+  selectedDriver: any; 
 
   // Results Table
   displayedColumns: string[] = [
@@ -169,70 +172,76 @@ export class PenaltyDriverComponent {
 
  
 
-
-  onSubmit(): void {
-    if (this.searchForm.invalid) {
-      return;
-    }
-
-     
-  
-    const formValue = this.searchForm.value;
-  
-    if (this.searchType === 'name') {
-      this.driverService
-        .searchByName(
-          formValue.firstName,
-          formValue.fatherName,
-          formValue.grandfatherName
-        )
-        .subscribe({
-          next: (driver) => {
-            this.dataSource.data = [this.mapDtoToDriver(driver)];
-            this.showResults = true;
-          },
-          error: (err) => {
-            console.error('Search by name failed:', err);
-            this.dataSource.data = [];
-            this.showResults = false;
-            this.toastr.error("Driver not found with this information")
-
-          },
-        });
-    } else {
-      this.driverService
-        .searchByLicense(
-          formValue.region,
-          formValue.level,
-          formValue.licenseNumber
-        )
-        .subscribe({
-          next: (driver) => {
-            this.dataSource.data = [this.mapDtoToDriver(driver)];
-            this.showResults = true;
-          },
-          error: (err) => {
-                this.toastr.error('Search by license ID failed!!!', 'Error', {
-                timeOut: 2000,
-                progressBar: true
-              });
-            this.dataSource.data = [];
-            this.showResults = false;
-          },
-        });
-    }
+onSubmit(): void {
+  if (this.searchForm.invalid) {
+    return;
   }
-  
-  private mapDtoToDriver(dto: DriverDTO): Driver {
-    return {
-      fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
-      issuerRegion: dto.licenceRegion ? this.getRegionName(dto.licenceRegion) : 'Unknown',
-      issuerCity: dto.licenceArea ? this.getCityName(dto.licenceArea) : 'Unknown',
-      issuerDate: dto.issuanceDate || '',  
-      licenseNumber: dto.licenceNo?.trim() || ''
-    };
+
+  const formValue = this.searchForm.value;
+
+  if (this.searchType === 'name') {
+    this.driverService
+      .searchByName(
+        formValue.firstName,
+        formValue.fatherName,
+        formValue.grandfatherName
+      )
+      .subscribe({
+        next: (driver) => {
+          const mapped = this.mapDtoToDriver(driver);
+          this.dataSource.data = [mapped];
+          this.selectedDriver = mapped; // ✅ Store selected driver
+          this.showResults = true;
+        },
+        error: (err) => {
+          console.error('Search by name failed:', err);
+          this.dataSource.data = [];
+          this.selectedDriver = null;
+          this.showResults = false;
+          this.toastr.error("Driver not found with this information");
+        },
+      });
+  } else {
+    this.driverService
+      .searchByLicense(
+        formValue.region,
+        formValue.level,
+        formValue.licenseNumber
+      )
+      .subscribe({
+        next: (driver) => {
+          const mapped = this.mapDtoToDriver(driver);
+          this.dataSource.data = [mapped];
+          this.selectedDriver = mapped; // ✅ Store selected driver
+          console.log('Mapped driver:', this.selectedDriver);  // This will show the full driver object
+          this.showResults = true;
+        },
+        error: (err) => {
+          this.toastr.error('Driver not found with this', 'Error', {
+            timeOut: 2000,
+            progressBar: true
+          });
+          this.dataSource.data = [];
+          this.selectedDriver = null;
+          this.showResults = false;
+        },
+      });
   }
-  
+}
+
+private mapDtoToDriver(dto: DriverDTO): Driver {
+  return {
+    mainGuid: dto.mainGuid,
+    fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
+    issuerRegion: dto.licenceRegion ? this.getRegionName(dto.licenceRegion) : 'Unknown',
+    issuerCity: dto.licenceArea ? this.getCityName(dto.licenceArea) : 'Unknown',
+    issuerDate: dto.issuanceDate || '',  
+    licenseNumber: dto.licenceNo?.trim() || '',
+    licenseCategory: dto.licenceGrade != null ? +dto.licenceGrade : undefined
+  };
+}
+
+
   
   
 
@@ -250,6 +259,7 @@ export class PenaltyDriverComponent {
     this.driverService.setDriverData({
       fullName: driver.fullName,
       licenseNumber: driver.licenseNumber,
+      mainGuid: driver.mainGuid
     });
     this.router.navigate(['/penality']);
   }

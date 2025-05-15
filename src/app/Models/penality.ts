@@ -6,9 +6,9 @@ export interface Penality {
   violationGrade?: string | null;
   offenceId?: number | null;
   plateRegion?: number | null;
-  // vehicleType?: string | null;
   NewPlateCode?: string;
   NewPlateNo?: string;
+  parentGuid?: string | null;
 
 
   // PenalityPoints?: number;

@@ -25,6 +25,8 @@ import { LookupService } from '../../services/lookup.service';
 import { TempDriverService } from '../../services/temp-driver.service';
 import { PenalityService } from '../../services/penality.service';
 import { Penality } from '../../Models/penality';
+import { DriverDTO } from '../../Models/driver';
+import { ToastrService } from 'ngx-toastr';
 
 
 
@@ -63,6 +65,7 @@ export class PenalityComponent implements OnInit {
   secondFormGroup!: FormGroup;
   showResults = false;
   violationTypeDisabled = false;
+  selectedDriver!: DriverDTO;
 
 
 
@@ -83,7 +86,8 @@ export class PenalityComponent implements OnInit {
 
               private lookupservice: LookupService,
               private penalityService: PenalityService,
-              private driverService: TempDriverService
+              private driverService: TempDriverService,
+              private toastr: ToastrService
   ) {
 
   }
@@ -96,15 +100,23 @@ export class PenalityComponent implements OnInit {
     this.createForms();
 
     if (data) {
+
+        this.selectedDriver = data; 
+
       this.firstFormGroup.patchValue({
+        mainGuid: data.mainGuid,
         fullName: data.fullName,
         licenseNumber: data.licenseNumber
       });
     }
     if(data) {
       this.secondFormGroup.patchValue({
-        yeerkenPoint: data.offencePoint
-        
+      PenalityPoints: data.penalityPoints,
+      Amount: data.amount,
+      DelayPoints: data.delayPoints,
+      DelayAmount: data.delayAmount,
+      wozefPoint: data.wozefPoint ?? 0, 
+      TotalAmount: data.totalAmount        
       })
     }
   }
@@ -118,14 +130,14 @@ export class PenalityComponent implements OnInit {
       violationDate: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
       dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
       violationGrade: ['', Validators.required],
-      violationType: [{ value: '', disabled: false }, Validators.required],
+      offenceId: [{ value: '', disabled: false }, Validators.required],
       plateRegion: ['', Validators.required],
       NewPlateCode: ['', Validators.required],
-      NewPlateNo: ['', Validators.required]
+      NewPlateNo: ['', Validators.required],
+      
     },
    { validators: this.dateRangeValidator });
 
-    // Second form (evaluation)
     this.secondFormGroup = this.fb.group({
       PenalityPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
       Amount: [{value: '' , disabled: true}, Validators.required],
@@ -236,26 +248,35 @@ export class PenalityComponent implements OnInit {
     this.secondFormGroup.patchValue({ totalPoint: total });
   }
 
-  submitFirstForm() {
-    if (this.firstFormGroup.valid) {
-      const formValue = this.firstFormGroup.value;
-  
-      const payload: Penality = {
-        penalityId: 0,
-        ...formValue
-      };
-  
-      this.penalityService.createPenality(payload).subscribe({
-        next: (res) => {
-          this.stepper.next();
-        },
+submitFirstForm(): void {
+  console.log('Form validity:', this.firstFormGroup.valid);
+  console.log('Selected driver:', this.selectedDriver);
+
+  if (this.firstFormGroup.valid && this.selectedDriver?.mainGuid) {
+    const dto: Penality = {
+      ...this.firstFormGroup.value,
+      parentGuid: this.selectedDriver.mainGuid
+    };
+    
+    const region = this.selectedDriver?.issuerRegion;
+    const licenseCategory = this.selectedDriver?.licenseCategory;
+    const licenseNumber = this.selectedDriver?.licenseNumber;
+    // const mainGuid = this.selectedDriver?.mainGuid;
+    console.log('Sending to penalty service:', { region, licenseCategory, licenseNumber });
+
+    this.penalityService.createPenality(dto ,licenseNumber)
+      .subscribe({
+        next: () => { this.toastr.success("Penality added successfully"),         this.stepper.next()},
         error: (err) => {
           console.error('Error submitting form:', err);
+          this.toastr.error('Failed to submit penalty.');
         }
       });
-    }
+  } else {
+    // console.error('Form invalid or driver not selected');
   }
-  
+}
+
 
   onKeyDown(event: KeyboardEvent){
     const allowKey = ['Enter','Backspace', 'Escape', 'Delete','Tab','Dot'];
@@ -274,28 +295,30 @@ export class PenalityComponent implements OnInit {
  
 
   saveSecondForm() {
-    if (this.secondFormGroup.valid) {
-      // Calculate total points
-      const totalPoints = 
-        +this.secondFormGroup.value.yeerkenPoint +
-        +this.secondFormGroup.value.zegytoYemekefelPoint +
-        +this.secondFormGroup.value.wozefPoint;
+  if (this.secondFormGroup.valid) {
+    const rawValues = this.secondFormGroup.getRawValue(); // ✅ includes disabled fields
 
-      this.secondFormGroup.patchValue({ totalPoint: totalPoints });
+    // Calculate total points
+    const totalPoints =
+      +rawValues.PenalityPoints +
+      +rawValues.DelayPoints +
+      +rawValues.wozefPoint;
 
-      // Prepare data for the results table
-      const resultData = {
-        yekefyaDay: new Date(),  // Today's date
-        yedersgeNumber: this.firstFormGroup.value.yetketNumber,
-        yeckeNumber: this.firstFormGroup.value.yetefateCode,
-        fullName: this.firstFormGroup.value.fullName,  // <-- FullName from first form
-        kefya: this.secondFormGroup.value.yeerkenKefya
-      };
+    this.secondFormGroup.patchValue({ TotalAmount: totalPoints });
 
-      this.dataSource = [resultData];  // Assign to table data
-      this.showResults = true;         // Show the results table
-    }
+    // Prepare data for the results table
+    const resultData = {
+      yekefyaDay: new Date(),  // Today's date
+      yedersgeNumber: this.firstFormGroup.value.yetketNumber,
+      penalitypoints: this.firstFormGroup.value.penalitypoints,
+      fullName: this.firstFormGroup.value.fullName,
+      amount: rawValues.amount  // ⚠️ make sure this field exists
+    };
+
+    this.dataSource = [resultData];
+    this.showResults = true;
   }
+}
 
   formatDate(date: Date): string {
     return date.toLocaleDateString();
