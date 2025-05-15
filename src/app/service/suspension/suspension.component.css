@@ -1,0 +1,122 @@
+.suspension-management-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Form Styles */
+.registration-form {
+  width: 100%;
+}
+
+.form-card {
+  margin-bottom: 24px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.section-title {
+  color: #3f51b5;
+  margin: 16px 0;
+  font-weight: 500;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 8px;
+}
+
+.form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+/* Table Styles */
+.table-card {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.table-controls {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 16px;
+}
+
+.search-field {
+  width: 300px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.suspension-table {
+  width: 100%;
+}
+
+/* Badge Styles */
+.level-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.level-badge.temporary {
+  background-color: #fff3e0;
+  color: #e65100;
+}
+
+.level-badge.fixed {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+/* Add this to your existing CSS if you want a smooth transition */
+.form-field {
+  transition: all 0.3s ease;
+}
+.status-badge.active {
+  background-color: #ffebee;
+  color: #c62828;
+}
+
+.status-badge.expired {
+  background-color: #e8f5e9;
+  color: #2e7d32;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .suspension-management-container {
+    padding: 12px;
+  }
+  
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .form-field {
+    width: 100%;
+  }
+  
+  .search-field {
+    width: 100%;
+  }
+  
+  .displayed-columns {
+    flex-wrap: wrap;
+  }
+}

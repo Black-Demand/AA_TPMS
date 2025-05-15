@@ -7,6 +7,7 @@ import { PenaltyDriverComponent } from './service/penalty-driver/penalty-driver.
 import { PenalityComponent } from './service/penality/penality.component';
 import { PenaltyDifComponent } from './service/penalty-dif/penalty-dif.component';
 import { DriverInfoComponent } from './driver/driver-info/driver-info.component';
+import { SuspensionComponent } from './service/suspension/suspension.component';
 
 export const routes: Routes = [
     {
@@ -34,7 +35,8 @@ export const routes: Routes = [
             {path: 'penality', component: PenalityComponent},
             {path: 'penality-driver', component: PenaltyDriverComponent},
             {path: 'penalty-dif', component: PenaltyDifComponent},
-            {path: 'driver-info', component: DriverInfoComponent}
+            {path: 'driver-info', component: DriverInfoComponent},
+            {path: 'suspension', component: SuspensionComponent}
         ]
     }
 ];
