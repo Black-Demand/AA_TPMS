@@ -1,0 +1,153 @@
+<div class="suspension-management-container">
+  <!-- Form Section -->
+  <form [formGroup]="penaltyForm" (ngSubmit)="onSubmit()" class="registration-form">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Suspension Information</mat-card-title>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <h3 class="section-title">Information</h3>
+        <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="fullName" readonly>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Driver License ID</mat-label>
+            <input matInput formControlName="licenseNumber" readonly>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Yegedwe Akele (the body that blocked)</mat-label>
+            <input matInput formControlName="blocked">
+            <mat-error>The field is required</mat-error>
+          </mat-form-field>
+        </div>
+
+      <div class="form-row">
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Registration Date</mat-label>
+        <input matInput [matDatepicker]="reg_date" formControlName="regDate">
+        <mat-datepicker-toggle matSuffix [for]="reg_date"></mat-datepicker-toggle>
+        <mat-datepicker #reg_date></mat-datepicker>
+        <mat-error>{{getErrorForRegDate()}}</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Suspension Date</mat-label>
+        <input matInput [matDatepicker]="sus_date" formControlName="susDate">
+        <mat-datepicker-toggle matSuffix [for]="sus_date"></mat-datepicker-toggle>
+        <mat-datepicker #sus_date></mat-datepicker>
+        <mat-error>{{getErrorForSupDate()}}</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Suspension Level</mat-label>
+        <mat-select formControlName="susLevel" required (selectionChange)="onSuspensionLevelChange()">
+          <mat-option *ngFor="let code of codes" [value]="code">{{code}}</mat-option>
+        </mat-select>
+         <mat-error>The field is required</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <!-- Conditional Expiration Date Field -->
+      <mat-form-field appearance="outline" class="form-field" *ngIf="showExpirationDate">
+        <mat-label>Expiration Date</mat-label>
+        <input matInput [matDatepicker]="exp_date" formControlName="expDate">
+        <mat-datepicker-toggle matSuffix [for]="exp_date"></mat-datepicker-toggle>
+        <mat-datepicker #exp_date></mat-datepicker>
+        <mat-error>{{getErrorForExpDate()}}</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Suspension Letter Number</mat-label>
+        <input matInput formControlName="letterNumber">
+          <mat-error>The field is required</mat-error>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline" class="form-field">
+        <mat-label>Reason for Ban</mat-label>
+        <input matInput formControlName="reason">
+        <mat-error>The field is required</mat-error>
+      </mat-form-field>
+    </div>
+  
+      <mat-card-actions align="end">
+        <button mat-button type="button" (click)="onReset()">Reset</button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="penaltyForm.invalid">Save</button>
+      </mat-card-actions>
+      </mat-card-content>
+    </mat-card>
+  </form>
+
+  <!-- Table Section -->
+  <mat-card class="table-card">
+    <mat-card-header>
+      <mat-card-title>Suspension Records</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      
+
+      <div class="table-container">
+        <table mat-table [dataSource]="dataSource" class="suspension-table">
+          <!-- Blocking Body Column -->
+          <ng-container matColumnDef="blocked">
+            <th mat-header-cell *matHeaderCellDef>Blocking Body</th>
+            <td mat-cell *matCellDef="let element">{{element.blocked}}</td>
+          </ng-container>
+
+          <!-- Registration Date Column -->
+          <ng-container matColumnDef="regDate">
+            <th mat-header-cell *matHeaderCellDef>Registration Date</th>
+            <td mat-cell *matCellDef="let element">{{element.regDate }}</td>
+          </ng-container>
+
+          <!-- Letter Number Column -->
+          <ng-container matColumnDef="letterNumber">
+            <th mat-header-cell *matHeaderCellDef>Letter Number</th>
+            <td mat-cell *matCellDef="let element">{{element.letterNumber}}</td>
+          </ng-container>
+
+          <!-- Suspension Date Column -->
+          <ng-container matColumnDef="susDate">
+            <th mat-header-cell *matHeaderCellDef>Suspension Date</th>
+            <td mat-cell *matCellDef="let element">{{element.susDate}}</td>
+          </ng-container>
+
+          <!-- Suspension Level Column -->
+          <ng-container matColumnDef="susLevel">
+            <th mat-header-cell *matHeaderCellDef>Suspension Level</th>
+            <td mat-cell *matCellDef="let element">
+              <span class="level-badge" [class.temporary]="element.susLevel === 'Temporary'" 
+                                [class.fixed]="element.susLevel === 'Fixed'">
+                {{element.susLevel}}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Suspension Status</th>
+            <td mat-cell *matCellDef="let element">
+              <span class="status-badge" [class.active]="isActive(element)"
+                                  [class.expired]="!isActive(element)">
+                {{isActive(element) ? '0' : '1'}}
+              </span>
+            </td>
+          </ng-container>
+
+        
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

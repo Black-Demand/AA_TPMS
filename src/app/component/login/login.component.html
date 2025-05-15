@@ -1,45 +1,64 @@
 <app-header></app-header>
 <router-outlet />
-<div class="container d-flex justify-content-center align-items-center min-vh-100">
-    <div class="row border rounded-5 p-3 bg-white shadow box-area">
-        <div class="col-md-6 rounded-4 d-flex justify-content-center align-items-center flex-column left-box" style="background: #1087be;">
-                <div class="featured-image mb-3">
-                    <img src="assets/logo2.jpeg" class="img-fluid logo" style="width: 400px; height: 250px; margin-top: 20px;">
-                </div>
-                <p class="text-white fs-2" style="font-family: 'Courier New', Courier, monospace; font-weight: 100;">For Help
-                    <br>   <mat-icon>phone</mat-icon>
-                    (251)115519397
-                </p>
+<div class="login-container">
+    <div class="login-card">
+      <!-- Left Column - Login Form -->
+      <div class="login-form-container">
+        <div class="login-header">
+          <h2>Welcome to TPS</h2>
+          <p>Traffic Penalty System</p>
         </div>
-        <div class="col-md-6 right-box">
-            <div class="row align-items-center">
-                <div class="header-text mb-4">
-                    <h2>Hello, Welcome</h2>
-                    <p>TPS.</p>
-                </div>
-                <form [formGroup]="form" (ngSubmit)="onLogin()">
-                    <mat-form-field appearance="fill">
-                        <mat-label>UserName</mat-label>
-                        <mat-icon matPrefix>person</mat-icon>
-                        <input matInput formControlName="username" type="text" placeholder="Enter UserName">
-                        <mat-error *ngIf="form.get('username')?.invalid && form.get('username')?.touched">Username is required</mat-error>
-                    </mat-form-field>
-                    <mat-form-field appearance="fill">
-                        <mat-label>Password</mat-label>
-                        <mat-icon matPrefix>lock</mat-icon>
-                        <input matInput type="password" formControlName="password"  [type]="showPassword ? 'text' : 'password'"  placeholder="Enter Password">
-                        <button mat-icon-button matSuffix (click)="passVis()" type="button">
-                            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-                        </button>
-                        <mat-error *ngIf="form.get('password')?.invalid">Password is Required</mat-error>
-                    </mat-form-field>
-
-                    <div class="input-group mb-3">
-                        <button [disabled]="form.invalid" class="btn btn-lg btn-primary w-100 fs-6">Login</button>
-                    </div>
-                </form>
-            </div>
+  
+        <form [formGroup]="form" (ngSubmit)="onLogin()" class="login-form">
+          <!-- Username Field -->
+          <mat-form-field appearance="outline">
+            <mat-label>Username</mat-label>
+            <mat-icon matPrefix>person</mat-icon>
+            <input matInput formControlName="username" placeholder="Enter your username">
+            <mat-error *ngIf="form.get('username')?.hasError('required')">
+              Username is required
+            </mat-error>
+            <mat-error *ngIf="form.get('username')?.hasError('minlength')">
+              Username must be at least 3 characters
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Password Field -->
+          <mat-form-field appearance="outline">
+            <mat-label>Password</mat-label>
+            <mat-icon matPrefix>lock</mat-icon>
+            <input matInput formControlName="password" 
+                   [type]="showPassword ? 'text' : 'password'" 
+                   placeholder="Enter your password">
+            <button mat-icon-button matSuffix (click)="passVis()" type="button" aria-label="Toggle password visibility">
+              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+            </button>
+            <mat-error *ngIf="form.get('password')?.hasError('required')">
+              Password is required
+            </mat-error>
+            <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+              Password must be at least 6 characters
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Login Button -->
+          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid" class="login-button">
+            Login
+            <mat-icon>arrow_forward</mat-icon>
+          </button>
+        </form>
+      </div>
+  
+      <!-- Right Column - Branding (hidden on mobile) -->
+      <div class="branding-container">
+        <div class="branding-content">
+          <img src="assets/logo2.jpeg" alt="TPS Logo" class="brand-logo">
+          <div class="support-info">
+            <mat-icon>phone</mat-icon>
+            <span>(251) 115 519 397</span>
+            <p>For Help or technical support</p>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-
+  </div>

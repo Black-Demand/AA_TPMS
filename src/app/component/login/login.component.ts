@@ -3,55 +3,58 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { Router, RouterOutlet } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
-import { HeaderComponent } from "../../header/header.component";
 import { ToastrService } from 'ngx-toastr';
+import { HeaderComponent } from "../../header/header.component";
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
   imports: [
-    RouterOutlet,
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatButtonModule,
     MatInputModule,
     MatIconModule,
-    HeaderComponent
-],
+    HeaderComponent,
+    RouterOutlet
+  ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  
   private fb = inject(FormBuilder);
   private router = inject(Router);
-  showPassword = false;
-
-  constructor(private toastr: ToastrService){}
+  private toastr = inject(ToastrService);
   
-  form = this.fb.group({
+  showPassword = false;
+  form = this.fb.nonNullable.group({
     username: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [Validators.required, Validators.minLength(6)]]
   });
 
-  passVis(): void{
+  togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
   }
 
+  passVis(): void {
+  this.showPassword = !this.showPassword;
+}
   onLogin() {
-    let { username, password } = this.form.value; // Extract values from form controls
+    if (this.form.invalid) return;
+
+    const { username, password } = this.form.getRawValue();
     
-    if(username === 'Admin' && password === '123456') {
-      this.router.navigate(['/nav-menu'])
+    if (username === 'Admin' && password === '123456') {
+      this.router.navigate(['/nav-menu']);
     } else {
-       this.toastr.error('UserName or Password Wrong!!!', 'Error', {
-      timeOut: 2000,
-      progressBar: true
-    });
+      this.toastr.error('Invalid username or password', 'Login Failed', {
+        timeOut: 2000,
+        progressBar: true,
+      });
     }
   }
 }
-
