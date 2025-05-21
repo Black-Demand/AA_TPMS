@@ -39,7 +39,7 @@
             <mat-error *ngIf="searchForm.get('grandfatherName')?.invalid">Required</mat-error>
           </mat-form-field>
         </div>
- 
+
         <!-- License Search Fields -->
         <div *ngIf="searchType === 'license'" class="search-fields license-fields">
           <mat-form-field appearance="outline">
@@ -144,7 +144,7 @@
 
                 <button mat-raised-button color="primary" (click)="navigateToNext(driver)">
                   <mat-icon>{{ action === 'penalty' ? 'gavel' : 'block' }}</mat-icon>
-                  {{ action === 'penalty' ? 'Penalty' : 'suspension' }}
+                  {{ action === 'penalty' ? 'suspension' : 'suspension' }}
                 </button>
              
 
