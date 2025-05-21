@@ -37,12 +37,16 @@
       </div>
 
       <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Amount of Payment</mat-label>
-          <input matInput formControlName="amount" required (keydown)="onKeyDown($event)"
-            placeholder="Enter Numbers only"  >
-          <mat-error>{{getPaymentErrorMessage()}}</mat-error>
-        </mat-form-field>
+   <mat-form-field appearance="outline" class="form-field">
+  <mat-label>Amount of Payment</mat-label>
+  <input matInput 
+         formControlName="amount" 
+         required 
+         readonly 
+         placeholder="Enter Numbers only">
+  <mat-error>{{ getPaymentErrorMessage() }}</mat-error>
+</mat-form-field>
+
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Violation Date</mat-label>

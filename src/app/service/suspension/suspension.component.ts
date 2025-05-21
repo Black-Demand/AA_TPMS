@@ -198,13 +198,13 @@ onSubmit(): void {
     return new Date(suspension.expDate) > new Date();
   }
  onSuspensionLevelChange(): void {
-  const selectedId = Number(this.penaltyForm.get('injunctionType')?.value); // convert to number
+  const selectedId = Number(this.penaltyForm.get('injunctionType')?.value); 
   const selectedInjunction = this.injunctions.find(i => i.id === selectedId);
 
-  const isTemporary = selectedInjunction?.id === 1; // or use a flag if available
+  const isTemporary = selectedInjunction?.id === 1; 
   this.showExpirationDate = isTemporary;
 
-  const expDateControl = this.penaltyForm.get('injunctionEndDate'); // make sure this name matches your form
+  const expDateControl = this.penaltyForm.get('injunctionEndDate'); 
 
   if (isTemporary) {
     expDateControl?.setValidators(Validators.required);
