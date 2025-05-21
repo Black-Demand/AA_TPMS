@@ -77,9 +77,9 @@ namespace Lookup {
   }
 
   export interface InjunctionTypeDTO {
-    Id: number;
+    id: number;
     Description: string;
-    DescriptionAmh: string;
+    descriptionAmh: string;
   }
 
   export interface KifleketemaDTO {
@@ -104,6 +104,8 @@ namespace Lookup {
     ServiceType: string;
     AmServiceType: string;
   }
+
+  
 
 }
 export default Lookup;

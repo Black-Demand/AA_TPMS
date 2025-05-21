@@ -6,6 +6,7 @@
     min-height: 100vh;
     background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
     padding: 20px;
+    margin-top: -15px;
   }
   
   /* Login Card */
@@ -65,6 +66,7 @@
     align-items: center;
     justify-content: center;
     gap: 8px;
+    background-color: teal;
   }
   
   /* Branding Container */

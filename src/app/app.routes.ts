@@ -36,7 +36,11 @@ export const routes: Routes = [
             {path: 'penality-driver', component: PenaltyDriverComponent},
             {path: 'penalty-dif', component: PenaltyDifComponent},
             {path: 'driver-info', component: DriverInfoComponent},
-            {path: 'suspension', component: SuspensionComponent}
+            {path: 'suspension', component: SuspensionComponent},
+            // { path: 'suspension', redirectTo: 'suspension-search', pathMatch: 'full' },
+            // { path: 'suspension-search', component: PenaltyDriverComponent },
+            // { path: 'suspension-form/:id', component: SuspensionComponent }
+
         ]
     }
 ];

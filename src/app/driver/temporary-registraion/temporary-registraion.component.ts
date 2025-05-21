@@ -25,6 +25,7 @@ import { Gender, GenderDescriptions } from '../../Enums/gender';
 import { DriverDTO } from '../../Models/driver';
 import { TempDriverService } from '../../services/temp-driver.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatDividerModule } from '@angular/material/divider';
 
 @Component({
   selector: 'app-temporary-registraion',
@@ -44,7 +45,8 @@ import { ToastrService } from 'ngx-toastr';
     MatTableModule,
     MatPaginatorModule,
     MatStepperModule,
-    MatTabsModule
+    MatTabsModule,
+    MatDividerModule   
   ],
   templateUrl: './temporary-registraion.component.html',
   styleUrls: ['./temporary-registraion.component.css']
@@ -246,7 +248,7 @@ export class TemporaryRegistraionComponent implements OnInit {
     })
   }
   loadNationality() {
-    this.lookupservice.getAllLookups().subscribe(
+    this.lookupservice.getAllNationality().subscribe(
       data => {
         this.nationalities = data;
       },

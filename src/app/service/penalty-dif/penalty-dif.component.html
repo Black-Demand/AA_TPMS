@@ -1,87 +1,91 @@
 <form [formGroup]="penaltyForm" (ngSubmit)="onSubmit()" class="registration-form">
-    <mat-card class="form-card">
-      <mat-card-header>
-        <mat-card-title>Penalty for Rule Violations (Miscellaneous)</mat-card-title>
-      </mat-card-header>
-  
-      <mat-card-content>
-        <!-- Section 1: Issuer Information -->
-        <h3 class="section-title">Information</h3>
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Full Name</mat-label>
-            <input matInput formControlName="fullName" required>
-            <mat-error>Required field</mat-error>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Penalty Type</mat-label>
-            <mat-select formControlName="penaltyType" required>
-              <mat-option *ngFor="let penaltyTyp of penaltyTypes" [value]="penaltyTyp">
-                {{penaltyTyp}}
-              </mat-option>
-            </mat-select>
-            <mat-error>Required field</mat-error>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Yetefate Code</mat-label>
-            <mat-select formControlName="yetCode" required>
-              <mat-option *ngFor="let code of codes" [value]="code">
-                {{code}}
-              </mat-option>
-            </mat-select>
-            <mat-error>Required field</mat-error>
-          </mat-form-field>
-        </div>
-  
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Amount of Payment</mat-label>
-            <input matInput  formControlName="payment" required (keydown)="onKeyDown($event)" placeholder="Enter Numbers only">
-            <mat-error>{{getPaymentErrorMessage()}}</mat-error>     
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Yetfesmbte Ken</mat-label>
-            <input matInput [matDatepicker]="yet_Ken" formControlName="yetfesmbteKen" required (dateChange)="penaltyForm.updateValueAndValidity()">
-            <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
-            <mat-datepicker #yet_Ken></mat-datepicker>
-            <mat-error>{{getErrorForYetfesmbetKen()}}</mat-error>
-          </mat-form-field>
+  <mat-card class="form-card">
+    <mat-card-header>
+      <mat-card-title>Penalty for Rule Violations (Miscellaneous)</mat-card-title>
+    </mat-card-header>
 
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Yetkessbte Ken</mat-label>
-            <input matInput [matDatepicker]="yetss_ken" formControlName="yetkessbteKen" [min]="minEndDate" required (dateChange)="penaltyForm.updateValueAndValidity()">
-            <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
-            <mat-datepicker #yetss_ken></mat-datepicker>
-            <mat-error>{{getErrorForYetkessbteKen()}}</mat-error>
-          </mat-form-field>
-        </div>
-  
-        
-        <div class="form-row">
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Yetket Number</mat-label>
-            <input matInput formControlName="yetketNumber" required
-            (keydown)="onKeyDown($event)" placeholder="Enter Numbers only">
-            <mat-error>{{getNumberErrorMessage()}}</mat-error>
-          </mat-form-field>
-  
-          <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Description</mat-label>
-            <input matInput formControlName="desc" required>
-            <mat-error>Required field</mat-error>
-          </mat-form-field>
-  
-        </div>
-  
-      </mat-card-content>
-  
-      <mat-card-actions align="end">
-        <button mat-button type="button" (click)="onReset()">Reset</button>
-        <button mat-raised-button color="primary" type="submit" [disabled]="penaltyForm.invalid">Submit</button>
-      </mat-card-actions>
-    </mat-card>
-                
+    <mat-card-content>
+      <!-- Section 1: Issuer Information -->
+      <h3 class="section-title">Information</h3>
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="fullName" required>
+          <mat-error>Required field</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Violation Grade</mat-label>
+          <mat-select formControlName="violationGrade" required (selectionChange)="onPenaltyTypeChange($event.value)">
+            <mat-option *ngFor="let penalty of offences" [value]="penalty.code">
+              {{ penalty.amDescription }}
+            </mat-option>
+          </mat-select>
+          <mat-error>Required field</mat-error>
+        </mat-form-field>
+
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Violation Type</mat-label>
+          <mat-select formControlName="violationType" required>
+            <mat-option *ngFor="let violation of violationtypes" [value]="violation.code">
+              {{ violation.amDescription }}
+            </mat-option>
+          </mat-select>
+          <mat-error>Required field</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Amount of Payment</mat-label>
+          <input matInput formControlName="amount" required (keydown)="onKeyDown($event)"
+            placeholder="Enter Numbers only"  >
+          <mat-error>{{getPaymentErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Violation Date</mat-label>
+          <input matInput [matDatepicker]="yet_Ken" formControlName="violationDate" required
+            (dateChange)="penaltyForm.updateValueAndValidity()">
+          <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
+          <mat-datepicker #yet_Ken></mat-datepicker>
+          <mat-error>{{getErrorForViolationDate()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Date Accused</mat-label>
+          <input matInput [matDatepicker]="yetss_ken" formControlName="dateAccused" [min]="minEndDate" required
+            (dateChange)="penaltyForm.updateValueAndValidity()">
+          <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
+          <mat-datepicker #yetss_ken></mat-datepicker>
+          <mat-error>{{getErrorForDateAccused()}}</mat-error>
+        </mat-form-field>
+      </div>
+
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Ticket Number</mat-label>
+          <input matInput formControlName="ticketNo" required (keydown)="onKeyDown($event)"
+            placeholder="Enter Numbers only">
+          <mat-error>{{getNumberErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Description</mat-label>
+          <input matInput formControlName="desc" required>
+          <mat-error>Required field</mat-error>
+        </mat-form-field>
+
+      </div>
+
+    </mat-card-content>
+
+    <mat-card-actions align="end">
+      <button mat-button type="button" (click)="onReset()">Reset</button>
+      <button mat-raised-button color="primary" type="submit" >Submit</button>
+    </mat-card-actions>
+  </mat-card>
+
 </form>

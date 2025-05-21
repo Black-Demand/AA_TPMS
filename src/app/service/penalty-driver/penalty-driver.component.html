@@ -121,7 +121,7 @@
             <!-- Issuer Date Column -->
             <ng-container matColumnDef="issuerDate">
               <th mat-header-cell *matHeaderCellDef>Issued Date</th>
-              <td mat-cell *matCellDef="let driver">{{ formatDate(driver.issuerDate) }}</td>
+              <td mat-cell *matCellDef="let driver">{{ driver.issuanceDate | date: 'yyyy-MM-dd' }}</td>
             </ng-container>
 
 
@@ -131,9 +131,23 @@
             <ng-container matColumnDef="actions">
               <th mat-header-cell *matHeaderCellDef>Action</th>
               <td mat-cell *matCellDef="let driver">
-                <button mat-raised-button color="primary" (click)="navigateToPenaltyForm(driver)">
-                  <mat-icon>home</mat-icon>
+                <!-- <button mat-raised-button color="primary" (click)="navigateToPenaltyForm(driver)">
+                  <mat-icon></mat-icon>Next
+                </button> -->
+                <!-- <button mat-raised-button color="primary" (click)="navigateToNext(driver, 'penalty')">
+                  <mat-icon>gavel</mat-icon> Penalty
                 </button>
+                 -->
+                <!-- <button mat-raised-button color="accent" (click)="navigateToNext(driver, 'suspension')">
+                  <mat-icon>block</mat-icon> Suspension
+                </button> -->
+
+                <button mat-raised-button color="primary" (click)="navigateToNext(driver)">
+                  <mat-icon>{{ action === 'penalty' ? 'gavel' : 'block' }}</mat-icon>
+                  {{ action === 'penalty' ? 'Penalty' : 'suspension' }}
+                </button>
+             
+
               </td>
             </ng-container>
 

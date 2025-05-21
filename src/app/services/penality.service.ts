@@ -27,7 +27,7 @@ createPenality(dto: any, licenseNumber: string): Observable<any> {
   }
 
   const params = new HttpParams()
-    .set('licenseNumber', licenseNumber);
+    .set('licenseNumber', licenseNumber); 
 
   return this.http.post(`${this.baseUrl}/Penality`, dto, { params });
 }

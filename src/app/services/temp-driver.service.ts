@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { DriverDTO } from '../Models/driver';
 import { environment } from '../../environments/environment.development';
 @Injectable({
@@ -10,8 +10,15 @@ export class TempDriverService {
   
   private driverData: any;
   private baseUrl = environment.baseUrl;
+  navigationTarget$: any;
   constructor(private http: HttpClient) { }
  
+
+
+  private _driverData = new BehaviorSubject<DriverDTO | null>(null);
+  public driverData$ = this._driverData.asObservable();
+
+
   setDriverData(data: any) {
     this.driverData = data;
   }

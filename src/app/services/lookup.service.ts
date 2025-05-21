@@ -90,9 +90,14 @@ export class LookupService {
   getAllKifleKetema(): Observable<Lookup.KifleketemaDTO[]> {
     return this.http.get<Lookup.KifleketemaDTO[]>(`${this.baseUrl}/LicenceLookUp/kifleketema`);
   }
-
+  getAllNationality(): Observable<Lookup.LookupDTO[]> {
+    return this.http.get<Lookup.LookupDTO[]>(`${this.baseUrl}/LicenceLookUp/nationalities`);
+  }
   getAllOffenceNew(offenceGradeCodes: string[]): Observable<Lookup.OffenceNewDTO[]> {
     const params = new HttpParams({ fromObject: { offenceGradeCodes } });
     return this.http.get<Lookup.OffenceNewDTO[]>(`${this.baseUrl}/LicenceLookUp/offencenew`, { params });
+  }
+   getCustomOffenceGrades(): Observable<Lookup.OffenceGradeDTO[]> {
+    return this.http.get<Lookup.OffenceGradeDTO[]>(`${this.baseUrl}/LicenceLookUp/customoffences`);
   }
 } 
