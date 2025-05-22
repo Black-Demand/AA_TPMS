@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { Color, NgxChartsModule, ScaleType } from '@swimlane/ngx-charts';
 import { DashborardSummaryService } from '../../services/dashborard-summary.service';
 import { CommonModule } from '@angular/common';
 import Dashboard from '../../Models/dashboard';
@@ -33,9 +33,13 @@ export class NavMenuComponent implements OnInit{
   xAxisLabel = 'Violation Grade';
   showYAxisLabel = true;
   yAxisLabel = 'Count';
-  colorScheme = {
-    domain: ['#5AA454', '#C7B42C']
-  };
+  colorScheme: Color = {
+  name: 'customScheme',
+  selectable: true,
+  group: ScaleType.Ordinal,
+  domain: ['#6495ED', '#90ee90']
+};
+
 
   constructor(private dashboardService: DashborardSummaryService,
               private lookupservice: LookupService

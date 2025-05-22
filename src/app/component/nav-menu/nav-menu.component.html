@@ -5,30 +5,35 @@
     <!-- Bar Chart -->
     <div class="chart-box">
       <h4>By Violation Grade and Sex</h4>
-      <ngx-charts-bar-vertical-2d
-        [results]="results"
-        [view]="[450, 400]"
-        [xAxis]="showXAxis"
-        [yAxis]="showYAxis"
-        [legend]="showLegend"
-        [xAxisLabel]="xAxisLabel"
-        [yAxisLabel]="yAxisLabel"
-        [gradient]="gradient">
-      </ngx-charts-bar-vertical-2d>
+        <ngx-charts-bar-vertical-2d
+      [results]="results"
+      [view]="[450, 400]"
+      [xAxis]="showXAxis"
+      [yAxis]="showYAxis"
+      [legend]="showLegend"
+      [xAxisLabel]="xAxisLabel"
+      [yAxisLabel]="yAxisLabel"
+      [gradient]="gradient"
+      [scheme]="colorScheme">
+</ngx-charts-bar-vertical-2d>
+
+
     </div>
 
     <!-- Pie Chart -->
     <div class="chart-box">
       <h4>By Region</h4>
-      <ngx-charts-pie-chart
-        [view]="[450, 400]"
-        [results]="regionPenalties"
-        [legend]="true"
-        [labels]="true"
-        [doughnut]="false"
-        [explodeSlices]="false"
-        [gradient]="false">
-      </ngx-charts-pie-chart>
+     <ngx-charts-pie-chart
+  [view]="[450, 400]"
+  [results]="regionPenalties"
+  [legend]="true"
+  [labels]="true"
+  [doughnut]="false"
+  [explodeSlices]="false"
+  [gradient]="false"
+  [scheme]="colorScheme">
+</ngx-charts-pie-chart>
+
     </div>
   </div>
 </div>
