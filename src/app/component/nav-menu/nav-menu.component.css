@@ -1,0 +1,11 @@
+.chart-row {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap; /* Responsive for small screens */
+  margin-top: 20px;
+}
+
+.chart-box {
+  text-align: center;
+}
