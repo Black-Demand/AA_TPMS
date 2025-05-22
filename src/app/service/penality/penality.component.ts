@@ -63,6 +63,7 @@ export class PenalityComponent implements OnInit {
   isLinear = true;
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
+  thirdFormGroup!: FormGroup;
   showResults = false;
   violationTypeDisabled = false;
   selectedDriver!: DriverDTO;
@@ -96,7 +97,7 @@ export class PenalityComponent implements OnInit {
     this.loadMajors();
     this.loadViolationGrade();
     const data = this.driverService.getDriverData();
-
+    this.generateOrdderNumber();
     this.createForms();
 
     if (data) {
@@ -107,6 +108,9 @@ export class PenalityComponent implements OnInit {
         mainGuid: data.mainGuid,
         fullName: data.fullName,
         licenseNumber: data.licenseNumber
+      });
+       this.thirdFormGroup.patchValue({
+        fullName: data.fullName,
       });
     }
     if(data) {
@@ -145,6 +149,16 @@ export class PenalityComponent implements OnInit {
       DelayAmount: [{value: '' , disabled: true}, Validators.required],
       wozefPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
       TotalAmount: [{value: 0, disabled: true}]
+    });
+
+    this.thirdFormGroup = this.fb.group({
+      orderNumber: [''],
+      payDay: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
+      receiptNumber: ['', Validators.required],
+      checkNumber: ['', Validators.required],
+      fullName: [{value: '', disabled: true}, Validators.required],
+      payment: ['',Validators.required]
+
     });
 
     // Calculate total when points change
@@ -205,6 +219,29 @@ export class PenalityComponent implements OnInit {
   get minEndDate(): Date | null {
     return this.firstFormGroup.get('violationDate')?.value;
   }
+
+
+  getErrorForPayDay():string{
+    let field = this.thirdFormGroup.get('payDay');
+
+      if(field?.hasError('required')){
+        return "The Pay Day is Required";
+      }
+
+       if(field?.hasError('dateNotTheFuture')){
+      return field.getError('dateNotTheFuture').message;
+    }
+    return "";
+  }
+
+  generateOrdderNumber(){
+    const randomNum = Math.floor(100000 + Math.random() * 900000);
+    const orderNumber = `${randomNum}`;
+
+    this.thirdFormGroup?.get('orderNumber')?.setValue(orderNumber);
+    this.thirdFormGroup?.get('orderNumber')?.disable();
+  }
+  
 
   getErrorMessageForYetfesmbetKen():string{
     let field = this.firstFormGroup.get('violationDate');
@@ -321,6 +358,8 @@ submitFirstForm(): void {
     this.showResults = true;
   }
 }
+
+savethirdForm(){}
 
   formatDate(date: Date): string {
     return date.toLocaleDateString();
