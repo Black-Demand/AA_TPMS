@@ -1,11 +1,94 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { DashborardSummaryService } from '../../services/dashborard-summary.service';
+import { CommonModule } from '@angular/common';
+import Dashboard from '../../Models/dashboard';
+import Lookup from '../../Models/lookup';
+import { MatSelectModule } from '@angular/material/select';
+import { FormsModule } from '@angular/forms';
+import { LookupService } from '../../services/lookup.service';
 
 @Component({
   selector: 'app-nav-menu',
-  imports: [],
+  imports: [NgxChartsModule, CommonModule, MatSelectModule, FormsModule],
   templateUrl: './nav-menu.component.html',
   styleUrl: './nav-menu.component.css'
 })
-export class NavMenuComponent {
+export class NavMenuComponent implements OnInit{
+ view: [number, number] = [700, 400];
+  results: any[] = [];
+  regionPenalties: any[] = [];
+  penalityMoneyAmount : any[] =[];
+  regions: Lookup.RegionDTO[] = [];
+  selectedRegion: string = '';
+  filteredRegionPenalties: any[] = [];
 
+
+
+  showXAxis = true;
+  showYAxis = true;
+  gradient = false;
+  showLegend = true;
+  showXAxisLabel = true;
+  xAxisLabel = 'Violation Grade';
+  showYAxisLabel = true;
+  yAxisLabel = 'Count';
+  colorScheme = {
+    domain: ['#5AA454', '#C7B42C']
+  };
+
+  constructor(private dashboardService: DashborardSummaryService,
+              private lookupservice: LookupService
+  ) {}
+
+  ngOnInit(): void {
+    this.dashboardService.getPenalitySummaryByViolationGradeAndSex().subscribe(data => {
+      this.results = this.transformData(data);
+    });
+
+    this.dashboardService.getPenaltiesByRegion().subscribe(data => {
+      this.regionPenalties = this.tranformDatas(data);
+    })
+
+    this.dashboardService.getPenaltyMoneyByRegionSummary(this.selectedRegion).subscribe(data => {
+      this.penalityMoneyAmount = this.transformdatss(data)
+    })
+  }
+
+  transformData(data: Dashboard.PenalitySexGradeSummaryDTO[]): any[] {
+    return data.map(item => ({
+      name: item.violationGrade,
+      series: [
+        { name: 'Male', value: item.maleCount },
+        { name: 'Female', value: item.femaleCount }
+      ]
+    }));
+  }
+
+  tranformDatas(data : Dashboard.RegionPenalityCountDTO[]) :any {
+    return data.map(item => ({
+      name: item.region.toString(),
+      value: item.penaltyCount
+    }))
+  }
+
+  transformdatss(data : Dashboard.RegionPenalityMoneySummaryDTO[]): any {
+    return data.map(item => ({
+      name : item.region,
+      value: item.totalPenaltyAmount
+    }))
+  }
+
+  onRegionChange(event: any): void {
+  const selected = this.selectedRegion;
+  this.filteredRegionPenalties = selected
+    ? this.regionPenalties.filter(p => p.name === selected)
+    : this.regionPenalties;
+}
+
+  loadRegions() {
+    this.lookupservice.getRegions().subscribe(data => {
+      this.regions = data;
+    });
+  }
 }
