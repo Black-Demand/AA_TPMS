@@ -113,7 +113,7 @@
 
         <mat-step [stepControl]="secondFormGroup"  #stepper>
           <form [formGroup]="secondFormGroup">
-            <ng-template matStepLabel>Evaluation</ng-template>
+            <ng-template matStepLabel>Payment Summery</ng-template>
 
             <div class="form-grid" style="margin-top: 10px;">
               <mat-form-field appearance="outline">
@@ -155,6 +155,60 @@
             </div>
           </form>
         </mat-step>
+
+        <!-- Third Form Step -->
+
+        <mat-step [stepControl]="thirdFormGroup"  #stepper>
+          <form [formGroup]="thirdFormGroup">
+            <ng-template matStepLabel>Receiving Payment</ng-template>
+
+            <div class="form-grid" style="margin-top: 10px;">
+              <mat-form-field appearance="outline">
+                <mat-label>Order Number</mat-label>
+                <input matInput formControlName="orderNumber" readonly >
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Pay Day</mat-label>
+                <input matInput [matDatepicker]="pay_day" formControlName="payDay" >
+                <mat-datepicker-toggle matSuffix [for] = "pay_day"></mat-datepicker-toggle>
+                <mat-datepicker #pay_day></mat-datepicker>
+                <mat-error>{{ getErrorForPayDay()}}</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Receipt Number</mat-label>
+                <input matInput  formControlName="receiptNumber" >
+                <mat-error>The field is Required</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Check Number</mat-label>
+                <input matInput formControlName="CheckNumber" >
+                <mat-error>The field is Required</mat-error>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Full Name</mat-label>
+                <input matInput formControlName="fullName" >
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Payment</mat-label>
+                <input matInput formControlName="payment" >
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button mat-button matStepperPrevious style="margin-top: 10px;">Back</button>
+              <button mat-raised-button color="primary" (click)="savethirdForm()" [disabled]="thirdFormGroup.invalid">
+                Paid
+              </button>
+            </div>
+          </form>
+        </mat-step>
+
+
       </mat-stepper>
 
       <!-- Results Table -->
