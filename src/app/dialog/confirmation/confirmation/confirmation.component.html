@@ -1,0 +1,30 @@
+<h2 mat-dialog-title class="dialog-header">
+  <div class="header-content">
+    <mat-icon class="payment-icon">verified</mat-icon>
+    <span class="title-text">Payment Confirmation</span>
+  </div>
+</h2>
+
+<mat-dialog-content class="dialog-content">
+  <div class="confirmation-message">
+    <p class="main-message">You are about to confirm this payment:</p>
+
+    <mat-divider class="divider"></mat-divider>
+
+    <p class="warning-message">
+      <mat-icon class="warning-icon">warning</mat-icon>
+      This action cannot be undone. Please verify all details before confirming.
+    </p>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end" class="dialog-actions">
+  <button mat-stroked-button color="primary" (click)="onCancel()" class="action-button">
+    <mat-icon>arrow_back</mat-icon>
+    Return
+  </button>
+  <button mat-flat-button color="primary" (click)="onConfirm()" class="action-button confirm-button">
+    <mat-icon>check_circle</mat-icon>
+    Confirm Payment
+  </button>
+</mat-dialog-actions>

@@ -3,10 +3,10 @@
     <mat-card-header>
       <mat-card-title>Penality form</mat-card-title>
       <div class="spacer"></div>
-      <button mat-raised-button [routerLink]="['/penality-driver']" class="back-button">
+      <!-- <button mat-raised-button [routerLink]="['/penality-driver']" class="back-button">
         <mat-icon>exit_to_app</mat-icon>
         <span>Back</span>
-      </button>
+      </button> -->
     </mat-card-header>
 
     <mat-card-content>
@@ -65,7 +65,7 @@
               </mat-form-field>
 
               <!-- Violation Type -->
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="outline" style="width: 460px;">
                 <mat-label>Violation Type</mat-label>
                 <mat-select formControlName="offenceId" [disabled]="violationTypeDisabled">
                   <mat-option *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
@@ -76,7 +76,7 @@
 
 
 
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="outline" style="margin-left: 150px; width: 270px;">
                 <mat-label>Plate Region</mat-label>
                 <mat-select formControlName="plateRegion" required>
                   <mat-option *ngFor="let region of regions" [value]="region.code">
@@ -85,7 +85,7 @@
                 </mat-select>
               </mat-form-field>
 
-              <mat-form-field appearance="outline">
+              <mat-form-field appearance="outline" style="margin-left: 110px;">
                 <mat-label>Major Code</mat-label>
                 <mat-select formControlName="NewPlateCode" required>
                   <mat-option *ngFor="let major of majors" [value]="major.codeId.toString()">
@@ -102,7 +102,7 @@
             </div>
 
             <div class="form-actions">
-              <button mat-raised-button color="primary" (click)="submitFirstForm()" [disabled]="firstFormGroup.invalid">
+              <button mat-raised-button color="primary" (click)="submitFirstForm()" matStepperNext [disabled]="firstFormGroup.invalid">
                 Submit and Next
               </button>
             </div>
@@ -148,9 +148,12 @@
             </div>
 
             <div class="form-actions">
-              <button mat-button matStepperPrevious style="margin-top: 10px;">Back</button>
-              <button mat-raised-button color="primary" (click)="saveSecondForm()" [disabled]="secondFormGroup.invalid">
-                Save
+              <button mat-button style="margin-top: 10px;" color="primary" matStepperNext>
+                <button mat-button>
+                  Next
+                <mat-icon>navigate_next</mat-icon>
+                </button>
+
               </button>
             </div>
           </form>
@@ -200,10 +203,15 @@
             </div>
 
             <div class="form-actions">
-              <button mat-button matStepperPrevious style="margin-top: 10px;">Back</button>
-              <button mat-raised-button color="primary" (click)="savethirdForm()" [disabled]="thirdFormGroup.invalid">
-                Paid
+              <button mat-button matStepperPrevious style="margin-top: 10px;">
+                  <mat-icon>arrow_back</mat-icon>
+                  Back
               </button>
+            <button mat-button style="margin-top: 10px;" color="primary" (click)="savethirdForm()">
+  <mat-icon>payment</mat-icon>
+  paied
+</button>
+
             </div>
           </form>
         </mat-step>

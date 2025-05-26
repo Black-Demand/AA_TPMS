@@ -27,11 +27,9 @@ export class NavMenuComponent implements OnInit{
 
   showXAxis = true;
   showYAxis = true;
-  gradient = false;
+  gradient = true;
   showLegend = true;
-  showXAxisLabel = true;
   xAxisLabel = 'Violation Grade';
-  showYAxisLabel = true;
   yAxisLabel = 'Count';
   colorScheme: Color = {
   name: 'customScheme',

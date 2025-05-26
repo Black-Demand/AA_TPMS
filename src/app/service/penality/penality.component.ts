@@ -27,6 +27,10 @@ import { PenalityService } from '../../services/penality.service';
 import { Penality } from '../../Models/penality';
 import { DriverDTO } from '../../Models/driver';
 import { ToastrService } from 'ngx-toastr';
+import { OrdersDTO } from '../../Models/order';
+import { OrdersService } from '../../services/orders.service';
+import { MatDialog } from '@angular/material/dialog';
+import { ConfirmationComponent } from '../../dialog/confirmation/confirmation/confirmation.component';
 
 
 
@@ -48,7 +52,7 @@ import { ToastrService } from 'ngx-toastr';
         MatPaginatorModule,
         MatStepperModule,
         MatTabsModule,
-    RouterLink
+  
   ],
   standalone: true,
   templateUrl: './penality.component.html',
@@ -82,13 +86,16 @@ export class PenalityComponent implements OnInit {
     'fullName', 'kefya', 'action'
   ];
   dataSource: any[] = [];  
+  licenseNo: any;
 
   constructor(private fb: FormBuilder,
 
               private lookupservice: LookupService,
               private penalityService: PenalityService,
               private driverService: TempDriverService,
-              private toastr: ToastrService
+              private toastr: ToastrService,
+              private ordersService: OrdersService,
+              private dialog: MatDialog
   ) {
 
   }
@@ -97,8 +104,8 @@ export class PenalityComponent implements OnInit {
     this.loadMajors();
     this.loadViolationGrade();
     const data = this.driverService.getDriverData();
-    this.generateOrdderNumber();
     this.createForms();
+    this.generateOrdderNumber();
 
     if (data) {
 
@@ -271,7 +278,7 @@ export class PenalityComponent implements OnInit {
   getNumberErrorMessage(): string{
     let field = this.firstFormGroup.get('ticketNo');
     if(field?.hasError('required')){
-      return 'Yetket Number is Required';
+      return 'Ticket Number is Required';
     }
     if(field?.hasError('pattern')){
       return 'Only Numbers are allowed';
@@ -303,7 +310,8 @@ submitFirstForm(): void {
 
     this.penalityService.createPenality(dto ,licenseNumber)
       .subscribe({
-        next: () => { this.toastr.success("Penality added successfully"),         this.stepper.next()},
+        next: () => { this.toastr.success("Penality added successfully"), 
+                  this.stepper.next()},
         error: (err) => {
           console.error('Error submitting form:', err);
           this.toastr.error('Failed to submit penalty.');
@@ -352,6 +360,7 @@ submitFirstForm(): void {
       penalitypoints: this.firstFormGroup.value.penalitypoints,
       fullName: this.firstFormGroup.value.fullName,
       amount: rawValues.amount  // ⚠️ make sure this field exists
+
     };
 
     this.dataSource = [resultData];
@@ -359,7 +368,41 @@ submitFirstForm(): void {
   }
 }
 
-savethirdForm(){}
+savethirdForm() {
+  const dialogRef = this.dialog.open(ConfirmationComponent, {
+    width: '450px'
+  });
+
+  dialogRef.afterClosed().subscribe(result => {
+    if (result === true) {
+      // Only proceed if user confirmed
+      if (this.thirdFormGroup.valid) {
+        const orderDto: OrdersDTO = this.thirdFormGroup.value; 
+        const licenseNo = this.licenseNo; 
+
+        this.ordersService.create(orderDto, licenseNo).subscribe({
+          next: (response) => {
+            this.toastr.success("Order submitted successfully");
+            console.log('Order submitted successfully:', response);
+          },
+          error: (err) => {
+            this.toastr.error("Error submitting order");
+            console.error('Error submitting order:', err);
+          },
+          complete: () => {
+            console.log('Order submission completed.');
+          }
+        });
+      } else {
+        console.warn('Form is invalid');
+        this.thirdFormGroup.markAllAsTouched(); 
+      }
+    } else {
+      console.log('User cancelled the operation');
+    }
+  });
+}
+
 
   formatDate(date: Date): string {
     return date.toLocaleDateString();

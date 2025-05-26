@@ -21,7 +21,7 @@ export class PenalityService {
   getPenalityById(id: number): Observable<Penality> {
     return this.http.get<Penality>(`${this.baseUrl}/${id}`);
   }
-createPenality(dto: any, licenseNumber: string): Observable<any> {
+  createPenality(dto: any, licenseNumber: string): Observable<any> {
   if (!licenseNumber) {
     throw new Error('Missing required driver information (licenseNumber).');
   }

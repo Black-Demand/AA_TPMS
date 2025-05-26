@@ -251,9 +251,6 @@ export class TemporaryRegistraionComponent implements OnInit {
     this.lookupservice.getAllNationality().subscribe(
       data => {
         this.nationalities = data;
-      },
-      error => {
-        console.error('Error fetching categories:', error);
       }
     );
   }

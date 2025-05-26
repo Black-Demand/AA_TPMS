@@ -141,7 +141,7 @@
         </mat-form-field>
         
 
-        <mat-form-field appearance="outline" class="form-field">
+        <mat-form-field appearance="outline" class="form-field" >
           <mat-label>Date of Birth</mat-label>
           <input matInput [matDatepicker]="dobPicker" formControlName="birthDate" required>
           <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
@@ -158,7 +158,7 @@
         </mat-form-field>
 
  
-        <mat-form-field appearance="outline" class="form-field phone-input-container">
+        <mat-form-field appearance="outline" class="form-field phone-input-container" style="max-width: 250px;">
           <mat-label>Phone No</mat-label>
           <span matPrefix>+251 &nbsp;</span>
           <input matInput formControlName="tel1" required maxlength="9" (input)="onPhoneInput($event)"

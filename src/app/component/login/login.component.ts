@@ -49,7 +49,7 @@ export class LoginComponent {
     const { username, password } = this.form.getRawValue();
     
     if (username === 'Admin' && password === '123456') {
-      this.router.navigate(['/dashboard']);
+      this.router.navigate(['/nav-menu']);
     } else {
       this.toastr.error('Invalid username or password', 'Login Failed', {
         timeOut: 2000,

@@ -14,7 +14,7 @@
           <mat-error>Required field</mat-error>
         </mat-form-field>
 
-        <mat-form-field appearance="outline" class="form-field">
+        <mat-form-field appearance="outline" class="form-field" >
           <mat-label>Violation Grade</mat-label>
           <mat-select formControlName="violationGrade" required (selectionChange)="onPenaltyTypeChange($event.value)">
             <mat-option *ngFor="let penalty of offences" [value]="penalty.code">
@@ -25,7 +25,7 @@
         </mat-form-field>
 
 
-        <mat-form-field appearance="outline" class="form-field">
+        <mat-form-field appearance="outline" class="form-field" style="width: 460px;">
           <mat-label>Violation Type</mat-label>
           <mat-select formControlName="violationType" required>
             <mat-option *ngFor="let violation of violationtypes" [value]="violation.code">
