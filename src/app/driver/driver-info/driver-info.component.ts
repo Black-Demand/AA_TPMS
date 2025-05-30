@@ -2,8 +2,8 @@ import { Component, inject, NgModule } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router, RouterLink } from '@angular/router';
-import { CommonModule } from '@angular/common';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
+import { CommonModule, formatDate } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -23,19 +23,25 @@ import { DriverDTO } from '../../Models/driver';
 import Lookup from '../../Models/lookup';
 import { LookupService } from '../../services/lookup.service';
 import { ToastrService } from 'ngx-toastr';
+import { MatMenuModule } from '@angular/material/menu';
+import { filter } from 'rxjs';
+import { DriverInformationComponent } from '../driver-information/driver-information.component';
+import { MatDialog } from '@angular/material/dialog';
 
 interface Driver {
+  mainGuid: string;
   fullName: string;
   issuerRegion: string;
   issuerCity: string;
   licenseNumber: string;
-  issuerDate: string;
+  issuanceDate: string;
+  licenseCategory?: number;
+  nationality?:  string;
 }
-
 @Component({
   selector: 'app-driver-info',
   imports: [
-    CommonModule,
+CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
     MatInputModule,
@@ -43,24 +49,30 @@ interface Driver {
     MatDatepickerModule,
     MatNativeDateModule,
     MatButtonModule,
-    MatIconModule,
     MatCardModule,
     MatRadioModule,
     MatTableModule,
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule,
+    MatIconModule,
+    MatMenuModule,
   ],
   templateUrl: './driver-info.component.html',
   styleUrl: './driver-info.component.css'
 })
 export class DriverInfoComponent {
+  // Search Form
   searchForm!: FormGroup;
   searchType: 'name' | 'license' = 'name';
   showResults = false;
   licenseAreas: Lookup.LicenceAreaDTO[] = [];
   licenseRegions: Lookup.LicenceRegionDTO[] = [];
   licenseLevels: Lookup.LicenceCategoryDTO[] = [];
+  nationalitys: Lookup.LookupDTO[] = [];
+  selectedDriver: any;
+  action: 'penalty' | 'suspension' = 'penalty'; // default
+  currentUrl! : string;
 
   // Results Table
   displayedColumns: string[] = [
@@ -76,23 +88,34 @@ export class DriverInfoComponent {
   constructor(
     private fb: FormBuilder,
     private driverService: TempDriverService,
-    private licenceLookupService: LookupService, // <-- Inject your service
+    private licenceLookupService: LookupService, 
     private router: Router,
-    private toastr: ToastrService
-    
-  ) // <-- Add this line
-  {
+    private toastr: ToastrService,
+    private route: ActivatedRoute ,
+     private dialog: MatDialog
+  ) {
     this.createForm();
   }
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      console.log('Query Params:', params);  
+      this.action = params['action'] === 'suspension' ? 'suspension' : 'penalty';
+      console.log('Action set to:', this.action);
+      console.log('Current URL:', window.location.href);
+
+
+    });
+
     this.loadRegions();
     this.loadCategories();
 
-    this.searchForm.get('region')?.valueChanges.subscribe((regionCode: number) => {
-      if (regionCode) {
-        this.loadLicenseAreas(regionCode);
-      }
-    })    
+    this.searchForm
+      .get('region')
+      ?.valueChanges.subscribe((regionCode: number) => {
+        if (regionCode) {
+          this.loadLicenseAreas(regionCode);
+        }
+      });
   }
 
   private loadRegions(): void {
@@ -109,8 +132,7 @@ export class DriverInfoComponent {
     });
   }
 
-  
-  private loadLicenseAreas(code : number): void {
+  private loadLicenseAreas(code: number): void {
     this.licenceLookupService.getAllAreas(code).subscribe({
       next: (data) => (this.licenseAreas = data),
       error: (err) => console.error('Failed to load license areas', err),
@@ -120,11 +142,9 @@ export class DriverInfoComponent {
   createForm(): void {
     this.searchForm = this.fb.group({
       searchType: ['name'],
-      // Name fields
       firstName: ['', Validators.required],
       fatherName: ['', Validators.required],
       grandfatherName: ['', Validators.required],
-      // License fields
       region: [''],
       level: [''],
       licenseNumber: [''],
@@ -165,16 +185,14 @@ export class DriverInfoComponent {
     }
   }
 
-
-
-
   onSubmit(): void {
+
     if (this.searchForm.invalid) {
       return;
     }
-  
+
     const formValue = this.searchForm.value;
-  
+
     if (this.searchType === 'name') {
       this.driverService
         .searchByName(
@@ -184,17 +202,17 @@ export class DriverInfoComponent {
         )
         .subscribe({
           next: (driver) => {
-            this.dataSource.data = [this.mapDtoToDriver(driver)];
+            const mapped = this.mapDtoToDriver(driver);
+            this.dataSource.data = [mapped];
+            this.selectedDriver = mapped; 
             this.showResults = true;
           },
           error: (err) => {
             console.error('Search by name failed:', err);
             this.dataSource.data = [];
+            this.selectedDriver = null;
             this.showResults = false;
-             this.toastr.error('Search by name failed!!!', 'Error', {
-                timeOut: 2000,
-                progressBar: true
-              });
+            this.toastr.error('Driver not found with this information');
           },
         });
     } else {
@@ -206,56 +224,122 @@ export class DriverInfoComponent {
         )
         .subscribe({
           next: (driver) => {
-            this.dataSource.data = [this.mapDtoToDriver(driver)];
+            const mapped = this.mapDtoToDriver(driver);
+            this.dataSource.data = [mapped];
+            this.selectedDriver = mapped; 
+            console.log('Mapped driver:', this.selectedDriver); 
             this.showResults = true;
           },
           error: (err) => {
-            console.error('Search by license failed:', err);
+            this.toastr.error('Driver not found with this information', 'Error', {
+              timeOut: 2000,
+              progressBar: true,
+            });
             this.dataSource.data = [];
+            this.selectedDriver = null;
             this.showResults = false;
-             this.toastr.error('Search by license ID failed!!!', 'Error', {
-                timeOut: 2000,
-                progressBar: true
-              });
           },
         });
     }
   }
-  
+
   private mapDtoToDriver(dto: DriverDTO): Driver {
     return {
+      mainGuid: dto.mainGuid,
       fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
-      issuerRegion: dto.licenceRegion ? this.getRegionName(dto.licenceRegion) : 'Unknown',
-      issuerCity: dto.licenceArea ? this.getCityName(dto.licenceArea) : 'Unknown',
-      issuerDate: dto.issuanceDate || '',  // Let formatter handle fallback
-      licenseNumber: dto.licenceNo?.trim() || ''
+      issuerRegion: dto.licenceRegion
+        ? this.getRegionName(dto.licenceRegion)
+        : 'Unknown',
+      issuerCity: dto.licenceArea
+        ? this.getCityName(dto.licenceArea)
+        : 'Unknown',
+      issuanceDate: dto.issuanceDate || '',
+      licenseNumber: dto.licenceNo?.trim() || '',
+      licenseCategory: dto.licenceGrade != null ? +dto.licenceGrade : undefined,
+      nationality: dto.nationality ?
+      this.getNationality(dto.nationality) : 'Unknown',
     };
   }
-  
-  
-  
 
   private getRegionName(code: string): string {
-    return this.licenseRegions.find((r) => r.code === code)?.amDescription || code;
+    return (
+      this.licenseRegions.find((r) => r.code === code)?.amDescription || code
+    );
   }
 
-  private getCityName(code: string) : string {
-    return this.licenseAreas.find((c) => c.code === code)?.amDescription || code;
+  private getCityName(code: string): string {
+    return (
+      this.licenseAreas.find((c) => c.code === code)?.amDescription || code
+    );
   }
-  
-
-
-  onNext(driver: Driver): void {
-    console.log('Proceeding with driver:', driver);
-    // Navigate to next form or perform action
+   private getNationality(code: string): string {
+    return (
+      this.nationalitys.find((c) => c.code === code)?.Description || code
+    );
   }
 
-  formatDate(date: Date): string {
-    return date.toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
+  // navigateToPenaltyForm(driver: any, action: 'penalty' | 'suspension') {
+  //   this.driverService.setDriverData({
+  //     fullName: driver.fullName,
+  //     licenseNumber: driver.licenseNumber,
+  //     mainGuid: driver.mainGuid,
+  //   });
+  //   // this.router.navigate(['/penality']);
+  //   if (action === 'penalty') {
+  //     this.router.navigate(['/penality']);
+  //   } else if (action === 'suspension') {
+  //     this.router.navigate(['form', driver.mainGuid], {
+  //       relativeTo: this.route,
+  //     });
+  //   }
+  // }
+  // navigateToNext(driver: any, action: 'penalty' | 'suspension') {
+  //   this.driverService.setDriverData({
+  //     fullName: driver.fullName,
+  //     licenseNumber: driver.licenseNumber,
+  //     mainGuid: driver.mainGuid
+  //   });
+
+  //   if (action === 'penalty') {
+  //     this.router.navigate(['/penality']);
+  //   } else if (action === 'suspension') {
+  //       this.router.navigate(['/suspension-form', driver.mainGuid]);
+  //   }
+  // }
+
+  navigateToNext(enteranimation:any, exitanimation:any, driver:any) {
+      this.driverService.setDriverData({
+      fullName: driver.fullName,
+      nationality: driver.nationality,
+      gender: driver.sex,
+      birthDate: driver.birthDate,
+      address: driver.issuerRegion,
+      town: driver.issuerCity,
     });
+    this.dialog.open(DriverInformationComponent,{
+      enterAnimationDuration:enteranimation,
+      exitAnimationDuration:exitanimation,
+      width:"50%"
+    })
+  }
+
+  
+  onNext(driver: Driver): void {
+    
+     const dialogRef = this.dialog.open(DriverInformationComponent, {
+        width: '450px'
+      });
+
+    console.log('Proceeding with driver:', driver);
+  }
+
+  formatDate(value: Date | string | null, format = 'yyyy-MM-dd'): string {
+    if (!value) return '';
+    try {
+      return formatDate(value, format, 'en-US');
+    } catch {
+      return '';
+    }
   }
 
   resetForm(): void {
@@ -263,5 +347,4 @@ export class DriverInfoComponent {
     this.createForm();
     this.showResults = false;
   }
-
 }

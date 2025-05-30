@@ -1,0 +1,79 @@
+
+  .dialog-title {
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #3f51b5;
+    margin: 0;
+    padding: 16px 24px;
+  }
+
+  .title-icon {
+    margin-right: 12px;
+    color: #3f51b5;
+  }
+
+ 
+  .dialog-content {
+    padding: 24px;
+  }
+
+  /* Profile Header */
+  .profile-header {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    margin-bottom: 32px;
+  }
+
+  .photo-container {
+    position: relative;
+  }
+
+  .photo-wrapper {
+    position: relative;
+    width: 100px;
+    height: 100px;
+  }
+
+  .driver-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+
+  .driver-info h2 {
+    margin: 0 0 8px 0;
+    font-weight: 600;
+    font-size: 24px;
+    color: #212121;
+  }
+
+
+  .form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .form-field {
+    width: 100%;
+  }
+
+  .form-field mat-icon {
+    color: #3f51b5;
+  }
+
+    /* Actions */
+  .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    padding: 16px 24px;
+    border-top: 1px solid #e0e0e0;
+  }
+
+  .close-btn {
+    border-color: #e0e0e0;
+  }
