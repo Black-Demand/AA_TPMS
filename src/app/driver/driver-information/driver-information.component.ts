@@ -31,7 +31,11 @@ export class DriverInformationComponent implements OnInit {
   
     form!: FormGroup;
     selectedDriver!: DriverDTO;
+<<<<<<< HEAD
     nationalities: Lookup.LookupDTO[] = [];
+=======
+    nationalitys : Lookup.LookupDTO[] = [];
+>>>>>>> f120db1f6b34f8d7dbb2e1d3aba9bbff0d71adfc
 
 
   constructor(
@@ -42,12 +46,12 @@ export class DriverInformationComponent implements OnInit {
               private lookupService: LookupService,
   ) {
     this.form = this.fb.group({
-      fullName: [{ value: '', disabled: true }, Validators.required],
-      nationality: [{ value: '', disabled: true }, Validators.required],
-      gender: [{ value: '', disabled: true }, Validators.required],
-      birthDate: [{ value: '', disabled: true }, Validators.required],
-      issuerRegion: [{ value: '', disabled: true }, Validators.required],
-      licenceArea: [{ value: '', disabled: true }, Validators.required],
+        fullName: [{value: '', disabled: true}, Validators.required],
+        nationality: [{value: '', disabled: true}, Validators.required],
+        gender: [{value: '', disabled: true}, Validators.required],
+        birthDate: [{value: '', disabled: true}, Validators.required],
+        address: [{value: '', disabled: true}, Validators.required],
+        town: [{value: '', disabled: true}, Validators.required],
     });
   }
   ngOnInit(): void {
@@ -56,6 +60,7 @@ export class DriverInformationComponent implements OnInit {
 
      if (data) {
         this.selectedDriver = data; 
+<<<<<<< HEAD
         console.log(data);
 
       this.form.patchValue({
@@ -65,10 +70,22 @@ export class DriverInformationComponent implements OnInit {
         birthDate: data.birthDate,
         issuerRegion: data.address,
         licenceArea: data.town
+=======
+console.log(data);
+      this.form.patchValue({
+        fullName: data.fullName,
+        nationality: data.nationality ?
+        this.getNationality(data.nationality) : 'Unknown',
+        gender: data.gender,
+        birthDate: data.birthDate,
+        address: data.address,
+        town: data.town
+>>>>>>> f120db1f6b34f8d7dbb2e1d3aba9bbff0d71adfc
       });
     }
   }
 
+<<<<<<< HEAD
    private getNatiolalityName(code: string): string {
     return (
       this.nationalities.find((n) => n.code === code)?.amdescription || code
@@ -76,6 +93,15 @@ export class DriverInformationComponent implements OnInit {
   }
 
 
+=======
+
+    private getNationality(code: string): string {
+    return (
+      this.nationalitys.find((c) => c.code === code)?.amdescription || code
+    );
+  }
+
+>>>>>>> f120db1f6b34f8d7dbb2e1d3aba9bbff0d71adfc
  
 
 }
