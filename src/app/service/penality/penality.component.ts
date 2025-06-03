@@ -63,7 +63,6 @@ export class PenalityComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
 
  private router = inject(Router);
-  // Form steps
   isLinear = true;
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
@@ -80,7 +79,6 @@ export class PenalityComponent implements OnInit {
   violationtypes: Lookup.OffenceNewDTO[] =[];
 
 
-  // Table data
   displayedColumns: string[] = [
     'number', 'yekefyaDay', 'yedersgeNumber', 'yeckeNumber', 
     'fullName', 'kefya', 'action'
@@ -120,20 +118,24 @@ export class PenalityComponent implements OnInit {
         fullName: data.fullName,
       });
     }
-    if(data) {
+    if (data) try{
       this.secondFormGroup.patchValue({
-      PenalityPoints: data.penalityPoints,
-      Amount: data.amount,
-      DelayPoints: data.delayPoints,
-      DelayAmount: data.delayAmount,
-      wozefPoint: data.wozefPoint ?? 0, 
-      TotalAmount: data.totalAmount        
-      })
+        penalityPoints: data.penalityPoints,
+        amount: data.amount,
+        delayPoints: data.delayPoints,
+        DelayAmount: data.delayAmount,
+        wozefPoint: data.wozefPoint ?? 0,
+        totalAmount: data.totalAmount,
+      });
+
+      console.log(this.secondFormGroup.controls);
     }
+     catch (e) {
+  console.error('Patch error:', e);
+  }
   }
 
   createForms(): void {
-    // First form (basic information)
     this.firstFormGroup = this.fb.group({
       fullName: [{value: '', disabled: true}, Validators.required],
       licenseNumber: [{value: '', disabled: true}, Validators.required],
@@ -150,12 +152,12 @@ export class PenalityComponent implements OnInit {
    { validators: this.dateRangeValidator });
 
     this.secondFormGroup = this.fb.group({
-      PenalityPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      Amount: [{value: '' , disabled: true}, Validators.required],
-      DelayPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      DelayAmount: [{value: '' , disabled: true}, Validators.required],
+      penalityPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      amount: [{value: '' , disabled: true}, Validators.required],
+      delayPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      delayAmount: [{value: '' , disabled: true}, Validators.required],
       wozefPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      TotalAmount: [{value: 0, disabled: true}]
+      totalAmount: [{value: 0, disabled: true}]
     });
 
     this.thirdFormGroup = this.fb.group({
@@ -168,7 +170,6 @@ export class PenalityComponent implements OnInit {
 
     });
 
-    // Calculate total when points change
     this.secondFormGroup.valueChanges.subscribe(() => {
       this.calculateTotal();
     });
@@ -271,7 +272,7 @@ export class PenalityComponent implements OnInit {
       return field.getError('dateNotTheFuture').message;
     }
     if(this.firstFormGroup.hasError('dateRangeInvalid')) {
-      return 'Yetkessbte Ken must be greater than or equal to Yetfesmbte Ken';
+      return 'dateAccused  must be greater than or equal to violation date';
     }
     return "";
   }
@@ -285,12 +286,11 @@ export class PenalityComponent implements OnInit {
     }
     return "";
   }
-
-  calculateTotal(): void {
-    const values = this.secondFormGroup.getRawValue();
-    const total = values.yeerkenPoint + values.zegytoYemekefelPoint + values.wozefPoint;
-    this.secondFormGroup.patchValue({ totalPoint: total });
-  }
+calculateTotal(): void {
+  const values = this.secondFormGroup.getRawValue();
+  const total = (values.penalityPoints || 0) + (values.delayAmount || 0) + (values.wozefPoint || 0);
+  this.secondFormGroup.patchValue({ totalAmount: total });
+}
 
 submitFirstForm(): void {
   console.log('Form validity:', this.firstFormGroup.valid);
@@ -310,11 +310,11 @@ submitFirstForm(): void {
 
     this.penalityService.createPenality(dto ,licenseNumber)
       .subscribe({
-        next: () => { this.toastr.success("Penality added successfully"), 
-                  this.stepper.next()},
+        next: () => { this.toastr.success("Penality added successfully")},
         error: (err) => {
           console.error('Error submitting form:', err);
           this.toastr.error('Failed to submit penalty.');
+          console.log( "resuting dto",dto);
         }
       });
   } else {
@@ -341,32 +341,30 @@ submitFirstForm(): void {
   }
  
 
-  saveSecondForm() {
-  if (this.secondFormGroup.valid) {
-    const rawValues = this.secondFormGroup.getRawValue(); // ✅ includes disabled fields
+//   saveSecondForm() {
+//   if (this.secondFormGroup.valid) {
+//     const rawValues = this.secondFormGroup.getRawValue(); 
 
-    // Calculate total points
-    const totalPoints =
-      +rawValues.PenalityPoints +
-      +rawValues.DelayPoints +
-      +rawValues.wozefPoint;
+//     const totalPoints =
+//       +rawValues.PenalityPoints +
+//       +rawValues.DelayPoints +
+//       +rawValues.wozefPoint;
 
-    this.secondFormGroup.patchValue({ TotalAmount: totalPoints });
+//     this.secondFormGroup.patchValue({ TotalAmount: totalPoints });
 
-    // Prepare data for the results table
-    const resultData = {
-      yekefyaDay: new Date(),  // Today's date
-      yedersgeNumber: this.firstFormGroup.value.yetketNumber,
-      penalitypoints: this.firstFormGroup.value.penalitypoints,
-      fullName: this.firstFormGroup.value.fullName,
-      amount: rawValues.amount  // ⚠️ make sure this field exists
+//     const resultData = {
+//       yekefyaDay: new Date(),  // Today's date
+//       yedersgeNumber: this.firstFormGroup.value.yetketNumber,
+//       penalitypoints: this.firstFormGroup.value.penalitypoints,
+//       fullName: this.firstFormGroup.value.fullName,
+//       amount: rawValues.amount  // ⚠️ make sure this field exists
 
-    };
+//     };
 
-    this.dataSource = [resultData];
-    this.showResults = true;
-  }
-}
+//     this.dataSource = [resultData];
+//     this.showResults = true;
+//   }
+// }
 
 savethirdForm() {
   const dialogRef = this.dialog.open(ConfirmationComponent, {

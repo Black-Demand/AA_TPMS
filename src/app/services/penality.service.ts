@@ -21,6 +21,8 @@ export class PenalityService {
   getPenalityById(id: number): Observable<Penality> {
     return this.http.get<Penality>(`${this.baseUrl}/${id}`);
   }
+
+
   createPenality(dto: any, licenseNumber: string): Observable<any> {
   if (!licenseNumber) {
     throw new Error('Missing required driver information (licenseNumber).');
@@ -30,7 +32,7 @@ export class PenalityService {
     .set('licenseNumber', licenseNumber); 
 
   return this.http.post(`${this.baseUrl}/Penality`, dto, { params });
-}
+ }
 
 
   updatePenality(penality: Penality): Observable<void> {

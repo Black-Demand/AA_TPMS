@@ -309,7 +309,7 @@ export class TemporaryRegistraionComponent implements OnInit {
         }
       });
     } else {
-      this.registrationForm.markAllAsTouched(); // Highlight validation errors
+      this.registrationForm.markAllAsTouched(); 
     }
   }
   

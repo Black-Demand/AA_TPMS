@@ -50,7 +50,7 @@ export class LookupService {
   }
   
   
-
+   // other lookups for dropdown 
   getAllCategories(): Observable<Lookup.LicenceCategoryDTO[]> {
     return this.http.get<Lookup.LicenceCategoryDTO[]>(`${this.baseUrl}/LicenceLookUp/categories`);
   }
