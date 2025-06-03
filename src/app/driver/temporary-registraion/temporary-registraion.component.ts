@@ -26,6 +26,7 @@ import { DriverDTO } from '../../Models/driver';
 import { TempDriverService } from '../../services/temp-driver.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDividerModule } from '@angular/material/divider';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-temporary-registraion',
@@ -86,8 +87,8 @@ export class TemporaryRegistraionComponent implements OnInit {
     private fb: FormBuilder,
     private tdrs: TempDriverService,
     private lookupservice: LookupService,
-    private toastr: ToastrService
-    
+    private toastr: ToastrService,
+    private router: Router
   ) {
     this.registrationForm = this.fb.group({
       licenceRegion: ['', Validators.required],
@@ -300,7 +301,7 @@ export class TemporaryRegistraionComponent implements OnInit {
         next: (response) => {
           // alert('Driver created successfully');
           this.toastr.success("Driver created successfully");
-          this.onReset(); 
+          this.router.navigate(['/penality']);
         },
         error: (err) => {
           console.error('Error creating driver:', err);
