@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { LookupService } from '../../services/lookup.service';
 import { TempDriverService } from '../../services/temp-driver.service';
 import { DriverDTO } from '../../Models/driver';
+import Lookup from '../../Models/lookup';
 
 @Component({
   selector: 'app-driver-information',
@@ -30,15 +31,15 @@ export class DriverInformationComponent implements OnInit {
   
     form!: FormGroup;
     selectedDriver!: DriverDTO;
-
+    nationalities: Lookup.LookupDTO[] = [];
 
 
   constructor(
               private fb: FormBuilder,
+              private driverService: TempDriverService,
               private dialog: MatDialog,
               private dialogRef: MatDialogRef<DriverInformationComponent>,
               private lookupService: LookupService,
-              private driverService: TempDriverService,
   ) {
     this.form = this.fb.group({
       fullName: [{ value: '', disabled: true }, Validators.required],
@@ -54,19 +55,26 @@ export class DriverInformationComponent implements OnInit {
        
 
      if (data) {
-
         this.selectedDriver = data; 
+        console.log(data);
 
       this.form.patchValue({
         fullName: data.fullName,
-        nationality: data.nationality,
-        gender: data.sex,
+        nationality: this.getNatiolalityName(data.nationality),
+        gender: data.gender,
         birthDate: data.birthDate,
-        issuerRegion: data.issuerRegion,
-        licenceArea: data.issuerCity
+        issuerRegion: data.address,
+        licenceArea: data.town
       });
     }
   }
+
+   private getNatiolalityName(code: string): string {
+    return (
+      this.nationalities.find((n) => n.code === code)?.amdescription || code
+    );
+  }
+
 
  
 

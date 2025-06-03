@@ -119,6 +119,7 @@ export class PenalityComponent implements OnInit {
       });
     }
     if (data) try{
+      console.log(data);
       this.secondFormGroup.patchValue({
         penalityPoints: data.penalityPoints,
         amount: data.amount,
