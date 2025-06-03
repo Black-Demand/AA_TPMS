@@ -37,6 +37,8 @@ interface Driver {
   issuanceDate: string;
   licenseCategory?: number;
   nationality?:  string;
+  sex?: number;
+  birthDate?: string;
 }
 @Component({
   selector: 'app-driver-info',
@@ -258,6 +260,8 @@ export class DriverInfoComponent {
       licenseCategory: dto.licenceGrade != null ? +dto.licenceGrade : undefined,
       nationality: dto.nationality ?
       this.getNationality(dto.nationality) : 'Unknown',
+      sex: dto.sex != null ? +dto.sex :undefined,
+      birthDate: dto.birthDate || ''
     };
   }
 
@@ -274,7 +278,7 @@ export class DriverInfoComponent {
   }
    private getNationality(code: string): string {
     return (
-      this.nationalitys.find((c) => c.code === code)?.Description || code
+      this.nationalitys.find((c) => c.code === code)?.amdescription || code
     );
   }
 

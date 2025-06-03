@@ -10,6 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { LookupService } from '../../services/lookup.service';
 import { TempDriverService } from '../../services/temp-driver.service';
 import { DriverDTO } from '../../Models/driver';
+import Lookup from '../../Models/lookup';
 
 @Component({
   selector: 'app-driver-information',
@@ -30,7 +31,7 @@ export class DriverInformationComponent implements OnInit {
   
     form!: FormGroup;
     selectedDriver!: DriverDTO;
-
+    nationalitys : Lookup.LookupDTO[] = [];
 
 
   constructor(
@@ -41,12 +42,12 @@ export class DriverInformationComponent implements OnInit {
               private driverService: TempDriverService,
   ) {
     this.form = this.fb.group({
-      fullName: [{ value: '', disabled: true }, Validators.required],
-      nationality: [{ value: '', disabled: true }, Validators.required],
-      gender: [{ value: '', disabled: true }, Validators.required],
-      birthDate: [{ value: '', disabled: true }, Validators.required],
-      issuerRegion: [{ value: '', disabled: true }, Validators.required],
-      licenceArea: [{ value: '', disabled: true }, Validators.required],
+        fullName: [{value: '', disabled: true}, Validators.required],
+        nationality: [{value: '', disabled: true}, Validators.required],
+        gender: [{value: '', disabled: true}, Validators.required],
+        birthDate: [{value: '', disabled: true}, Validators.required],
+        address: [{value: '', disabled: true}, Validators.required],
+        town: [{value: '', disabled: true}, Validators.required],
     });
   }
   ngOnInit(): void {
@@ -56,16 +57,24 @@ export class DriverInformationComponent implements OnInit {
      if (data) {
 
         this.selectedDriver = data; 
-
+console.log(data);
       this.form.patchValue({
         fullName: data.fullName,
-        nationality: data.nationality,
-        gender: data.sex,
+        nationality: data.nationality ?
+        this.getNationality(data.nationality) : 'Unknown',
+        gender: data.gender,
         birthDate: data.birthDate,
-        issuerRegion: data.issuerRegion,
-        licenceArea: data.issuerCity
+        address: data.address,
+        town: data.town
       });
     }
+  }
+
+
+    private getNationality(code: string): string {
+    return (
+      this.nationalitys.find((c) => c.code === code)?.amdescription || code
+    );
   }
 
  

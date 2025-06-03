@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { dateCannotBeTheFuture, minAgeValidator } from '../age.validate';
  
 // Material Modules
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule} from '@angular/material/checkbox';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -12,8 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
 import { MatRadioModule } from "@angular/material/radio";
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatStepperModule } from '@angular/material/stepper';
 import { MatTabsModule } from '@angular/material/tabs';
 import { CommonModule } from '@angular/common';
@@ -27,11 +28,18 @@ import { TempDriverService } from '../../services/temp-driver.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
-
+import { dateNotTheFuture, dateNotTheFutures } from '../../service/date.validate';
+import { MatSort } from '@angular/material/sort';
+interface ViolationRecord {
+  fullName: string;
+  licenseId: string;
+  ticketNumber: string;
+  violationDate: Date;
+  violationGrade: string;
+}
 @Component({
-  selector: 'app-temporary-registraion',
-  standalone: true,
-  imports: [
+  selector: 'app-traffic',
+   imports: [
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -47,17 +55,22 @@ import { Router } from '@angular/router';
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule,
-    MatDividerModule   
+    MatDividerModule,
+    MatCheckboxModule
   ],
-  templateUrl: './temporary-registraion.component.html',
-  styleUrls: ['./temporary-registraion.component.css']
+  templateUrl: './traffic.component.html',
+  styleUrl: './traffic.component.css'
 })
-export class TemporaryRegistraionComponent implements OnInit {
+export class TrafficComponent implements OnInit {
 
   registrationForm: FormGroup;
   imagePreview: string | ArrayBuffer | null = null;
   selectedPhotoFile: File | null = null;
+  displayedColumns: string[] = ['fullName', 'licenseId', 'ticketNumber', 'violationDate', 'violationGrade', 'actions'];
+  dataSource!: MatTableDataSource<ViolationRecord>;
 
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   
   
   genderEnum = Gender;
@@ -73,15 +86,20 @@ export class TemporaryRegistraionComponent implements OnInit {
   licenceAreas: Lookup.LicenceAreaDTO[] = [];
   licenceCatagories: Lookup.LicenceCategoryDTO[] = [];
   nationalities: Lookup.LookupDTO[] = [];
+  
 
   selectedRegionCode!: number;  
   selectedZoneCode!: number;
   selectedWoredaCode!: number;
   selectedLicenceRegionCode: number = 0;
 
+violationgrades: Lookup.OffenceGradeDTO[] =[];
+violationtypes: Lookup.OffenceNewDTO[] =[];
+ violationTypeDisabled = false;
+checked: any;
+labelPosition: any;
 
 
-  
 
   constructor(
     private fb: FormBuilder,
@@ -91,29 +109,86 @@ export class TemporaryRegistraionComponent implements OnInit {
     private router: Router
   ) {
     this.registrationForm = this.fb.group({
-      licenceRegion: ['', Validators.required],
-      licenceArea: ['', Validators.required],
-      licenceGrade: ['', Validators.required],
-      licenceNo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
-      issuanceDate: ['', [Validators.required, dateCannotBeTheFuture()]],      
-      firstNameAmh: ['', Validators.required],
-      fatherNameAmh: ['', Validators.required],
-      grandNameAmh: ['', Validators.required],      
-      firstName: ['', Validators.required],
-      fatherName: ['', Validators.required],
-      grandName: ['', Validators.required],      
-      nationality: ['', Validators.required],
-      sex: ['', Validators.required],
-      birthDate: ['', [Validators.required, minAgeValidator(18)]],
-      tel1: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],      
-      region: ['', Validators.required],
-      zone: ['', Validators.required],
-      woreda: ['', Validators.required],
-      kebele: ['', Validators.required],
-      houseNo: [''],
-      remark: [''],      
-      photo: [null, Validators.required]
+      fullInfo: ['', Validators.required],
+      violationDate: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
+      dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
+      violationGrade: ['', Validators.required],
+      placeAccused: ['', Validators.required],
+      offenceId: [{ value: '', disabled: false }, Validators.required],
+      payment: ['', Validators.required],
+      ticket: ['', Validators.required],
+      tName: ['', Validators.required],
+      actionTaken: ['', Validators.required],
+      plateRegion: ['', Validators.required],
+      NewPlateCode: ['', Validators.required],
+      NewPlateNo: ['', Validators.required]
     });
+  }
+
+
+    dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const yetKen = group.get('violationDate')?.value;
+    const yetsKen = group.get('dateAccused')?.value;
+
+    if(yetKen && yetsKen && yetKen > yetsKen){
+        return { dateRangeInvalid: true };
+    }
+    return null;
+}
+
+  get minEndDate(): Date | null {
+    return this.registrationForm.get('violationDate')?.value;
+  }
+
+
+
+   getErrorMessageForYetfesmbetKen():string{
+    let field = this.registrationForm.get('violationDate');
+    
+    if(field?.hasError('required')){
+      return 'The field is Required';
+    }
+    if(field?.hasError('dateNotTheFuture')){
+      return field.getError('dateNotTheFuture').message;
+    }
+    return "";
+  }
+  getErrorMessageForYetfessmbetKen():string{
+    let field = this.registrationForm.get('dateAccused');
+    
+    if(field?.hasError('required')){
+      return 'The field is Required';
+    }
+    if(field?.hasError('dateNotTheFuture')){
+      return field.getError('dateNotTheFuture').message;
+    }
+    if(this.registrationForm.hasError('dateRangeInvalid')) {
+      return 'Yetkessbte Ken must be greater than or equal to Yetfesmbte Ken';
+    }
+    return "";
+  }
+
+  loadViolationGrade() {
+    this.lookupservice.getAllOffences().subscribe(data => {
+       this.violationgrades = data;
+    });
+  }
+
+  loadViolationTypeByGrade(gradeCode: string) {
+    const numericGradeCode = Number(gradeCode);
+  
+    if (numericGradeCode > 3) {
+      this.violationTypeDisabled = true;
+      this.registrationForm.get('violationType')?.reset();
+      this.registrationForm.get('violationType')?.disable();
+      this.violationtypes = [];
+    } else {
+      this.violationTypeDisabled = false;
+      this.registrationForm.get('violationType')?.enable();
+      this.lookupservice.getAllOffenceNew([gradeCode]).subscribe(data => {
+        this.violationtypes = data;
+      });
+    }
   }
 
   onPhoneInput(event: Event): void {
@@ -168,6 +243,8 @@ export class TemporaryRegistraionComponent implements OnInit {
     this.loadCategories();
     this.loadLicenceRegions();
     this.loadNationality();
+        this.loadViolationGrade();
+
   }
    
   onRegionChange(regionCode: number) {
