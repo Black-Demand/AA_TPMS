@@ -1,4 +1,5 @@
 export interface DriverDTO {
+  fullName: any;
   licenseNumber: any;
   licenseCategory: any;
   issuerRegion: any;
