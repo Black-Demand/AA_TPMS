@@ -21,7 +21,6 @@ import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import Lookup from '../../Models/lookup';
 import { LookupService } from '../../services/lookup.service';
-import { Gender, GenderDescriptions } from '../../Enums/gender';
 import { DriverDTO } from '../../Models/driver';
 import { TempDriverService } from '../../services/temp-driver.service';
 import { ToastrService } from 'ngx-toastr';
@@ -204,10 +203,10 @@ export class TrafficComponent  implements OnInit {
   }
 
     generateOrdderNumber(){
-    const randomNum = Math.floor(100000 + Math.random() * 900000);
-    const orderNumber = `${randomNum}`;
+    const ticketNum = Math.floor(100000 + Math.random() * 900000);
+    const ticket = `${ticketNum}`;
 
-    this.trafficForm?.get('ticket')?.setValue(orderNumber);
+    this.trafficForm?.get('ticket')?.setValue(ticket);
     this.trafficForm?.get('ticket')?.disable();
   }
  
