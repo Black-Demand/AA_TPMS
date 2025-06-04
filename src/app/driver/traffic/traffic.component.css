@@ -1,3 +1,14 @@
+.page{
+    color: white;
+    padding: 0 1rem;
+    background: #f1f5f9;
+    .page__box{
+        min-height: 0px;
+        background: teal;
+        margin: 0 -1rem;
+        font-size: 26px;
+    }
+}
   .registration-form {
     display: flex;
     justify-content: center;
@@ -31,88 +42,121 @@
    
     }
   }
-  .image-upload-container {
-    width: 100%;
-    margin: 1rem 0;
-    display: flex;
-    flex-direction: column;
-  
-    .image-upload-preview {
-      width: 200px;
-      height: 200px;
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      overflow: hidden;
-      position: relative;
-      transition: all 0.3s ease;
-      background-color: #f5f5f5;
-  
-      &:hover {
-        border-color: #3f51b5;
-        background-color: #f0f0f0;
-      }
-  
-      &.has-error {
-        border-color: #f44336;
-      }
-  
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
-      }
-  
-      .upload-placeholder {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        padding: 1rem;
-        text-align: center;
-  
-        .upload-icon {
-          font-size: 48px;
-          width: 48px;
-          height: 48px;
-          color: #757575;
-          margin-bottom: 8px;
-        }
-  
-        .upload-text {
-          font-size: 14px;
-          color: #424242;
-          font-weight: 500;
-          margin-bottom: 4px;
-        }
-  
-        .upload-requirements {
-          font-size: 12px;
-          color: #757575;
-        }
-      }
-    }
-  
+ 
     mat-error {
       margin-top: 8px;
       font-size: 12px;
-      text-align: center;
     }
+ .damage-section {
+  margin: 2rem 0;
+  padding: 1rem;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+}
+
+.damage-checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.damage-option {
+  flex: 1;
+  min-width: 200px;
+  padding: 1rem;
+  border-radius: 4px;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+}
+
+.damage-option mat-icon {
+  margin-right: 8px;
+}
+
+/* Add this to your component's CSS file */
+
+/* Table Container */
+.violation-table-container {
+  margin: 2rem auto;
+  max-width: 1200px;
+  padding: 1rem;
+}
+
+/* Table Title */
+.table-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #3f51b5;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.table-title mat-icon {
+  margin-right: 8px;
+}
+
+/* Table Styling */
+.mat-elevation-z8 {
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.violation-table {
+  width: 100%;
+}
+
+/* Header Row */
+.mat-header-row {
+  background-color: #f5f5f5;
+  height: 56px;
+}
+
+.mat-header-cell {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+/* Data Rows */
+.mat-row {
+  height: 52px;
+  transition: background-color 0.2s;
+}
+
+.mat-row:hover {
+  background-color: #f5f5f5;
+}
+
+.mat-cell {
+  font-size: 14px;
+  color: rgba(0, 0, 0, 0.87);
+  padding: 0 16px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+/* Paginator (if you add one later) */
+.mat-paginator {
+  background-color: #f5f5f5;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .violation-table-container {
+    padding: 0.5rem;
   }
-  .phone-input-container {
-    width: 100%;
-    
-    input {
-      padding-left: 10px;
-    }
-    
-    .mat-mdc-form-field-error {
-      white-space: nowrap;
-    }
+  
+  .mat-header-cell, .mat-cell {
+    padding: 0 8px;
+    font-size: 12px;
   }
+}
+
   @media (max-width: 768px) {
     .registration-form {
       padding: 12px;
@@ -126,7 +170,12 @@
           .form-field {
             min-width: 100%;
           }
+          .damage-checkboxes {
+            flex-direction: column;
+            gap: 1rem;
+          }
         }
       }
     }
+  
   }

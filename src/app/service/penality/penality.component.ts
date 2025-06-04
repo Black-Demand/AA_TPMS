@@ -105,6 +105,7 @@ export class PenalityComponent implements OnInit {
     const data = this.driverService.getDriverData();
     this.createForms();
     this.generateOrdderNumber();
+    this.generateTicketNumber();
 
     if (data) {
         console.log(data);
@@ -145,7 +146,7 @@ export class PenalityComponent implements OnInit {
     this.firstFormGroup = this.fb.group({
       fullName: [{value: '', disabled: true}, Validators.required],
       licenseNumber: [{value: '', disabled: true}, Validators.required],
-      ticketNo: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
+      ticketNo: [''],
       violationDate: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
       dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
       violationGrade: ['', Validators.required],
@@ -254,6 +255,14 @@ export class PenalityComponent implements OnInit {
 
     this.thirdFormGroup?.get('orderNumber')?.setValue(orderNumber);
     this.thirdFormGroup?.get('orderNumber')?.disable();
+  }
+
+   generateTicketNumber(){
+    const ticketNum = Math.floor(100000 + Math.random() * 900000);
+    const ticketNo = `${ticketNum}`;
+
+    this.firstFormGroup?.get('ticketNo')?.setValue(ticketNo);
+    this.firstFormGroup?.get('ticketNo')?.disable();
   }
   
 

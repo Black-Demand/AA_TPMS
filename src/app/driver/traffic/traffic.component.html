@@ -1,26 +1,28 @@
-<form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
+<form [formGroup]="trafficForm" (ngSubmit)="onSubmit()" class="registration-form">
   <mat-card class="form-card">
     <mat-card-header>
       <mat-card-title>Traffic Information Entry</mat-card-title>
     </mat-card-header>
-<div style="margin: 20px 0;">
-  <mat-divider></mat-divider>
-</div>
+    <div style="margin: 20px 0;">
+      <mat-divider></mat-divider>
+    </div>
 
     <mat-card-content>
-      <!-- Section 1: Issuer Information -->
-      <h3 class="section-title">Issuer Information</h3>
+
       <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field" style="width: 100px;">
-          <mat-label>Information</mat-label>
-         <input type="text" matInput formControlName="fullInfo" readonly>
-          <mat-error>Required field</mat-error>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Full Name</mat-label>
+          <input matInput formControlName="fullName" readonly>
         </mat-form-field>
-        <mat-card-actions align="end">
-            <button mat-raised-button color="primary" type="search">Search</button>
-        </mat-card-actions>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Driver License ID</mat-label>
+          <input matInput formControlName="licenseNumber" readonly>
+        </mat-form-field>
+
       </div>
 
+<<<<<<< HEAD
       <!-- Section 2: License Information -->
       <h3 class="section-title">License Information</h3>
       <div class="form-row">
@@ -50,36 +52,126 @@
                 <mat-datepicker #yet_Ken></mat-datepicker>
                 <mat-error>{{getErrorMessageForYetfesmbetKen()}}</mat-error>
               </mat-form-field>
+=======
+      <div style="margin: 40px 0;">
+        <mat-divider></mat-divider>
+>>>>>>> 75cff8298d0f0b0b8406d884b0c43e3420221d8a
       </div>
 
-      <!-- Section 3: Personal Information -->
-      <h3 class="section-title">Personal Information</h3>
       <div class="form-row">
-        <!-- Amharic Names -->
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Accused Place</mat-label>
-                <input matInput formControlName="placeAccused" required>
-                <mat-error>Required field</mat-error>
-              </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Violation Grade</mat-label>
+          <mat-select formControlName="violationGrade" required
+            (selectionChange)="loadViolationTypeByGrade($event.value)">
+            <mat-option *ngFor="let violationgrade of violationgrades" [value]="violationgrade.id.toString()">
+              {{ violationgrade.code }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Accused Date</mat-label>
-                <input matInput [matDatepicker]="yetss_ken" formControlName="dateAccused" [min]="minEndDate" required
-                  (dateChange)="registrationForm.updateValueAndValidity()">
-                <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
-                <mat-datepicker #yetss_ken></mat-datepicker>
-                <mat-error>{{getErrorMessageForYetfessmbetKen()}}</mat-error>
-              </mat-form-field>
 
-            <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Payment</mat-label>
-            <input matInput formControlName="payment" required>
-            <mat-error>Required field</mat-error>
-            </mat-form-field>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Violation Type</mat-label>
+          <mat-select formControlName="offenceId" [disabled]="violationTypeDisabled">
+            <mat-option *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
+              {{ violationtype.amDescription }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+      </div>
+      <div class="form-row">
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Violation Date</mat-label>
+          <input matInput [matDatepicker]="yet_Ken" formControlName="violationDate" required
+            (dateChange)="trafficForm.updateValueAndValidity()">
+          <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
+          <mat-datepicker #yet_Ken></mat-datepicker>
+          <mat-error>{{getErrorMessageForYetfesmbetKen()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Traffic Police Name</mat-label>
+          <mat-select formControlName="tName">
+            <mat-option value="one">
+              One
+            </mat-option>
+            <mat-option value="two">
+              Two
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>The Action Taken</mat-label>
+          <mat-select formControlName="action">
+            <mat-option value="one">
+              One
+            </mat-option>
+            <mat-option value="two">
+              Two
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
+
+      <div class="form-row">
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Plate Region</mat-label>
+          <mat-select formControlName="plateRegion" required>
+            <mat-option *ngFor="let region of regions" [value]="region.code">
+              {{region.amDescription}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Major Code</mat-label>
+          <mat-select formControlName="NewPlateCode" required>
+            <mat-option *ngFor="let major of majors" [value]="major.codeId.toString()">
+              {{major.majorCode}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Plate Number</mat-label>
+          <input matInput formControlName="NewPlateNo" required>
+        </mat-form-field>
+      </div>
+
+      <div style="margin: 40px 0;">
+        <mat-divider></mat-divider>
       </div>
 
       <div class="form-row">
         <!-- English Names -->
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Accused Place</mat-label>
+          <input matInput formControlName="placeAccused" required>
+          <mat-error>Required field</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Accused Date</mat-label>
+          <input matInput [matDatepicker]="yetss_ken" formControlName="dateAccused" [min]="minEndDate" required
+            (dateChange)="trafficForm.updateValueAndValidity()">
+          <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
+          <mat-datepicker #yetss_ken></mat-datepicker>
+          <mat-error>{{getErrorMessageForYetfessmbetKen()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Payment</mat-label>
+          <input matInput formControlName="payment" required>
+          <mat-error>Required field</mat-error>
+        </mat-form-field>
+      </div>
+
+      <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Ticket Number</mat-label>
           <input matInput formControlName="ticket" required>
@@ -87,56 +179,50 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Traffic Name</mat-label>
-          <input matInput formControlName="tName" required>
+          <mat-label>Vehicle Type</mat-label>
+          <mat-select formControlName="vehicleType" required>
+            <mat-option value="taxi">
+              taxi
+            </mat-option>
+            <mat-option value="taxi">
+              taxi
+            </mat-option>
+          </mat-select>
           <mat-error>Required field</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>The Action Taken</mat-label>
-          <input matInput formControlName="actionTaken" required>
-          <mat-error>Required field</mat-error>
+          <mat-label>Accused Time</mat-label>
+          <input matInput [matTimepicker]="timePicker" formControlName="timeAccused" required>
+          <mat-timepicker-toggle matSuffix [for]="timePicker"></mat-timepicker-toggle>
+          <mat-timepicker #timePicker></mat-timepicker>
+          <mat-error *ngIf="trafficForm.get('timeAccused')?.invalid && trafficForm.get('timeAccused')?.touched">
+            Please select a valid time
+          </mat-error>
         </mat-form-field>
-      </div>
-       
-      <div class="form-row">
-        <mat-form-field appearance="outline"class="form-field">
-            <mat-label>Plate Region</mat-label>
-            <mat-select formControlName="plateRegion" required>
-                <mat-option>
-                    FDFGFG
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        
-        <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Major Code</mat-label>
-            <mat-select formControlName="NewPlateCode" required>
-                <mat-option>
-                    FFDD
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-        
-        <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Plate Number</mat-label>
-            <input matInput formControlName="NewPlateNo" required>
-        </mat-form-field>
+
       </div>
 
-      <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Plate Number</mat-label>
-            <input matInput formControlName="NewPlateNo" required>
-        </mat-form-field>
-        <h2>The damage caused</h2>
-        
-        <section class="example-section">
-            <mat-checkbox class="example-margin">Checked</mat-checkbox>
-            <mat-checkbox class="example-margin">Indeterminate</mat-checkbox>
-            <mat-checkbox class="example-margin">Indeterminate</mat-checkbox>
-        </section>
-    </div>
+      <!-- Damage Assessment Section -->
+      <div class="damage-section" formGroupName="damageAssessment">
+        <h3 class="section-title">
+          <mat-icon>handyman</mat-icon> Damage Assessment
+        </h3>
+        <div class="damage-checkboxes">
+          <mat-checkbox class="damage-option" formControlName="simpleBodyDamage">
+            <mat-icon>miscellaneous_services</mat-icon>
+            Simple Body Damage
+          </mat-checkbox>
+          <mat-checkbox class="damage-option" formControlName="heavyBodyDamage">
+            <mat-icon>car_crash</mat-icon>
+            Heavy Body Damage
+          </mat-checkbox>
+          <mat-checkbox class="damage-option" formControlName="materialDamage">
+            <mat-icon>home_repair_service</mat-icon>
+            Material/Property Damage
+          </mat-checkbox>
+        </div>
+      </div>
 
 
     </mat-card-content>
@@ -144,104 +230,43 @@
     <mat-card-actions align="end">
       <button mat-button type="button" (click)="onReset()">
         <mat-icon>refresh</mat-icon> Reset</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Submit</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="trafficForm.invalid">Submit</button>
     </mat-card-actions>
   </mat-card>
-
 </form>
 
-<div class="violation-records-container">
-  <mat-card class="records-card">
-    <mat-card-header>
-      <mat-card-title>
-        <mat-icon>list_alt</mat-icon> Traffic Violation Records
-      </mat-card-title>
-    </mat-card-header>
 
-    <mat-divider></mat-divider>
+<div class="violation-table-container" *ngIf="violations.length > 0">
+  <h2 class="table-title">Submitted Violations</h2>
 
-    <mat-card-content>
-    
+  <div class="mat-elevation-z8">
+    <table mat-table [dataSource]="violations" class="violation-table">
+      <!-- Full Name Column -->
+      <ng-container matColumnDef="fullName">
+        <th mat-header-cell *matHeaderCellDef>Full Name</th>
+        <td mat-cell *matCellDef="let violation">{{violation.fullName}}</td>
+      </ng-container>
 
-      <div class="mat-elevation-z8 table-container">
-        <table mat-table [dataSource]="dataSource" matSort class="violation-table">
-          <!-- Full Name Column -->
-          <ng-container matColumnDef="fullName">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> 
-              <mat-icon>person</mat-icon> Full Name 
-            </th>
-            <td mat-cell *matCellDef="let element"> {{element.fullName}} </td>
-          </ng-container>
+      <!-- License ID Column -->
+      <ng-container matColumnDef="licenseNumber">
+        <th mat-header-cell *matHeaderCellDef>License ID</th>
+        <td mat-cell *matCellDef="let violation">{{violation.licenseNumber}}</td>
+      </ng-container>
 
-          <!-- License ID Column -->
-          <ng-container matColumnDef="licenseId">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              <mat-icon>badge</mat-icon> License ID
-            </th>
-            <td mat-cell *matCellDef="let element"> {{element.licenseId}} </td>
-          </ng-container>
+      <!-- Ticket Number Column -->
+      <ng-container matColumnDef="ticket">
+        <th mat-header-cell *matHeaderCellDef>Ticket Number</th>
+        <td mat-cell *matCellDef="let violation">{{violation.ticket}}</td>
+      </ng-container>
 
-          <!-- Ticket Number Column -->
-          <ng-container matColumnDef="ticketNumber">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              <mat-icon>receipt</mat-icon> Ticket #
-            </th>
-            <td mat-cell *matCellDef="let element" class="ticket-cell"> 
-              <span class="ticket-badge">{{element.ticketNumber}}</span>
-            </td>
-          </ng-container>
+      <!-- Accused Date Column -->
+      <ng-container matColumnDef="dateAccused">
+        <th mat-header-cell *matHeaderCellDef>Accused Date</th>
+        <td mat-cell *matCellDef="let violation">{{violation.dateAccused | date:'mediumDate'}}</td>
+      </ng-container>
 
-          <!-- Violation Date Column -->
-          <ng-container matColumnDef="violationDate">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              <mat-icon>event</mat-icon> Violation Date
-            </th>
-            <td mat-cell *matCellDef="let element"> 
-              {{element.violationDate | date:'mediumDate'}}
-            </td>
-          </ng-container>
-
-          <!-- Violation Grade Column -->
-          <ng-container matColumnDef="violationGrade">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header>
-              <mat-icon>warning</mat-icon> Grade
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <span [ngClass]="{
-                'grade-badge': true,
-                'grade-high': element.violationGrade === 'High',
-                'grade-medium': element.violationGrade === 'Medium',
-                'grade-low': element.violationGrade === 'Low'
-              }">
-                {{element.violationGrade}}
-              </span>
-            </td>
-          </ng-container>
-
-          <!-- Actions Column -->
-          <ng-container matColumnDef="actions">
-            <th mat-header-cell *matHeaderCellDef>
-              <mat-icon>settings</mat-icon> Actions
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <button mat-icon-button color="primary" matTooltip="View details">
-                <mat-icon>visibility</mat-icon>
-              </button>
-              <button mat-icon-button color="accent" matTooltip="Edit record">
-                <mat-icon>edit</mat-icon>
-              </button>
-              <button mat-icon-button color="warn" matTooltip="Delete record">
-                <mat-icon>delete</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-      </div>
-    </mat-card-content>
-  </mat-card>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
 </div>

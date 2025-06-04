@@ -1,0 +1,73 @@
+.search-system-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px;
+}
+
+.search-card {
+  margin-bottom: 24px;
+}
+
+.search-type-section {
+  margin-bottom: 24px;
+  
+  mat-radio-group {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    
+    .search-type-radio {
+      flex: 1 1 200px;
+    }
+  }
+}
+
+.search-fields {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}
+
+.results-section {
+  margin-top: 32px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  
+  th.mat-header-cell {
+    font-weight: bold;
+    background-color: #f5f5f5;
+  }
+  
+  .mat-column-actions {
+    width: 120px;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .search-system-container {
+    padding: 16px;
+  }
+  
+  .search-fields {
+    grid-template-columns: 1fr;
+  }
+  
+  .mat-column-issuerCity, .mat-column-issuerDate {
+    display: none;
+  }
+}

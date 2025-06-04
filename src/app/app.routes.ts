@@ -12,6 +12,7 @@ import { SuspensionSearchComponent } from './service/suspension-search/suspensio
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { DriverInformationComponent } from './driver/driver-information/driver-information.component';
 import { TrafficComponent } from './driver/traffic/traffic.component';
+import { TrafficSearchComponent } from './driver/traffic-search/traffic-search.component';
 
 export const routes: Routes = [
     {
@@ -44,7 +45,8 @@ export const routes: Routes = [
             {path: 'suspension', component: SuspensionComponent},
             {path: 'suspension-search', component: SuspensionSearchComponent},
             {path: 'drivers', component: DriverInformationComponent},
-            {path: 'traffic', component: TrafficComponent}
+            {path: 'traffic', component: TrafficComponent},
+            {path: 'traffic-search', component: TrafficSearchComponent}
             // { path: 'suspension', redirectTo: 'suspension-search', pathMatch: 'full' },
             // { path: 'suspension-search', component: PenaltyDriverComponent },
             // { path: 'suspension-form/:id', component: SuspensionComponent }

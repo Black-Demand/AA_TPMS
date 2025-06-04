@@ -28,12 +28,11 @@
                   <input matInput formControlName="licenseNumber" readonly>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline">
-                  <mat-label>Ticket Number</mat-label>
-                  <input matInput formControlName="ticketNo" required (keydown)="onKeyDown($event)"
-                    placeholder="Enter Numbers only">
-                  <mat-error>{{getNumberErrorMessage()}}</mat-error>
-                </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Ticket Number</mat-label>
+                <input matInput formControlName="ticketNo" required>
+                <mat-error></mat-error>
+              </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
                   <mat-label>Violation Date</mat-label>

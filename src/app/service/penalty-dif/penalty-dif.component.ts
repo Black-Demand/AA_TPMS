@@ -72,7 +72,7 @@ export class PenaltyDifComponent implements OnInit {
         amount: [{ value: '', disabled: true }],
         violationDate: ['', [Validators.required, dateCannotBeTheFuture()]],
         dateAccused: ['', [Validators.required, dateCannotBeTheFuture()]],
-        ticketNo: ['', [Validators.required, Validators.pattern(/^[0-9]*$/)]],
+        ticketNo: [''],
         desc: [''],
       },
       { validators: this.dateRangeValidator }
@@ -80,6 +80,7 @@ export class PenaltyDifComponent implements OnInit {
   }
   ngOnInit(): void {
     this.loadCustomOffences();
+    this.generateTicketNumber();
     
     // this.penaltyForm.patchValue({amount : response.amount})
   }
@@ -138,33 +139,15 @@ export class PenaltyDifComponent implements OnInit {
     }
     return '';
   }
-  getNumberErrorMessage(): string {
-    let field = this.penaltyForm.get('ticketNo');
-    if (field?.hasError('required')) {
-      return 'Ticket Number is Required';
-    }
-    if (field?.hasError('pattern')) {
-      return 'Only Numbers are allowed';
-    }
-    return '';
-  }
-  onKeyDown(event: KeyboardEvent) {
-    const allowKey = ['Enter', 'Backspace', 'Escape', 'Delete', 'Tab', 'Dot'];
-    if (allowKey.includes(event.key)) {
-      return;
-    }
 
-    if (
-      event.ctrlKey &&
-      ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())
-    ) {
-      return;
-    }
+   generateTicketNumber(){
+    const ticketNum = Math.floor(100000 + Math.random() * 900000);
+    const ticketNo = `${ticketNum}`;
 
-    if (isNaN(Number(event.key))) {
-      event.preventDefault();
-    }
+    this.penaltyForm?.get('ticketNo')?.setValue(ticketNo);
+    this.penaltyForm?.get('ticketNo')?.disable();
   }
+
   loadCustomOffences() {
     this.lookupService.getCustomOffenceGrades().subscribe({
       next: (data) => {
