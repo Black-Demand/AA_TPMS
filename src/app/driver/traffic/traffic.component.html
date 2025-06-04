@@ -35,9 +35,9 @@
 
              <mat-form-field appearance="outline" class="form-field">
                 <mat-label>Violation Type</mat-label>
-                <mat-select formControlName="offenceId" [disabled]="violationTypeDisabled">
-                  <mat-option>
-                    gfgff
+                <mat-select formControlName="offenceId" required [disabled]="violationTypeDisabled">
+                  <mat-option  *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
+                     {{violationtype.amDescription}}
                   </mat-option>
                 </mat-select>
               </mat-form-field>

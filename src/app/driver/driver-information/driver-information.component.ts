@@ -31,11 +31,7 @@ export class DriverInformationComponent implements OnInit {
   
     form!: FormGroup;
     selectedDriver!: DriverDTO;
-<<<<<<< HEAD
-    nationalities: Lookup.LookupDTO[] = [];
-=======
     nationalitys : Lookup.LookupDTO[] = [];
->>>>>>> f120db1f6b34f8d7dbb2e1d3aba9bbff0d71adfc
 
 
   constructor(
@@ -60,40 +56,23 @@ export class DriverInformationComponent implements OnInit {
 
      if (data) {
         this.selectedDriver = data; 
-<<<<<<< HEAD
         console.log(data);
 
-      this.form.patchValue({
-        fullName: data.fullName,
-        nationality: this.getNatiolalityName(data.nationality),
-        gender: data.gender,
-        birthDate: data.birthDate,
-        issuerRegion: data.address,
-        licenceArea: data.town
-=======
 console.log(data);
       this.form.patchValue({
         fullName: data.fullName,
-        nationality: data.nationality ?
-        this.getNationality(data.nationality) : 'Unknown',
         gender: data.gender,
+        nationality: data.nationality ?this.getNationality(data.nationality) : 'Unknown',
+        // gender: data.gender,
         birthDate: data.birthDate,
+        // issuerRegion: data.address,
+        // licenceArea: data.town,
         address: data.address,
         town: data.town
->>>>>>> f120db1f6b34f8d7dbb2e1d3aba9bbff0d71adfc
       });
     }
   }
 
-<<<<<<< HEAD
-   private getNatiolalityName(code: string): string {
-    return (
-      this.nationalities.find((n) => n.code === code)?.amdescription || code
-    );
-  }
-
-
-=======
 
     private getNationality(code: string): string {
     return (
@@ -101,7 +80,6 @@ console.log(data);
     );
   }
 
->>>>>>> f120db1f6b34f8d7dbb2e1d3aba9bbff0d71adfc
  
 
 }

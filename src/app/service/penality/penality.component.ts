@@ -31,6 +31,7 @@ import { OrdersDTO } from '../../Models/order';
 import { OrdersService } from '../../services/orders.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationComponent } from '../../dialog/confirmation/confirmation/confirmation.component';
+import { StepperSelectionEvent } from '@angular/cdk/stepper';
 
 
 
@@ -106,10 +107,9 @@ export class PenalityComponent implements OnInit {
     this.generateOrdderNumber();
 
     if (data) {
-
+        console.log(data);
         this.selectedDriver = data; 
-
-      this.firstFormGroup.patchValue({
+        this.firstFormGroup.patchValue({
         mainGuid: data.mainGuid,
         fullName: data.fullName,
         licenseNumber: data.licenseNumber
@@ -119,9 +119,9 @@ export class PenalityComponent implements OnInit {
       });
     }
     if (data) try{
-      console.log(data);
+      console.log('resulting driver data',data);
       this.secondFormGroup.patchValue({
-        penalityPoints: data.penalityPoints,
+        penalityPoints: data.NewPlateNo,
         amount: data.amount,
         delayPoints: data.delayPoints,
         DelayAmount: data.delayAmount,
@@ -133,6 +133,11 @@ export class PenalityComponent implements OnInit {
     }
      catch (e) {
   console.error('Patch error:', e);
+  }
+  if(data) {
+    this.thirdFormGroup.patchValue({
+      payment: data.amount
+    })
   }
   }
 
@@ -167,7 +172,7 @@ export class PenalityComponent implements OnInit {
       receiptNumber: ['', Validators.required],
       checkNumber: ['', Validators.required],
       fullName: [{value: '', disabled: true}, Validators.required],
-      payment: ['',Validators.required]
+      payment: [{value: '', disabled: true},[Validators.required]]
 
     });
 
@@ -302,26 +307,53 @@ submitFirstForm(): void {
       ...this.firstFormGroup.value,
       parentGuid: this.selectedDriver.mainGuid
     };
-    
+
     const region = this.selectedDriver?.issuerRegion;
     const licenseCategory = this.selectedDriver?.licenseCategory;
     const licenseNumber = this.selectedDriver?.licenseNumber;
-    // const mainGuid = this.selectedDriver?.mainGuid;
+
     console.log('Sending to penalty service:', { region, licenseCategory, licenseNumber });
 
-    this.penalityService.createPenality(dto ,licenseNumber)
+    this.penalityService.createPenality(dto, licenseNumber)
       .subscribe({
-        next: () => { this.toastr.success("Penality added successfully")},
+        next: (response) => {
+          this.toastr.success("Penality added successfully");
+
+          console.log("Response from backend:", response);
+
+          const {
+            amount,
+            penalityPoints,
+            delayPoints,
+            delayAmount,
+            wozefPoint,
+            totalAmount
+          } = response;
+
+          this.secondFormGroup.patchValue({
+            penalityPoints: penalityPoints,
+            amount: amount,
+            delayPoints: delayPoints,
+            delayAmount: delayAmount,
+            wozefPoint: wozefPoint ?? 0,
+            totalAmount: totalAmount
+          });
+
+          console.log('Second form group after patching:', this.secondFormGroup.value);
+        },
         error: (err) => {
           console.error('Error submitting form:', err);
           this.toastr.error('Failed to submit penalty.');
-          console.log( "resuting dto",dto);
         }
       });
   } else {
     // console.error('Form invalid or driver not selected');
   }
 }
+
+
+
+
 
 
 
@@ -366,15 +398,27 @@ submitFirstForm(): void {
 //     this.showResults = true;
 //   }
 // }
+onStepChange(event: StepperSelectionEvent): void {
+  if (event.selectedIndex === 2) {
+    const paymentAmount = this.secondFormGroup.get('amount')?.value;
+    this.thirdFormGroup.patchValue({ payment: paymentAmount });
+    console.log('Patched payment to third form:', paymentAmount);
+  }
+}
 
 savethirdForm() {
+
+  const paymentAmount = this.secondFormGroup.get('amount')?.value;
+  this.thirdFormGroup.patchValue({payment: paymentAmount});
+console.log('Payment Amount from second form:', paymentAmount);
+
+
   const dialogRef = this.dialog.open(ConfirmationComponent, {
     width: '450px'
   });
 
   dialogRef.afterClosed().subscribe(result => {
     if (result === true) {
-      // Only proceed if user confirmed
       if (this.thirdFormGroup.valid) {
         const orderDto: OrdersDTO = this.thirdFormGroup.value; 
         const licenseNo = this.licenseNo; 

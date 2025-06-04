@@ -92,12 +92,11 @@ export class TrafficComponent implements OnInit {
   selectedZoneCode!: number;
   selectedWoredaCode!: number;
   selectedLicenceRegionCode: number = 0;
-
-violationgrades: Lookup.OffenceGradeDTO[] =[];
-violationtypes: Lookup.OffenceNewDTO[] =[];
- violationTypeDisabled = false;
-checked: any;
-labelPosition: any;
+  violationgrades: Lookup.OffenceGradeDTO[] =[];
+  violationtypes: Lookup.OffenceNewDTO[] =[];
+  violationTypeDisabled = false;
+  checked: any;
+  labelPosition: any;
 
 
 
@@ -243,7 +242,7 @@ labelPosition: any;
     this.loadCategories();
     this.loadLicenceRegions();
     this.loadNationality();
-        this.loadViolationGrade();
+    this.loadViolationGrade();
 
   }
    
