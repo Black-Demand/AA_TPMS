@@ -22,40 +22,8 @@
 
       </div>
 
-<<<<<<< HEAD
-      <!-- Section 2: License Information -->
-      <h3 class="section-title">License Information</h3>
-      <div class="form-row">
-           <mat-form-field appearance="outline"  class="form-field">
-                <mat-label>Violation Grade</mat-label>
-                <mat-select formControlName="violationGrade" required  (selectionChange)="loadViolationTypeByGrade($event.value)">
-                  <mat-option *ngFor="let violationgrade of violationgrades" [value]="violationgrade.id.toString()">
-                    {{ violationgrade.code }}
-                  </mat-option>
-                </mat-select>
-            </mat-form-field>
-
-             <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Violation Type</mat-label>
-                <mat-select formControlName="offenceId" required [disabled]="violationTypeDisabled">
-                  <mat-option  *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
-                     {{violationtype.amDescription}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
- 
-              <mat-form-field appearance="outline" class="form-field">
-                <mat-label>Violation Date</mat-label>
-                <input matInput [matDatepicker]="yet_Ken" formControlName="violationDate" required
-                  (dateChange)="registrationForm.updateValueAndValidity()">
-                <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
-                <mat-datepicker #yet_Ken></mat-datepicker>
-                <mat-error>{{getErrorMessageForYetfesmbetKen()}}</mat-error>
-              </mat-form-field>
-=======
       <div style="margin: 40px 0;">
         <mat-divider></mat-divider>
->>>>>>> 75cff8298d0f0b0b8406d884b0c43e3420221d8a
       </div>
 
       <div class="form-row">
@@ -107,11 +75,8 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>The Action Taken</mat-label>
           <mat-select formControlName="action">
-            <mat-option value="one">
-              One
-            </mat-option>
-            <mat-option value="two">
-              Two
+            <mat-option *ngFor="let action of actionOptions" [value]="action.value">
+              {{action.label}}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -178,14 +143,14 @@
           <mat-error>Required field</mat-error>
         </mat-form-field>
 
+
+        
+       
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Vehicle Type</mat-label>
           <mat-select formControlName="vehicleType" required>
-            <mat-option value="taxi">
-              taxi
-            </mat-option>
-            <mat-option value="taxi">
-              taxi
+            <mat-option *ngFor="let vehicle of vhicleTypes" [value]="vehicle.code">
+              {{vehicle.descriptionAmh}}
             </mat-option>
           </mat-select>
           <mat-error>Required field</mat-error>

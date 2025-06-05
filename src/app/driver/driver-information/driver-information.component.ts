@@ -51,28 +51,9 @@ export class DriverInformationComponent implements OnInit {
     });
   }
  ngOnInit(): void {
-  // Load nationality list first
   this.lookupService.getAllNationality().subscribe((data) => {
     this.nationalitys = data;
 
-<<<<<<< HEAD
-     if (data) {
-        this.selectedDriver = data; 
-        console.log(data);
-
-console.log(data);
-      this.form.patchValue({
-        fullName: data.fullName,
-        gender: data.gender,
-        nationality: data.nationality ?this.getNationality(data.nationality) : 'Unknown',
-        // gender: data.gender,
-        birthDate: data.birthDate,
-        // issuerRegion: data.address,
-        // licenceArea: data.town,
-        address: data.address,
-        town: data.town
-=======
-    // Get driver data after nationalities are loaded
     const driverData = this.driverService.getDriverData();
     if (driverData) {
       this.selectedDriver = driverData;
@@ -81,10 +62,9 @@ console.log(data);
         fullName: driverData.fullName,
         nationality: this.getNationality(driverData.nationality),
         gender: this.getGender(driverData.gender),
-       birthDate: this.formatDate(driverData.birthDate),
+        birthDate: this.formatDate(driverData.birthDate),
         address: driverData.address,
         town: driverData.town
->>>>>>> 75cff8298d0f0b0b8406d884b0c43e3420221d8a
       });
     }
   });
@@ -92,7 +72,7 @@ console.log(data);
 
 private formatDate(date: string | Date): string {
   const d = new Date(date);
-  return d.toISOString().split('T')[0]; // Returns only 'YYYY-MM-DD'
+  return d.toISOString().split('T')[0]; 
 }
 
 
@@ -105,7 +85,7 @@ private getGender(code: number): string {
 }
 
   
-    private getNationality(code: string | number): string {
+  private getNationality(code: string | number): string {
   const matched = this.nationalitys.find(c => String(c.code) === String(code));
   return matched ? matched.amdescription : String(code);
 }

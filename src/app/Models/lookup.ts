@@ -71,9 +71,9 @@ namespace Lookup {
   }
 
   export interface VehicleBodyTypeDTO{
-    Code: string;
+    code: string;
     VehicleTypeCode: string;
-    DescriptionAmh: string;
+    descriptionAmh: string;
   }
 
   export interface InjunctionTypeDTO {

@@ -27,6 +27,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
 import { dateNotTheFuture, dateNotTheFutures } from '../../service/date.validate';
+import { ACTION_OPTIONS, ActionOption} from '../../Enums/actiontaken';
 
 @Component({
   selector: 'app-traffic',
@@ -72,15 +73,8 @@ export class TrafficComponent  implements OnInit {
   selectedZoneCode!: number;
   selectedWoredaCode!: number;
   selectedLicenceRegionCode: number = 0;
-<<<<<<< HEAD
-  violationgrades: Lookup.OffenceGradeDTO[] =[];
-  violationtypes: Lookup.OffenceNewDTO[] =[];
-  violationTypeDisabled = false;
-  checked: any;
-  labelPosition: any;
-=======
   selectedDriver!: DriverDTO;
->>>>>>> 75cff8298d0f0b0b8406d884b0c43e3420221d8a
+  selectedAction = '';
 
 
   
@@ -88,8 +82,9 @@ export class TrafficComponent  implements OnInit {
   violationtypes: Lookup.OffenceNewDTO[] = [];
   regions: Lookup.LicenceRegionDTO[] = [];
   majors: Lookup.Majors[] = [];
+  vhicleTypes: Lookup.VehicleBodyTypeDTO[] =[];
+  actionOptions: ActionOption[] = ACTION_OPTIONS;
 
-  
 
   constructor(
     private fb: FormBuilder,
@@ -105,6 +100,7 @@ export class TrafficComponent  implements OnInit {
     this.loadRegions();
     this.loadMajors();
     this.loadViolationGrade();
+    this.loadVheicleBodyType();
     const data = this.tdrs.getDriverData();
     this.trafficForms();
     this.generateOrdderNumber();
@@ -219,118 +215,7 @@ export class TrafficComponent  implements OnInit {
   }
  
 
-<<<<<<< HEAD
-  onPhoneInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
-    
-    // Ensure we don't exceed max length
-    if (value.length > 9) {
-      value = value.substring(0, 9);
-    }
-    
-    input.value = value;
-    this.registrationForm.get('phone')?.setValue(value, { emitEvent: false });
-  }
-
-  getFullPhoneNumber(): string {
-    const phoneControl = this.registrationForm.get('phone');
-    return phoneControl?.value ? `+251${phoneControl.value}` : '';
-  }
-
-  get licenseNumberControl() {
-    return this.registrationForm.get('licenseNumber');
-  }
-
-  getErrorForLicenseNumber(): string {
-    if (this.licenseNumberControl?.hasError('required')) {
-      return 'Driver\'s License Number is required';
-    }
-    if (this.licenseNumberControl?.hasError('minlength') || 
-        this.licenseNumberControl?.hasError('maxlength')) {
-      return 'Must be exactly 6 characters';
-    }
-    return '';
-  }
-
-  getErrorForIssueDate(): string {
-    const field = this.registrationForm.get('issuanceDate');
-  
-    if (field?.hasError('required')) {
-      return 'The issue date is required';
-    }
-  
-    if (field?.hasError('dateCannotBeTheFuture')) {
-      return 'Issue date cannot be in the future';
-    }
-  
-    return '';
-  }
-
-  ngOnInit(): void {
-    this.loadRegions();
-    this.loadCategories();
-    this.loadLicenceRegions();
-    this.loadNationality();
-    this.loadViolationGrade();
-
-  }
-   
-  onRegionChange(regionCode: number) {
-    this.selectedRegionCode = regionCode; 
-    this.loadZones(regionCode);
-  }
-  
-  onZoneChange(zoneCode: number) {
-    console.log('Zone changed:', zoneCode);
-    this.selectedZoneCode = zoneCode;
-    this.loadWoredas(zoneCode);
-  }
-  
-
-  onWoredaChange(woredaCode: number) {
-    console.log('Woreda changed:', woredaCode);
-    this.selectedWoredaCode = woredaCode;
-    this.loadKebeles(woredaCode);
-  }
-  
-
-
-  loadRegions() {
-    this.lookupservice.getRegions().subscribe(data => {
-      this.regions = data;
-      this.zones = [];
-      this.woredas = [];
-      this.kebeles = [];
-    });
-  }
-  
-  loadZones(regionCode: number) {
-    this.lookupservice.getZonesByRegion(regionCode).subscribe(data => {
-      this.zones = data;
-      this.woredas = [];
-      this.kebeles = [];
-    });
-  }
-  
-  loadWoredas(zoneCode: number) {
-    this.lookupservice.getWoredasByZone(zoneCode).subscribe(data => {
-      this.woredas = data;
-      this.kebeles = [];
-    });
-  }
-  
-  
-  loadKebeles(woredaCode: number) {
-    this.lookupservice.getKebelesByWoreda(woredaCode).subscribe(data => {
-      this.kebeles = data;
-    });
-  }
-
-  loadLicenceRegions(): void {
-=======
    loadRegions() {
->>>>>>> 75cff8298d0f0b0b8406d884b0c43e3420221d8a
     this.lookupservice.getAllRegions().subscribe(data => {
        this.regions = data;
     });
@@ -340,6 +225,12 @@ export class TrafficComponent  implements OnInit {
     this.lookupservice.getAllMajors().subscribe(data => {
        this.majors = data;
     });
+  }
+
+    loadVheicleBodyType() {
+   this.lookupservice.getAllVehicles().subscribe( data => {
+    this.vhicleTypes = data;
+   })
   }
   
   onSubmit(): void {
