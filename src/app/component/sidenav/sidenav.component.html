@@ -7,55 +7,55 @@
       <!-- Dashboard -->
       <mat-list-item routerLink="/nav-menu" routerLinkActive="active">
         <mat-icon>dashboard</mat-icon>
-        <span class="menu-label">Dashboard</span>
+        <span class="menu-label">{{'COMMON.DASHBOARD' | translate }}</span>
       </mat-list-item>
 
       <!-- Service with dropdown -->
       <mat-list-item class="menu-item" [matMenuTriggerFor]="serviceMenu">
         <mat-icon>miscellaneous_services</mat-icon>
-        <span class="menu-label">Service</span>
+        <span class="menu-label">{{'COMMON.SERVICES.TITLE' | translate }}</span>
         <mat-icon class="menu-expand-icon">keyboard_arrow_down</mat-icon>
       </mat-list-item>
       <mat-menu #serviceMenu="matMenu">
         <button mat-menu-item routerLink="/penalty-driver" routerLinkActive="active">
-          Penalty for Rule Violation (Driver)
+          {{'COMMON.SERVICES.PENALITIES' | translate }}
         </button>
         <button mat-menu-item routerLink="/penalty-dif" routerLinkActive="active">
-          Penalty for Rule Violation (Miscellaneous)
+          {{'COMMON.SERVICES.MICIL_PENAL' | translate }}
         </button>
         <button mat-menu-item routerLink="/suspension-search" routerLinkActive="active">
-          Suspension
+          {{'COMMON.SERVICES.INJUNCTION' | translate }}
         </button>
       </mat-menu>
 
       <!-- Driver with dropdown -->
       <mat-list-item class="menu-item" [matMenuTriggerFor]="driverMenu">
         <mat-icon>directions_car</mat-icon>
-        <span class="menu-label">Driver</span>
+        <span class="menu-label">{{'COMMON.DRIVER.D_TITLE' | translate }}</span>
         <mat-icon class="menu-expand-icon">keyboard_arrow_down</mat-icon>
       </mat-list-item>
       <mat-menu #driverMenu="matMenu">
         <button mat-menu-item routerLink="/driver-info" routerLinkActive="active">
-          Driver Information
+          {{'COMMON.DRIVER.D_INFO' | translate }}
         </button>
         <button mat-menu-item routerLink="/temporary-registration" routerLinkActive="active">
-          Temporary Registration
+          {{'COMMON.DRIVER.TEMP_REG' | translate }}
         </button>
         <button mat-menu-item routerLink="/traffic-search" routerLinkActive="active">
-         Traffic Information Entry (Traffic) 
+         {{'COMMON.DRIVER.TRAFFIC_DATA' | translate }}
         </button>
       </mat-menu>
 
       <!-- Punishment Monitoring -->
       <mat-list-item routerLink="/punishment-monitoring" routerLinkActive="active">
         <mat-icon>gavel</mat-icon>
-        <span class="menu-label">Punishment Monitoring</span>
+        <span class="menu-label">{{'COMMON.PUN_MONITOR' | translate }}</span>
       </mat-list-item>
 
       <!-- Composition with dropdown -->
       <mat-list-item class="menu-item" [matMenuTriggerFor]="compositionMenu">
         <mat-icon>description</mat-icon>
-        <span class="menu-label">Composition</span>
+        <span class="menu-label">{{'COMMON.DIFF' | translate }}</span>
         <mat-icon class="menu-expand-icon">keyboard_arrow_down</mat-icon>
       </mat-list-item>
       <mat-menu #compositionMenu="matMenu">
@@ -70,6 +70,6 @@
       <!-- Report -->
       <mat-list-item routerLink="/report" routerLinkActive="active">
         <mat-icon>assessment</mat-icon>
-        <span class="menu-label">Report</span>
+        <span class="menu-label">{{'COMMON.REPORT' | translate }}</span>
       </mat-list-item>   
     </mat-nav-list>

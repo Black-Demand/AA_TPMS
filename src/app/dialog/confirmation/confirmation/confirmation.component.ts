@@ -4,10 +4,11 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-confirmation',
-  imports: [MatDialogModule,MatButtonModule,MatIconModule,MatDividerModule],
+  imports: [MatDialogModule,MatButtonModule,MatIconModule,MatDividerModule,TranslateModule],
   templateUrl: './confirmation.component.html',
   styleUrl: './confirmation.component.css'
 })

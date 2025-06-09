@@ -1,7 +1,7 @@
   <div class="driver-license-container">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Penality form</mat-card-title>
+        <mat-card-title>{{'SEARCH.PENAL_FORM' | translate}}</mat-card-title>
         <div class="spacer"></div>
         <!-- <button mat-raised-button [routerLink]="['/penality-driver']" class="back-button">
           <mat-icon>exit_to_app</mat-icon>
@@ -15,27 +15,27 @@
           <!-- First Form Step -->
           <mat-step [stepControl]="firstFormGroup">
             <form [formGroup]="firstFormGroup">
-              <ng-template matStepLabel>Basic Information</ng-template>
+              <ng-template matStepLabel>{{'SEARCH.BASIC_INFO' | translate}}</ng-template>
 
               <div class="form-grid" style="margin-top: 10px;">
                 <mat-form-field appearance="outline">
-                  <mat-label>Full Name</mat-label>
+                  <mat-label>{{'SEARCH.FULL_NAME' | translate}}</mat-label>
                   <input matInput formControlName="fullName" readonly>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                  <mat-label>Driver License ID</mat-label>
+                  <mat-label>{{'SEARCH.LICENCE_NUMBER_PLACEHOLDER' | translate}}</mat-label>
                   <input matInput formControlName="licenseNumber" readonly>
                 </mat-form-field>
 
               <mat-form-field appearance="outline">
-                <mat-label>Ticket Number</mat-label>
+                <mat-label>{{'SEARCH.TICKET_NO_PLACEHOLDER' | translate}}</mat-label>
                 <input matInput formControlName="ticketNo" required>
-                <mat-error></mat-error>
+                  <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
               </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Violation Date</mat-label>
+                  <mat-label>{{'SEARCH.VIOLATION_DATE_PLACEHOLDER' | translate}}</mat-label>
                   <input matInput [matDatepicker]="yet_Ken" formControlName="violationDate" required
                     (dateChange)="firstFormGroup.updateValueAndValidity()">
                   <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
@@ -44,7 +44,7 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>Accused Date</mat-label>
+                  <mat-label>{{'SEARCH.DATE_ACCUSED_PLACEHOLDER' | translate}}</mat-label>
                   <input matInput [matDatepicker]="yetss_ken" formControlName="dateAccused" [min]="minEndDate" required
                     (dateChange)="firstFormGroup.updateValueAndValidity()">
                   <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
@@ -54,55 +54,60 @@
 
                 <!-- Violation Grade -->
                 <mat-form-field appearance="outline">
-                  <mat-label>Violation Grade</mat-label>
+                  <mat-label>{{'SEARCH.VIOLATION_GRADE_PLACEHOLDER' | translate}}</mat-label>
                   <mat-select formControlName="violationGrade" required
                     (selectionChange)="loadViolationTypeByGrade($event.value)">
                     <mat-option *ngFor="let violationgrade of violationgrades" [value]="violationgrade.id.toString()">
                       {{ violationgrade.code }}
                     </mat-option>
                   </mat-select>
+                 <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
                 </mat-form-field>
 
                 <!-- Violation Type -->
-                <mat-form-field appearance="outline" style="width: 460px;">
-                  <mat-label>Violation Type</mat-label>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'SEARCH.VIOLATION_TYPE_PLACEHOLDER' | translate }}</mat-label>
                   <mat-select formControlName="offenceId" [disabled]="violationTypeDisabled">
                     <mat-option *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
                       {{ violationtype.amDescription }}
                     </mat-option>
                   </mat-select>
+                  <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
                 </mat-form-field>
 
 
 
-                <mat-form-field appearance="outline" style="margin-left: 150px; width: 270px;">
-                  <mat-label>Plate Region</mat-label>
+                <mat-form-field appearance="outline" >
+                  <mat-label>{{'SEARCH.PLATE_REGION_PLACEHOLDER' | translate}}</mat-label>
                   <mat-select formControlName="plateRegion" required>
                     <mat-option *ngFor="let region of regions" [value]="region.code">
                       {{region.amDescription}}
                     </mat-option>
                   </mat-select>
+                  <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
                 </mat-form-field>
 
-                <mat-form-field appearance="outline" style="margin-left: 110px;">
-                  <mat-label>Major Code</mat-label>
+                <mat-form-field appearance="outline">
+                  <mat-label>{{'SEARCH.MAJOR_CODE_PLACEHOLDER' | translate}}</mat-label>
                   <mat-select formControlName="NewPlateCode" required>
                     <mat-option *ngFor="let major of majors" [value]="major.codeId.toString()">
                       {{major.majorCode}}
                     </mat-option>
                   </mat-select>
+                  <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
                 </mat-form-field>
 
 
                 <mat-form-field appearance="outline">
-                  <mat-label>Plate Number</mat-label>
+                  <mat-label>{{'SEARCH.PLATE_NO_PLACEHOLDER' | translate}}</mat-label>
                   <input matInput formControlName="NewPlateNo" required>
+                  <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
                 </mat-form-field>
               </div>
 
               <div class="form-actions">
                 <button mat-raised-button color="primary" (click)="submitFirstForm()" matStepperNext [disabled]="firstFormGroup.invalid">
-                  Submit and Next
+                 {{'SEARCH.SAVE_BUTTON' | translate}}
                 </button>
               </div>
             </form>
@@ -112,7 +117,7 @@
 
           <mat-step [stepControl]="secondFormGroup"  #stepper>
             <form [formGroup]="secondFormGroup" >
-              <ng-template matStepLabel>Payment Summery</ng-template>
+              <ng-template matStepLabel>{{'SEARCH.PAY_SUMMERY' | translate }}</ng-template>
 
               <div class="form-grid" style="margin-top: 10px;">
                 <mat-form-field appearance="outline">
@@ -148,7 +153,7 @@
 
               <div class="form-actions">
               <button mat-button color="primary" matStepperNext style="margin-top: 10px;">
-                Next <mat-icon>navigate_next</mat-icon>
+                {{'SEARCH.NEXT_BUTTON' | translate }} <mat-icon>navigate_next</mat-icon>
               </button>
               </div>
             </form>
@@ -158,41 +163,41 @@
 
           <mat-step [stepControl]="thirdFormGroup"  #stepper>
             <form [formGroup]="thirdFormGroup">
-              <ng-template matStepLabel>Receiving Payment</ng-template>
+              <ng-template matStepLabel>{{'SEARCH.PAY_RECIPTION' | translate }}</ng-template>
 
               <div class="form-grid" style="margin-top: 10px;">
                 <mat-form-field appearance="outline">
-                  <mat-label>Order Number</mat-label>
+                  <mat-label>{{'SEARCH.ORDER_NO_PLACEHOLDER' | translate }}</mat-label>
                   <input matInput formControlName="orderNumber" readonly >
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                  <mat-label>Pay Day</mat-label>
+                  <mat-label>{{'SEARCH.PAY_DATE_PLACEHOLDER' | translate }}</mat-label>
                   <input matInput [matDatepicker]="pay_day" formControlName="payDay" >
                   <mat-datepicker-toggle matSuffix [for] = "pay_day"></mat-datepicker-toggle>
                   <mat-datepicker #pay_day></mat-datepicker>
-                  <mat-error>{{ getErrorForPayDay()}}</mat-error>
+                  <mat-error>{{ getErrorForPayDay() }}</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                  <mat-label>Receipt Number</mat-label>
+                  <mat-label>{{'SEARCH.RECIT_NO_PLACEHOLDER' | translate }}</mat-label>
                   <input matInput  formControlName="receiptNumber" >
-                  <mat-error>The field is Required</mat-error>
+                  <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                  <mat-label>Check Number</mat-label>
+                  <mat-label>{{'SEARCH.CHECK_NO_PLACEHOLDER' | translate }}</mat-label>
                   <input matInput formControlName="CheckNumber" >
-                  <mat-error>The field is Required</mat-error>
+                  <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                  <mat-label>Full Name</mat-label>
+                  <mat-label>{{'SEARCH.FULL_NAME' | translate }}</mat-label>
                   <input matInput formControlName="fullName" >
                 </mat-form-field>
 
                   <mat-form-field appearance="outline">
-                    <mat-label>Payment</mat-label>
+                    <mat-label>{{'SEARCH.PAYMENT_PLACEHOLDER' | translate }}</mat-label>
                     <input matInput formControlName="payment" readonly >
                   </mat-form-field>
               </div>
@@ -200,11 +205,11 @@
               <div class="form-actions">
                 <button mat-button matStepperPrevious style="margin-top: 10px;">
                     <mat-icon>arrow_back</mat-icon>
-                    Back
+                    {{'SEARCH.BACK_BUTTON' | translate }}
                 </button>
               <button mat-button style="margin-top: 10px;" color="primary" (click)="savethirdForm()">
                 <mat-icon>payment</mat-icon>
-                paied
+                {{'SEARCH.PAY_BUTTON' | translate }}
               </button>
 
               </div>

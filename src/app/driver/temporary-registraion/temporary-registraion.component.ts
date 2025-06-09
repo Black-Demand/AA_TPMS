@@ -27,6 +27,7 @@ import { TempDriverService } from '../../services/temp-driver.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-temporary-registraion',
@@ -47,7 +48,8 @@ import { Router } from '@angular/router';
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule,
-    MatDividerModule   
+    MatDividerModule,
+    TranslateModule   
   ],
   templateUrl: './temporary-registraion.component.html',
   styleUrls: ['./temporary-registraion.component.css']
@@ -88,7 +90,8 @@ export class TemporaryRegistraionComponent implements OnInit {
     private tdrs: TempDriverService,
     private lookupservice: LookupService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private translate : TranslateService
   ) {
     this.registrationForm = this.fb.group({
       licenceRegion: ['', Validators.required],
@@ -151,10 +154,6 @@ export class TemporaryRegistraionComponent implements OnInit {
 
   getErrorForIssueDate(): string {
     const field = this.registrationForm.get('issuanceDate');
-  
-    if (field?.hasError('required')) {
-      return 'The issue date is required';
-    }
   
     if (field?.hasError('dateCannotBeTheFuture')) {
       return 'Issue date cannot be in the future';
@@ -300,13 +299,13 @@ export class TemporaryRegistraionComponent implements OnInit {
       this.tdrs.createDriver(driver).subscribe({
         next: (response) => {
           // alert('Driver created successfully');
-          this.toastr.success("Driver created successfully");
+         this.toastr.success(this.translate.instant('TOASTER.SUCCESS.TEMP'));
         //this.router.navigate(['/penality']);
         },
         error: (err) => {
           console.error('Error creating driver:', err);
           alert('Error: ' + (err.error?.message || err.message || 'Unknown error'));
-          this.toastr.error("'Error creating driver:" , err);
+          this.toastr.error(this.translate.instant('TOASTER.ERROR.TEMP'));
         }
       });
     } else {

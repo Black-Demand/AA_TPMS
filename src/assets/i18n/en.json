@@ -1,0 +1,116 @@
+{
+  "SEARCH": {
+    "LOGOUT": "Logout ",
+    "SETTING": "Settings  ",
+    "PROFILE": "My Profile",
+    "TITLE": "Traffic Penalty System",
+    "SEARCH_TITLE": "Driver Search",
+    "NAME_SEARCH": "Search by Name",
+    "SEARCH_BUTTON": "Search",
+    "LICENCE_SEARCH": "Search by Licence Number",
+    "NAME_PLACEHOLDER": "Name",
+    "F_NAME_PLACEHOLDER": "Father's Name",
+    "G_NAME_PLACEHOLDER": "Grandfather's Name",
+    "SEARCH_TAB_TITLE": "Search Results",
+    "RESULTS_FOUND": "Results found",
+    "ACTION": "Action",
+    "PENAL_FORM": "Penality form",
+    "TEMP_DRIVER_REG": "Temporary Driver Registration",
+    "ISSUER_REGION_PLACEHOLDER": "Issuer Region",
+    "LICENCE_AREA_PLACEHOLDER": "Licence Area",
+    "LICENCE_GRADE_PLACEHOLDER": "Licence Grade",
+    "LICENCE_NUMBER_PLACEHOLDER": "Licence Number",
+    "NATIONALITY_PLACEHOLDER": "Nationality",
+    "REGION_PLACEHOLDER": "Region",
+    "WOREDA_PLACEHOLDER": "Woreda",
+    "ZONE_PLACEHOLDER": "Zone",
+    "KEBELE_PLACEHOLDER": "Kebele",
+    "HOUSE_NO_PLACEHOLDER": "House Number",
+    "REMARK_PLACEHOLDER": "Remark",
+    "SAVE_BUTTON": "Save",
+    "CANCEL_BUTTON": "Cancel",
+    "NEXT_BUTTON": "ቀጣይ",
+    "FULL_NAME": "Full Name",
+    "ISSUED_DATE": "Issued Date",
+    "PENALITY": "Penalty",
+    "BASIC_INFO": "Basic Information",
+    "PAY_SUMMERY": "Payment Summary",
+    "PAY_RECIPTION": "Payment Receipt",
+    "VIOLATION_DATE_PLACEHOLDER": "Violation Date",
+    "DATE_ACCUSED_PLACEHOLDER": "Date Accused",
+    "VIOLATION_GRADE_PLACEHOLDER": "Violation Grade",
+    "VIOLATION_TYPE_PLACEHOLDER": "Violation Type Code",
+    "PLATE_REGION_PLACEHOLDER": "Plate Region",
+    "MAJOR_CODE_PLACEHOLDER": "Major Code",
+    "PLATE_NO_PLACEHOLDER": "Plate Number",
+    "TICKET_NO_PLACEHOLDER": "Ticket Number",
+    "ORDER_NO_PLACEHOLDER": "Order Number",
+    "PAY_DATE_PLACEHOLDER": "Payment Date",
+    "RECIT_NO_PLACEHOLDER": "Receipt Number",
+    "CHECK_NO_PLACEHOLDER": "Check Number",
+    "PAYMENT_PLACEHOLDER": "Payment Amount",
+    "PAY_BUTTON": "Paid",
+    "BACK_BUTTON": "Go Back"
+  },
+
+  "TEMP": {
+    "TEMP_FORM_TITLE": "Temporary Driver Registration",
+    "SEX": "Gender",
+    "TEL": "Phone Number",
+    "NAME_PLACEHOLDER_EN": "Name(English)",
+    "F_NAME_PLACEHOLDER_EN": "Fathers Name(English)",
+    "G_NAME_PLACEHOLDER_EN": "Grand Fathers Name(English)",
+    "DOB_PLACEHOLDER": "Date of Birth",
+    "PHOTO": "Photograph"
+  },
+
+  "ERROR": {
+    "REQUIRED": "Required Field",
+    "PAY_DAY_REQUIRED": "Pay Day is Required",
+    "DATE_NOT_IN_FUTURE": "Date can not be in the feature",
+    "TICKET_REQUIRED": "Ticket number is required",
+    "TICKET_PATTERN": "input numbers only",
+    "VIOLATION_DATE_REQUIRED": "violation date is required",
+    "DATE_RANGE_INVALID": "violation date can not execced Accused date",
+    "MIN_AGE": "You must be at least {{minAge}} years old",
+    "DOB_REQUIRED": "Date of birth is required",
+    "DATE_REQUIRED": "Date is required"
+  },
+  "COMMON": {
+    "DASHBOARD": "Dashboard",
+    "SERVICES": {
+      "TITLE": "Services",
+      "PENALITIES": "Violation Penalty (Driver)",
+      "MICIL_PENAL": "Violation Penalty (Miscellaneous)",
+      "INJUNCTION": "Injunction Registration",
+      "LIFT_INJU": "Lift Injunction"
+    },
+    "DRIVER": {
+      "D_TITLE": "Driver",
+      "D_INFO": "Driver Information",
+      "TEMP_REG": "Temporary Registration",
+      "TRAFFIC_DATA": "Traffic Data Entry"
+    },
+    "PUN_MONITOR": "Punishment Monitoring",
+    "DIFF": "Miscellaneous Services",
+    "REPORT": "Report"
+  },
+  "CONFIRMATION" : {
+    "CON_TITLE" : "Payment Confirmation",
+    "CON_SUB_TI" : "You are about to confirm this payment",
+    "MESSAGE" : "This action cannot be undone. Please verify all details before confirming",
+    "CON_BUTTON" : "Confirm Payment"
+  },
+  "TOASTER" : {
+    "SUCCESS" : {
+      "PENAL" : "penality Submitted Succesfully",
+      "ORDER" : "Order Submitted Succesfully",
+      "TEMP" : "Driver Submitted Succesfully"
+    },
+    "ERROR" :{
+      "PENAL" : "Error Submitting Penlaity",
+      "ORDER" : "Error Submitting Order",
+      "TEMP" : "Error Submitting Driver"
+    }
+  }
+}

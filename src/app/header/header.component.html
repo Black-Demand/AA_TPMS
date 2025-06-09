@@ -7,21 +7,22 @@
 
     <!-- App Title -->
     <span class="app-title">
-      <span class="title-text">Traffic Penalty System</span>
-      
+      <span class="title-text">{{'SEARCH.TITLE' | translate}}</span>
+
     </span>
 
     <!-- Spacer -->
     <span class="spacer"></span>
 
     <!-- Right Side Controls -->
-    <div class="header-controls" >
-      <!-- Language Selector -->
-        <mat-select [(value)]="selectedLanguage" placeholder="Language">
+      <div class="header-controls">
+        <!-- Language Selector -->
+        <mat-select [(value)]="lang" (selectionChange)="onLanguageChange($event)" >
           <mat-option value="am">
             <span class="language-option">
               <span class="flag-icon"></span> Amharic
             </span>
+            
           </mat-option>
           <mat-option value="en">
             <span class="language-option">
@@ -38,18 +39,18 @@
       <mat-menu #profileMenu="matMenu" class="profile-menu">
         <button mat-menu-item>
           <mat-icon class="menu-icon">person</mat-icon>
-          <span>My Profile</span>
+          <span>{{'SEARCH.PROFILE' | translate}}</span>
         </button>
         <button mat-menu-item>
           <mat-icon class="menu-icon">settings</mat-icon>
-          <span>Settings</span>
+          <span>{{'SEARCH.SETTING' | translate}}</span>
         </button>
         <mat-divider></mat-divider>
         <button mat-menu-item [routerLink]="['/login']">
           <mat-icon class="menu-icon">exit_to_app</mat-icon>
-          <span>Logout</span>
+          <span>{{'SEARCH.LOGOUT' | translate}}</span>
         </button>
       </mat-menu>
     </div>
   </mat-toolbar-row>
-</mat-toolbar>
+</mat-toolbar>  

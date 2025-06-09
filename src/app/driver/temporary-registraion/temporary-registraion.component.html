@@ -1,7 +1,7 @@
 <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()" class="registration-form">
   <mat-card class="form-card">
     <mat-card-header>
-      <mat-card-title>Temporary Driver Registration</mat-card-title>
+      <mat-card-title>{{'TEMP.TEMP_FORM_TITLE' | translate }}</mat-card-title>
     </mat-card-header>
     <div style="margin: 20px 0;">
       <mat-divider></mat-divider>
@@ -14,34 +14,34 @@
       </div>
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field" style="width: 100px;">
-          <mat-label>Issuer Region</mat-label>
+          <mat-label>{{'SEARCH.ISSUER_REGION_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="licenceRegion" (selectionChange)="onIssuerRegionChange($event.value)" required>
             <mat-option *ngFor="let region of licenceRegions" [value]="region.code">
               {{ region.amDescription }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Licence Area</mat-label>
+          <mat-label>{{'SEARCH.LICENCE_AREA_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="licenceArea" required>
             <mat-option *ngFor="let area of licenceAreas" [value]="area.code">
               {{ area.amDescription }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>License Level</mat-label>
+          <mat-label>{{'SEARCH.LICENCE_GRADE_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="licenceGrade" required>
             <mat-option *ngFor="let category of licenceCatagories" [value]="category.code">
               {{category.displayName}}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
       </div>
 
@@ -51,7 +51,7 @@
       </div>
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Driver's License Number</mat-label>
+          <mat-label>{{'SEARCH.LICENCE_NUMBER_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="licenceNo" required minlength="6" maxlength="6" #licenseNumberInput>
 
           <!-- Character counter -->
@@ -61,7 +61,7 @@
 
           <!-- Error messages -->
           <mat-error *ngIf="registrationForm.get('licenceNo')?.hasError('required')">
-            Driver's License Number is required
+            {{'ERROR.REQUIRED' | translate }}
           </mat-error>
           <mat-error *ngIf="registrationForm.get('licenceNo')?.hasError('minlength') || 
                                   registrationForm.get('licenceNo')?.hasError('maxlength')">
@@ -70,10 +70,11 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Date of Issue</mat-label>
+          <mat-label>{{'SEARCH.ISSUED_DATE' | translate }}</mat-label>
           <input matInput [matDatepicker]="issueDatePicker" formControlName="issuanceDate" required>
           <mat-datepicker-toggle matSuffix [for]="issueDatePicker"></mat-datepicker-toggle>
           <mat-datepicker #issueDatePicker></mat-datepicker>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
           <mat-error>{{ getErrorForIssueDate() }}</mat-error>
         </mat-form-field>
       </div>
@@ -85,93 +86,88 @@
       <div class="form-row">
         <!-- Amharic Names -->
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>ስም</mat-label>
+          <mat-label>{{'SEARCH.NAME_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="firstNameAmh" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>የአባት ስም</mat-label>
+          <mat-label>{{'SEARCH.F_NAME_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="fatherNameAmh" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>የአያት ስም </mat-label>
+          <mat-label>{{'SEARCH.G_NAME_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="grandNameAmh" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
       </div>
 
       <div class="form-row">
         <!-- English Names -->
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>First Name</mat-label>
+          <mat-label>{{'TEMP.NAME_PLACEHOLDER_EN' | translate }}</mat-label>
           <input matInput formControlName="firstName" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Father's Name</mat-label>
+          <mat-label>{{'TEMP.F_NAME_PLACEHOLDER_EN' | translate }}</mat-label>
           <input matInput formControlName="fatherName" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Grandfather's Name</mat-label>
+          <mat-label>{{'TEMP.G_NAME_PLACEHOLDER_EN' | translate }}</mat-label>
           <input matInput formControlName="grandName" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
       </div>
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Nationality</mat-label>
+          <mat-label>{{'SEARCH.NATIONALITY_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="nationality" required>
             <mat-option *ngFor="let country of nationalities" [value]="country.code">
               {{country.amdescription}}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Gender</mat-label>
+          <mat-label>{{'TEMP.SEX' | translate }}</mat-label>
           <mat-select formControlName="sex" required>
             <mat-option *ngFor="let gender of genderOptions" [value]="gender.value">
               {{ gender.label }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
-
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Date of Birth</mat-label>
+          <mat-label>{{'TEMP.DOB_PLACEHOLDER' | translate }}</mat-label>
           <input matInput [matDatepicker]="dobPicker" formControlName="birthDate" required>
           <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
           <mat-datepicker #dobPicker></mat-datepicker>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+      <mat-error
+  *ngIf="registrationForm.get('birthDate')?.hasError('minAge') && registrationForm.get('birthDate')?.touched"
+  [translate]="'ERROR.MIN_AGE'"
+  [translateParams]="{ minAge: 18 }">
+</mat-error>
 
-          <mat-error
-            *ngIf="registrationForm.get('birthDate')?.hasError('required') && registrationForm.get('birthDate')?.touched">
-            Date of Birth is required
-          </mat-error>
-          <mat-error
-            *ngIf="registrationForm.get('birthDate')?.hasError('minAge') && registrationForm.get('birthDate')?.touched">
-            You must be at least 18 years old
-          </mat-error>
         </mat-form-field>
 
 
         <mat-form-field appearance="outline" class="form-field phone-input-container" style="max-width: 250px;">
-          <mat-label>Phone No</mat-label>
+          <mat-label>{{'TEMP.TEL' | translate }}</mat-label>
           <span matPrefix>+251 &nbsp;</span>
           <input matInput formControlName="tel1" required maxlength="9" (input)="onPhoneInput($event)"
             placeholder="912345678" type="tel">
-          <mat-error *ngIf="registrationForm.get('tel1')?.hasError('required')">
-            Phone number is required
-          </mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
           <mat-error *ngIf="registrationForm.get('tel1')?.hasError('pattern')">
             Please enter exactly 9 digits (after +251)
           </mat-error>
@@ -186,38 +182,38 @@
       </div>
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Region</mat-label>
+          <mat-label>{{'SEARCH.REGION_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="region" (selectionChange)="onRegionChange($event.value)" required>
             <mat-option *ngFor="let region of regions" [value]="region.code">
               {{ region.amDescription }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
 
         <!-- ZONE DROPDOWN (this is where the trigger must happen) -->
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Zone</mat-label>
+          <mat-label>{{'SEARCH.ZONE_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="zone" (selectionChange)="onZoneChange($event.value)" required>
             <mat-option *ngFor="let zone of zones" [value]="zone.code">
               {{ zone.amDescription }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>District/Subdistrict</mat-label>
+          <mat-label>{{'SEARCH.WOREDA_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="woreda" (selectionChange)="onWoredaChange($event.value)" required>
             <mat-option *ngFor="let woreda of woredas" [value]="woreda.code">
               {{ woreda.amDescription }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
@@ -225,29 +221,29 @@
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Kebele/Wereda</mat-label>
+          <mat-label>{{'SEARCH.KEBELE_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="kebele" required>
             <mat-option *ngFor="let kebele of kebeles" [value]="kebele.code">
               {{ kebele.amDescription }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>House Number</mat-label>
+          <mat-label>{{'SEARCH.HOUSE_NO_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="houseNo">
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Remark</mat-label>
+          <mat-label>{{'SEARCH.REMARK_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="remark" rows="2">
         </mat-form-field>
       </div>
 
       <!-- Section 5: Photo Upload -->
-      <h3 class="section-title">Photograph</h3>
+      <h3 class="section-title">{{'TEMP.PHOTO'  | translate }}</h3>
       <div class="image-upload-container">
         <input type="file" accept="image/*" (change)="onFileSelected($event)" style="display: none;" #fileInput>
 
@@ -271,8 +267,8 @@
 
     <mat-card-actions align="end">
       <button mat-button type="button" (click)="onReset()">
-        <mat-icon>refresh</mat-icon> Reset</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">Submit</button>
+        <mat-icon>refresh</mat-icon>{{'SEARCH.CANCEL_BUTTON' | translate }}</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">{{'SEARCH.SAVE_BUTTON' | translate }}</button>
     </mat-card-actions>
   </mat-card>
 

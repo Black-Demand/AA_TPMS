@@ -1,19 +1,19 @@
 <h2 mat-dialog-title class="dialog-header">
   <div class="header-content">
     <mat-icon class="payment-icon">verified</mat-icon>
-    <span class="title-text">Payment Confirmation</span>
+    <span class="title-text">{{'CONFIRMATION.CON_TITLE' | translate }}</span>
   </div>
 </h2>
 
 <mat-dialog-content class="dialog-content">
   <div class="confirmation-message">
-    <p class="main-message">You are about to confirm this payment:</p>
+    <p class="main-message">{{'CONFIRMATION.CON_SUB_TI' | translate }}</p>
 
     <mat-divider class="divider"></mat-divider>
 
     <p class="warning-message">
       <mat-icon class="warning-icon">warning</mat-icon>
-      This action cannot be undone. Please verify all details before confirming.
+      {{'CONFIRMATION.MESSAGE' | translate }}
     </p>
   </div>
 </mat-dialog-content>
@@ -21,10 +21,10 @@
 <mat-dialog-actions align="end" class="dialog-actions">
   <button mat-stroked-button color="primary" (click)="onCancel()" class="action-button">
     <mat-icon>arrow_back</mat-icon>
-    Return
+    {{'SEARCH.BACK_BUTTON' | translate }}
   </button>
   <button mat-flat-button color="primary" (click)="onConfirm()" class="action-button confirm-button">
     <mat-icon>check_circle</mat-icon>
-    Confirm Payment
+    {{'CONFIRMATION.CON_BUTTON' | translate }}
   </button>
 </mat-dialog-actions>

@@ -28,6 +28,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
 import { dateNotTheFuture, dateNotTheFutures } from '../../service/date.validate';
 import { ACTION_OPTIONS, ActionOption} from '../../Enums/actiontaken';
+import { PenalityfortrafficService } from '../../services/penalityfortraffic.service';
 
 @Component({
   selector: 'app-traffic',
@@ -91,7 +92,8 @@ export class TrafficComponent  implements OnInit {
     private tdrs: TempDriverService,
     private lookupservice: LookupService,
     private toastr: ToastrService,
-    private router: Router
+    private router: Router,
+    private penalityForTraffic : PenalityfortrafficService
   ) {
 
   }
@@ -124,20 +126,21 @@ export class TrafficComponent  implements OnInit {
       violationGrade: ['', Validators.required],
       offenceId: [{ value: '', disabled: false }, Validators.required],
       violationDate: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
-      tName: ['', Validators.required],
-      action: ['', Validators.required],
+      actionTakenBy: ['', Validators.required],
+      actionTaken: ['', Validators.required],
       plateRegion: ['', Validators.required],
-      NewPlateCode: ['', Validators.required],
-      NewPlateNo: ['', Validators.required],
-      placeAccused: ['', Validators.required],
+      newPlateCode: ['', Validators.required],
+      newPlateNo: ['', Validators.required],
+      violationPlace: ['', Validators.required],
       dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
-      payment: ['', Validators.required],
-      ticket: ['', Validators.required],
+      amount: ['', Validators.required],
+      ticketNo: ['', Validators.required],
       vehicleType: ['', Validators.required],
-      timeAccused: ['', Validators.required],
-      damageAssessment: this.fb.group({
-        simpleBodyDamage: [false], heavyBodyDamage: [false], materialDamage: [false]
-  })
+      violationTime: ['', Validators.required],
+      isLightInjury: [false],
+      isSevereInjury: [false],
+      isPropertyDamage: [false]
+
 
     });
   }
@@ -233,33 +236,37 @@ export class TrafficComponent  implements OnInit {
    })
   }
   
-  onSubmit(): void {
+ onSubmit(): void {
   if (this.trafficForm.valid) {
-    // Get all values including disabled fields
     const formValue = {
-      ...this.trafficForm.getRawValue(), // This includes disabled fields
+      ...this.trafficForm.getRawValue(), 
       fullName: this.selectedDriver.fullName,
       licenseNumber: this.selectedDriver.licenseNumber
     };
 
-    // Add to violations array for the table
     this.violations.push(formValue);
-    
-    console.log('Violation submitted:', formValue);
 
-    this.tdrs.createDriver(formValue).subscribe({
-      next: (response) => {
-        this.toastr.success("Driver created successfully");
-      },
-      error: (err) => {
-        console.error('Error creating driver:', err);
-        this.toastr.error("Error creating driver:", err);
-      }
-    });
+    // console.log('Violation submitted:', formValue);
+
+    try {
+      this.penalityForTraffic.createPenalityForTraffic(formValue, formValue.licenseNumber).subscribe({
+        next: (response) => {
+          this.toastr.success("Penality created successfully");
+        },
+        error: (err) => {
+          console.error('Error creating penality:', err);
+          this.toastr.error("Error creating penality");
+        }
+      });
+    } catch (error) {
+      console.error(error);
+    }
+
   } else {
     this.trafficForm.markAllAsTouched();
   }
 }
+
   
   onReset(): void {
     this.trafficForm.reset();

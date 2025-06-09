@@ -7,6 +7,7 @@ import Lookup from '../../Models/lookup';
 import { MatSelectModule } from '@angular/material/select';
 import { FormsModule } from '@angular/forms';
 import { LookupService } from '../../services/lookup.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-nav-menu',
@@ -40,7 +41,7 @@ export class NavMenuComponent implements OnInit{
 
 
   constructor(private dashboardService: DashborardSummaryService,
-              private lookupservice: LookupService
+              private lookupservice: LookupService,
   ) {}
 
   ngOnInit(): void {

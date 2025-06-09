@@ -1,11 +1,11 @@
 export interface ActionOption {
-  value: string;
+  value: number;
   label: string;
 }
 
 
 export const ACTION_OPTIONS: ActionOption[] = [
-  { value: 'rearPlateRemoved', label: 'የኋላ ሰሌዳ ተፈቶ ተይዟል' },
-  { value: 'frontPlateRemoved', label: 'የፊት ሰሌዳ ተፈቶ ተይዟል' },
-  { value: 'drivingLicenseTaken', label: 'የመንጃ ፍቃድ ተወስዷል' },
+  { value: 1, label: 'የኋላ ሰሌዳ ተፈቶ ተይዟል' },
+  { value: 2, label: 'የፊት ሰሌዳ ተፈቶ ተይዟል' },
+  { value: 3, label: 'የመንጃ ፍቃድ ተወስዷል' },
 ];

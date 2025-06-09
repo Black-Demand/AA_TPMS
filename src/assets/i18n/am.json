@@ -1,0 +1,116 @@
+{
+  "SEARCH": {
+    "LOGOUT": "ውጣ",
+    "SETTING": "ቅንብሮች ",
+    "PROFILE": "የኔ መገለጫ",
+    "TITLE": "የትራፊክ ቅጣት ስርዓት",
+    "SEARCH_TITLE": "አሽከርካሪ መፈለጊያ",
+    "NAME_SEARCH": "በስም ፈልግ",
+    "SEARCH_BUTTON": "ፈልግ",
+    "LICENCE_SEARCH": "በመንጃ ፈቃድ ቁጥር ፈልግ",
+    "NAME_PLACEHOLDER": "ስም",
+    "F_NAME_PLACEHOLDER": "የአባት ስም",
+    "G_NAME_PLACEHOLDER": "የአያት ስም",
+    "SEARCH_TAB_TITLE": "የፍለጋዎ ውጤቶች",
+    "RESULTS_FOUND": " መዝገቦች ተገኙ",
+    "ACTION": "እርምጃ",
+    "PENAL_FORM": "የቅጣት መመዝገቢያ",
+    "TEMP_DRIVER_REG": "ጊዜያዊ አሽከርከካሪ መመዝገቢያ",
+    "ISSUER_REGION_PLACEHOLDER": "ሰጭ ክልል",
+    "LICENCE_AREA_PLACEHOLDER": "ሰጭ አካባቢ",
+    "LICENCE_GRADE_PLACEHOLDER": "መንጃ ፈቃድ ደረጃ",
+    "LICENCE_NUMBER_PLACEHOLDER": "መንጃ ፈቃድ ቁጥር",
+    "NATIONALITY_PLACEHOLDER": "ዜግነት",
+    "REGION_PLACEHOLDER": "ክልል",
+    "WOREDA_PLACEHOLDER": "ወረዳ",
+    "ZONE_PLACEHOLDER": "ዞን",
+    "KEBELE_PLACEHOLDER": "ቀበሌ",
+    "HOUSE_NO_PLACEHOLDER": "የቤት ቁጥር",
+    "REMARK_PLACEHOLDER": "ማስታወሻ",
+    "SAVE_BUTTON": "አስቅምጥ",
+    "CANCEL_BUTTON": "አጥፋ",
+    "NEXT_BUTTON": "ቀጣይ",
+    "FULL_NAME": "ሙሉ ስም",
+    "ISSUED_DATE": "የተሰጥበት ቀን",
+    "PENALITY": "ቅጣት",
+    "BASIC_INFO": "አስፈላጊ መረጃ",
+    "PAY_SUMMERY": "ከፍያ ማጠጠቃለያ",
+    "PAY_RECIPTION": "ከፍያ መቀበያ",
+    "VIOLATION_DATE_PLACEHOLDER": "ጥሰት የተፈጸመበት ቀን",
+    "DATE_ACCUSED_PLACEHOLDER": "የተከሰሰበት ቀን",
+    "VIOLATION_GRADE_PLACEHOLDER": "የጥፋት ደረጃ",
+    "VIOLATION_TYPE_PLACEHOLDER": "የጥፋት ደረጃ ኮድ",
+    "PLATE_REGION_PLACEHOLDER": "የሰሌዳ ክልል",
+    "MAJOR_CODE_PLACEHOLDER": "ሜጀር ኮድ",
+    "PLATE_NO_PLACEHOLDER": "የሰሌዳ ቁጥር",
+    "TICKET_NO_PLACEHOLDER": "የትኬት ቁጥር",
+    "ORDER_NO_PLACEHOLDER": "የማዘዣ ቁጥር",
+    "PAY_DATE_PLACEHOLDER": "የክፍያ ቀን",
+    "RECIT_NO_PLACEHOLDER": "የሪሲት ቁጥር",
+    "CHECK_NO_PLACEHOLDER": "የቼክ ቁጥር",
+    "PAYMENT_PLACEHOLDER": "ክፍያ መጠጠን",
+    "PAY_BUTTON": "ተከፍሏል",
+    "BACK_BUTTON": "ወድ ኋላ ተመልስ"
+  },
+
+  "TEMP": {
+    "TEMP_FORM_TITLE": "ጊዜያዊ የተሽከርካሪ መመዝገቢያ",
+    "SEX": "ጾታ",
+    "TEL": "የስልክ ቁጥር",
+    "NAME_PLACEHOLDER_EN": "ስም በኢንግሊዝኛ",
+    "F_NAME_PLACEHOLDER_EN": "የአባት ስም በኢንግሊዝኛ",
+    "G_NAME_PLACEHOLDER_EN": "የአያት ስም በኢንግሊዝኛ",
+    "DOB_PLACEHOLDER": "የልደት ቀን",
+    "PHOTO": "ፎቶግራፍ"
+  },
+
+  "ERROR": {
+    "REQUIRED": "ይህ መረጃ ያስፈልጋል",
+    "PAY_DAY_REQUIRED": "የክፍያ ቀን አስፈላጊ ነው",
+    "DATE_NOT_IN_FUTURE": "ቀኑ በወደፊት መሆን የለበትም",
+    "TICKET_REQUIRED": "የትኬት ቁጥር አስፈላጊ ነው",
+    "TICKET_PATTERN": "ቁጥሮች ብቻ ያስገቡያስገቡ",
+    "VIOLATION_DATE_REQUIRED": "የጥሰት ቀን አስፈላጊ ነው",
+    "DATE_RANGE_INVALID": "የተከሰሰበት ቀን ከጥሰት ቀን መብለጥ የለበትም",
+    "MIN_AGE": "እባክዎን ዝቅተኛውን ዕድሜ {{minAge}} ያህል ይሁኑ",
+    "DOB_REQUIRED": "የልደት ቀን አስፈላጊ ነው",
+    "DATE_REQUIRED": "ቀን አስፈላጊ ነው"
+  },
+  "COMMON": {
+    "DASHBOARD": "ዳሽቦርድ",
+    "SERVICES": {
+      "TITLE": "አገልግሎት",
+      "PENALITIES": "የደንብ መተላለፍ ቅጣት (አሽከርካሪ)",
+      "MICIL_PENAL": "የደንብ መተላለፍ ቅጣት (ልዪ ልዪ)",
+      "INJUNCTION": "እገዳ ምዝገባ",
+      "LIFT_INJU": "እገዳ ማንሳት"
+    },
+    "DRIVER": {
+      "D_TITLE": "አሽከርካሪ",
+      "D_INFO": "የአሽከርካሪ መረጃ",
+      "TEMP_REG": "ጊዜያዊ ምዝገባ",
+      "TRAFFIC_DATA": "የትራፊክ መረጃ ማስገቢያ"
+    },
+    "PUN_MONITOR": "ቅጣት መከታተያ",
+    "DIFF": "ልዩ ልዩ አገልግሎት ",
+    "REPORT": "ሪፖርት"
+  },
+  "CONFIRMATION" : {
+    "CON_TITLE" : "ክፍያ ማረጋገጫ",
+    "CON_SUB_TI" : "ይህን ክፍያ ሊያረጋገጡ ነው",
+    "MESSAGE" : "ይህ እርምጃ ወደ ኋላ መመለስ አይችልም። ከማረጋገጥዎ በፊት ሁሉንም ዝርዝሮች እባክዎ ያረጋግጡ",
+    "CON_BUTTON" : "ክፍያውን ያረጋግጡ"
+  },
+  "TOASTER" : {
+    "SUCCESS" : {
+      "PENAL" : "ቅጣቱ በትክክል ተመዝግቧል",
+      "ORDER" : "ክፍያው በትክክል ተመዝግቧል",
+      "TEMP" : "አሽከርካሪ በትክክል ተመዝግቧል"
+    },
+    "ERROR" :{
+      "PENAL" : "ቅጣቱ በትክክል አልተመዘገበም",
+      "ORDER" : "ክፍያው በትክክል አልተመዘገበም",
+      "TEMP" : "አሽከርካሪ በትክክል አልተመዘገበም"
+    }
+  }
+}

@@ -32,6 +32,8 @@ import { OrdersService } from '../../services/orders.service';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationComponent } from '../../dialog/confirmation/confirmation/confirmation.component';
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../services/language.service';
 
 
 
@@ -53,7 +55,7 @@ import { StepperSelectionEvent } from '@angular/cdk/stepper';
         MatPaginatorModule,
         MatStepperModule,
         MatTabsModule,
-  
+        TranslateModule
   ],
   standalone: true,
   templateUrl: './penality.component.html',
@@ -94,8 +96,10 @@ export class PenalityComponent implements OnInit {
               private driverService: TempDriverService,
               private toastr: ToastrService,
               private ordersService: OrdersService,
-              private dialog: MatDialog
+              private dialog: MatDialog,
+              private translate : TranslateService
   ) {
+    
 
   }
   ngOnInit() {
@@ -168,14 +172,13 @@ export class PenalityComponent implements OnInit {
     });
 
     this.thirdFormGroup = this.fb.group({
-      orderNumber: [''],
+      orderNumber: [''], // no validators
       payDay: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
       receiptNumber: ['', Validators.required],
-      checkNumber: ['', Validators.required],
-      fullName: [{value: '', disabled: true}, Validators.required],
-      payment: [{value: '', disabled: true},[Validators.required]]
-
-    });
+      checkNumber: [''], // removed Validators.required
+      fullName: [{ value: '', disabled: true }, Validators.required],
+      payment: [{ value: '', disabled: true }, [Validators.required]]
+});
 
     this.secondFormGroup.valueChanges.subscribe(() => {
       this.calculateTotal();
@@ -235,19 +238,19 @@ export class PenalityComponent implements OnInit {
     return this.firstFormGroup.get('violationDate')?.value;
   }
 
+getErrorForPayDay(): string {
+  const field = this.thirdFormGroup.get('payDay');
 
-  getErrorForPayDay():string{
-    let field = this.thirdFormGroup.get('payDay');
-
-      if(field?.hasError('required')){
-        return "The Pay Day is Required";
-      }
-
-       if(field?.hasError('dateNotTheFuture')){
-      return field.getError('dateNotTheFuture').message;
-    }
-    return "";
+  if (field?.hasError('required')) {
+    return this.translate.instant('ERROR.PAY_DAY_REQUIRED');
   }
+
+  if (field?.hasError('dateNotTheFuture')) {
+    return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
+  }
+
+  return '';
+}
 
   generateOrdderNumber(){
     const randomNum = Math.floor(100000 + Math.random() * 900000);
@@ -266,41 +269,56 @@ export class PenalityComponent implements OnInit {
   }
   
 
-  getErrorMessageForYetfesmbetKen():string{
-    let field = this.firstFormGroup.get('violationDate');
-    
-    if(field?.hasError('required')){
-      return 'The field is Required';
-    }
-    if(field?.hasError('dateNotTheFuture')){
-      return field.getError('dateNotTheFuture').message;
-    }
-    return "";
+getErrorMessageForYetfesmbetKen(): string {
+  const field = this.firstFormGroup.get('violationDate');
+
+  if (field?.hasError('required')) {
+    return this.translate.instant('ERROR.VIOLATION_DATE_REQUIRED');
   }
-  getErrorMessageForYetfessmbetKen():string{
-    let field = this.firstFormGroup.get('dateAccused');
-    
-    if(field?.hasError('required')){
-      return 'The field is Required';
-    }
-    if(field?.hasError('dateNotTheFuture')){
-      return field.getError('dateNotTheFuture').message;
-    }
-    if(this.firstFormGroup.hasError('dateRangeInvalid')) {
-      return 'dateAccused  must be greater than or equal to violation date';
-    }
-    return "";
+
+  if (field?.hasError('dateNotTheFuture')) {
+    return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
   }
-  getNumberErrorMessage(): string{
-    let field = this.firstFormGroup.get('ticketNo');
-    if(field?.hasError('required')){
-      return 'Ticket Number is Required';
-    }
-    if(field?.hasError('pattern')){
-      return 'Only Numbers are allowed';
-    }
-    return "";
+
+  return '';
+}
+
+
+getErrorMessageForYetfessmbetKen(): string {
+  const field = this.firstFormGroup.get('dateAccused');
+
+  if (field?.hasError('required')) {
+    return this.translate.instant('ERROR.REQUIRED');
   }
+
+  if (field?.hasError('dateNotTheFuture')) {
+    return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
+  }
+
+  if (this.firstFormGroup.hasError('dateRangeInvalid')) {
+    return this.translate.instant('ERROR.DATE_RANGE_INVALID');
+  }
+
+  return '';
+}
+
+
+ getNumberErrorMessage(): string {
+  const field = this.firstFormGroup.get('ticketNo');
+
+  if (field?.hasError('required')) {
+    return this.translate.instant('ERROR.TICKET_REQUIRED');
+  }
+
+  if (field?.hasError('pattern')) {
+    return this.translate.instant('ERROR.TICKET_PATTERN');
+  }
+
+  return '';
+}
+
+
+
 calculateTotal(): void {
   const values = this.secondFormGroup.getRawValue();
   const total = (values.penalityPoints || 0) + (values.delayAmount || 0) + (values.wozefPoint || 0);
@@ -326,7 +344,7 @@ submitFirstForm(): void {
     this.penalityService.createPenality(dto, licenseNumber)
       .subscribe({
         next: (response) => {
-          this.toastr.success("Penality added successfully");
+           this.toastr.success(this.translate.instant('TOASTER.SUCCESS.PENAL'));
 
           console.log("Response from backend:", response);
 
@@ -352,7 +370,8 @@ submitFirstForm(): void {
         },
         error: (err) => {
           console.error('Error submitting form:', err);
-          this.toastr.error('Failed to submit penalty.');
+          this.toastr.error(this.translate.instant('TOASTER.ERROR.PENAL'));
+
         }
       });
   } else {
@@ -415,12 +434,16 @@ onStepChange(event: StepperSelectionEvent): void {
   }
 }
 
-savethirdForm() {
+savethirdForm(): void {
+  // this.thirdFormGroup.get('payment')?.enable();
+  // this.thirdFormGroup.get('fullName')?.enable();
 
   const paymentAmount = this.secondFormGroup.get('amount')?.value;
-  this.thirdFormGroup.patchValue({payment: paymentAmount});
-console.log('Payment Amount from second form:', paymentAmount);
+  this.thirdFormGroup.patchValue({ payment: paymentAmount });
 
+  this.thirdFormGroup.markAllAsTouched();
+
+  console.log('Third form validity:', this.thirdFormGroup.valid);
 
   const dialogRef = this.dialog.open(ConfirmationComponent, {
     width: '450px'
@@ -428,29 +451,36 @@ console.log('Payment Amount from second form:', paymentAmount);
 
   dialogRef.afterClosed().subscribe(result => {
     if (result === true) {
-      if (this.thirdFormGroup.valid) {
-        const orderDto: OrdersDTO = this.thirdFormGroup.value; 
-        const licenseNo = this.licenseNo; 
+      this.thirdFormGroup.markAllAsTouched();
 
-        this.ordersService.create(orderDto, licenseNo).subscribe({
+      if (this.thirdFormGroup.valid) {
+        const orderDto = this.thirdFormGroup.value;
+        const licenseNumber = this.selectedDriver?.licenseNumber;
+
+        if (!licenseNumber) {
+          this.toastr.error('License number is missing. Cannot submit order.');
+          return;
+        }
+
+        console.log('Submitting order with licenseNumber:', licenseNumber);
+        console.log('Order DTO:', orderDto);
+
+        this.ordersService.create(orderDto, licenseNumber).subscribe({
           next: (response) => {
-            this.toastr.success("Order submitted successfully");
-            console.log('Order submitted successfully:', response);
+            this.toastr.success(this.translate.instant('TOASTER.SUCCESS.ORDER'));
+            console.log('Order response:', response);
+
+            this.thirdFormGroup.get('payment')?.disable();
+            this.thirdFormGroup.get('fullName')?.disable();
           },
           error: (err) => {
-            this.toastr.error("Error submitting order");
-            console.error('Error submitting order:', err);
-          },
-          complete: () => {
-            console.log('Order submission completed.');
+            this.toastr.error(this.translate.instant('TOASTER.ERROR.ORDER'));
+            console.error('Order submission error:', err);
           }
         });
       } else {
-        console.warn('Form is invalid');
-        this.thirdFormGroup.markAllAsTouched(); 
+        console.warn('Third form invalid, cannot submit');
       }
-    } else {
-      console.log('User cancelled the operation');
     }
   });
 }

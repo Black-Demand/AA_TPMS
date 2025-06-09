@@ -11,23 +11,30 @@ export function minAgeValidator(minAge: number) {
     const isBirthdayPassed = (monthDiff > 0 || (monthDiff === 0 && dayDiff >= 0));
     const actualAge = isBirthdayPassed ? age : age - 1;
 
-    return actualAge >= minAge ? null : { minAge: true };
+    return actualAge >= minAge
+      ? null
+      : {
+          minAge: {
+            messageKey: 'ERROR.MIN_AGE',
+            params: { minAge }
+          }
+        };
   };
 }
 
 export function dateCannotBeTheFuture(): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => { 
-      const selectedDate = new Date(control.value);
-      const today = new Date();
-  
-      if (selectedDate > today) {
-        return {
-          dateCannotBeTheFuture: {
-            message: 'The date cannot be in the future'
-          }
-        };
-      }
-  
-      return null;
-    };
-  }
+  return (control: AbstractControl): ValidationErrors | null => {
+    const selectedDate = new Date(control.value);
+    const today = new Date();
+
+    if (selectedDate > today) {
+      return {
+        dateCannotBeTheFuture: {
+          messageKey: 'ERROR.DATE_NOT_IN_FUTURE'
+        }
+      };
+    }
+
+    return null;
+  };
+}

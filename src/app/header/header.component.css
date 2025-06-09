@@ -30,6 +30,8 @@
     display: flex;
     align-items: center;
     gap: 16px;
+    overflow: visible;
+    position: relative;
   }
   
   .language-selector {
@@ -87,7 +89,7 @@
     
     
     .language-selector {
-      width: 120px;
+      width: 100px;
     }
   }
   

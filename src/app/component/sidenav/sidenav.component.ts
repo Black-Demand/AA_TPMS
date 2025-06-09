@@ -5,6 +5,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { RouterModule } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-sidenav',
@@ -15,7 +16,8 @@ import { RouterModule } from '@angular/router';
     MatListModule,
     MatIconModule,
     MatMenuModule,
-    RouterModule
+    RouterModule,
+    TranslateModule
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.css'

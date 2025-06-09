@@ -62,7 +62,7 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Traffic Police Name</mat-label>
-          <mat-select formControlName="tName">
+          <mat-select formControlName="actionTakenBy">
             <mat-option value="one">
               One
             </mat-option>
@@ -74,7 +74,7 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>The Action Taken</mat-label>
-          <mat-select formControlName="action">
+          <mat-select formControlName="actionTaken">
             <mat-option *ngFor="let action of actionOptions" [value]="action.value">
               {{action.label}}
             </mat-option>
@@ -95,7 +95,7 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Major Code</mat-label>
-          <mat-select formControlName="NewPlateCode" required>
+          <mat-select formControlName="newPlateCode" required>
             <mat-option *ngFor="let major of majors" [value]="major.codeId.toString()">
               {{major.majorCode}}
             </mat-option>
@@ -104,7 +104,7 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Plate Number</mat-label>
-          <input matInput formControlName="NewPlateNo" required>
+          <input matInput formControlName="newPlateNo" required>
         </mat-form-field>
       </div>
 
@@ -116,7 +116,7 @@
         <!-- English Names -->
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Accused Place</mat-label>
-          <input matInput formControlName="placeAccused" required>
+          <input matInput formControlName="violationPlace" required>
           <mat-error>Required field</mat-error>
         </mat-form-field>
 
@@ -131,7 +131,7 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Payment</mat-label>
-          <input matInput formControlName="payment" required>
+          <input matInput formControlName="amount" required>
           <mat-error>Required field</mat-error>
         </mat-form-field>
       </div>
@@ -139,7 +139,7 @@
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Ticket Number</mat-label>
-          <input matInput formControlName="ticket" required>
+          <input matInput formControlName="ticketNo" required>
           <mat-error>Required field</mat-error>
         </mat-form-field>
 
@@ -158,10 +158,10 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Accused Time</mat-label>
-          <input matInput [matTimepicker]="timePicker" formControlName="timeAccused" required>
+          <input matInput [matTimepicker]="timePicker" formControlName="violationTime" required>
           <mat-timepicker-toggle matSuffix [for]="timePicker"></mat-timepicker-toggle>
           <mat-timepicker #timePicker></mat-timepicker>
-          <mat-error *ngIf="trafficForm.get('timeAccused')?.invalid && trafficForm.get('timeAccused')?.touched">
+          <mat-error *ngIf="trafficForm.get('violationTime')?.invalid && trafficForm.get('violationTime')?.touched">
             Please select a valid time
           </mat-error>
         </mat-form-field>
@@ -169,26 +169,25 @@
       </div>
 
       <!-- Damage Assessment Section -->
-      <div class="damage-section" formGroupName="damageAssessment">
-        <h3 class="section-title">
-          <mat-icon>handyman</mat-icon> Damage Assessment
-        </h3>
-        <div class="damage-checkboxes">
-          <mat-checkbox class="damage-option" formControlName="simpleBodyDamage">
-            <mat-icon>miscellaneous_services</mat-icon>
-            Simple Body Damage
-          </mat-checkbox>
-          <mat-checkbox class="damage-option" formControlName="heavyBodyDamage">
-            <mat-icon>car_crash</mat-icon>
-            Heavy Body Damage
-          </mat-checkbox>
-          <mat-checkbox class="damage-option" formControlName="materialDamage">
-            <mat-icon>home_repair_service</mat-icon>
-            Material/Property Damage
-          </mat-checkbox>
-        </div>
+    <div class="damage-section">
+      <h3 class="section-title">
+        <mat-icon>handyman</mat-icon> Damage Assessment
+      </h3>
+      <div class="damage-checkboxes">
+        <mat-checkbox class="damage-option" formControlName="isLightInjury">
+          <mat-icon>miscellaneous_services</mat-icon>
+          Simple Body Damage
+        </mat-checkbox>
+        <mat-checkbox class="damage-option" formControlName="isSevereInjury">
+          <mat-icon>car_crash</mat-icon>
+          Heavy Body Damage
+        </mat-checkbox>
+        <mat-checkbox class="damage-option" formControlName="isPropertyDamage">
+          <mat-icon>home_repair_service</mat-icon>
+          Material/Property Damage
+        </mat-checkbox>
       </div>
-
+    </div>
 
     </mat-card-content>
 

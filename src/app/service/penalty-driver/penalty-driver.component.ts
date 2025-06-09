@@ -25,7 +25,8 @@ import { LookupService } from '../../services/lookup.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatMenuModule } from '@angular/material/menu';
 import { filter } from 'rxjs';
-
+import { LanguageService } from '../../services/language.service';
+import { TranslateModule } from '@ngx-translate/core';
 interface Driver {
   mainGuid: string;
   fullName: string;
@@ -55,6 +56,7 @@ interface Driver {
     MatTabsModule,
     MatIconModule,
     MatMenuModule,
+    TranslateModule
   ],
   standalone: true,
   templateUrl: './penalty-driver.component.html',
@@ -89,11 +91,14 @@ export class PenaltyDriverComponent {
     private licenceLookupService: LookupService, 
     private router: Router,
     private toastr: ToastrService,
-    private route: ActivatedRoute 
+    private route: ActivatedRoute,
+    private languageService: LanguageService
   ) {
     this.createForm();
   }
   ngOnInit(): void {
+    const currentLang = this.languageService.getCurrentLang();
+
     this.route.queryParams.subscribe(params => {
       console.log('Query Params:', params);  
       this.action = params['action'] === 'suspension' ? 'suspension' : 'penalty';
