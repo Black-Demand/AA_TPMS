@@ -25,6 +25,8 @@ import { LookupService } from '../../services/lookup.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatMenuModule } from '@angular/material/menu';
 import { filter } from 'rxjs';
+import { LanguageService } from '../../services/language.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Driver {
   mainGuid: string;
@@ -68,6 +70,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
     MatTabsModule,
     MatIconModule,
     MatMenuModule,
+    TranslateModule
   ],
   templateUrl: './traffic-search.component.html',
   styleUrl: './traffic-search.component.css'
@@ -101,7 +104,8 @@ export class TrafficSearchComponent {
     private licenceLookupService: LookupService, 
     private router: Router,
     private toastr: ToastrService,
-    private route: ActivatedRoute 
+    private route: ActivatedRoute,
+    private languageService: LanguageService 
   ) {
     this.createForm();
   }

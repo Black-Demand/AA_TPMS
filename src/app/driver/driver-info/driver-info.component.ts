@@ -27,6 +27,8 @@ import { MatMenuModule } from '@angular/material/menu';
 import { filter } from 'rxjs';
 import { DriverInformationComponent } from '../driver-information/driver-information.component';
 import { MatDialog } from '@angular/material/dialog';
+import { LanguageService } from '../../services/language.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Driver {
   mainGuid: string;
@@ -59,6 +61,7 @@ CommonModule,
     MatTabsModule,
     MatIconModule,
     MatMenuModule,
+    TranslateModule
   ],
   templateUrl: './driver-info.component.html',
   styleUrl: './driver-info.component.css'
@@ -90,11 +93,12 @@ export class DriverInfoComponent {
   constructor(
     private fb: FormBuilder,
     private driverService: TempDriverService,
-    private licenceLookupService: LookupService, 
+    private licenceLookupService: LookupService,
     private router: Router,
     private toastr: ToastrService,
-    private route: ActivatedRoute ,
-     private dialog: MatDialog
+    private route: ActivatedRoute,
+    private dialog: MatDialog,
+    private languageService: LanguageService 
   ) {
     this.createForm();
   }

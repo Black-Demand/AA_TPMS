@@ -11,12 +11,12 @@
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Full Name</mat-label>
+          <mat-label>{{'SEARCH.FULL_NAME' | translate}}</mat-label>
           <input matInput formControlName="fullName" readonly>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Driver License ID</mat-label>
+          <mat-label>{{'SEARCH.LICENCE_NUMBER_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="licenseNumber" readonly>
         </mat-form-field>
 
@@ -28,7 +28,7 @@
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Violation Grade</mat-label>
+          <mat-label>{{'SEARCH.VIOLATION_GRADE_PLACEHOLDER' | translate}}</mat-label>
           <mat-select formControlName="violationGrade" required
             (selectionChange)="loadViolationTypeByGrade($event.value)">
             <mat-option *ngFor="let violationgrade of violationgrades" [value]="violationgrade.id.toString()">
@@ -39,7 +39,7 @@
 
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Violation Type</mat-label>
+          <mat-label>{{'SEARCH.VIOLATION_TYPE_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="offenceId" [disabled]="violationTypeDisabled">
             <mat-option *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
               {{ violationtype.amDescription }}
@@ -52,7 +52,7 @@
       <div class="form-row">
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Violation Date</mat-label>
+          <mat-label>{{'SEARCH.VIOLATION_DATE_PLACEHOLDER' | translate}}</mat-label>
           <input matInput [matDatepicker]="yet_Ken" formControlName="violationDate" required
             (dateChange)="trafficForm.updateValueAndValidity()">
           <mat-datepicker-toggle matSuffix [for]="yet_Ken"></mat-datepicker-toggle>
@@ -61,7 +61,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Traffic Police Name</mat-label>
+          <mat-label>{{'SEARCH.TPN' | translate}}</mat-label>
           <mat-select formControlName="actionTakenBy">
             <mat-option value="one">
               One
@@ -73,7 +73,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>The Action Taken</mat-label>
+          <mat-label>{{'SEARCH.ACTIONS' | translate}}</mat-label>
           <mat-select formControlName="actionTaken">
             <mat-option *ngFor="let action of actionOptions" [value]="action.value">
               {{action.label}}
@@ -85,7 +85,7 @@
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Plate Region</mat-label>
+          <mat-label>{{'SEARCH.PLATE_REGION_PLACEHOLDER' | translate}}</mat-label>
           <mat-select formControlName="plateRegion" required>
             <mat-option *ngFor="let region of regions" [value]="region.code">
               {{region.amDescription}}
@@ -94,7 +94,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Major Code</mat-label>
+          <mat-label>{{'SEARCH.MAJOR_CODE_PLACEHOLDER' | translate}}</mat-label>
           <mat-select formControlName="newPlateCode" required>
             <mat-option *ngFor="let major of majors" [value]="major.codeId.toString()">
               {{major.majorCode}}
@@ -103,7 +103,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Plate Number</mat-label>
+          <mat-label>{{'SEARCH.PLATE_NO_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="newPlateNo" required>
         </mat-form-field>
       </div>
@@ -115,13 +115,13 @@
       <div class="form-row">
         <!-- English Names -->
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Accused Place</mat-label>
+          <mat-label>{{'SEARCH.ACCUSED' | translate}}</mat-label>
           <input matInput formControlName="violationPlace" required>
           <mat-error>Required field</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Accused Date</mat-label>
+          <mat-label>{{'SEARCH.DATE_ACCUSED_PLACEHOLDER' | translate}}</mat-label>
           <input matInput [matDatepicker]="yetss_ken" formControlName="dateAccused" [min]="minEndDate" required
             (dateChange)="trafficForm.updateValueAndValidity()">
           <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
@@ -130,7 +130,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Payment</mat-label>
+          <mat-label>{{'SEARCH.PAYMENT_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="amount" required>
           <mat-error>Required field</mat-error>
         </mat-form-field>
@@ -138,7 +138,7 @@
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Ticket Number</mat-label>
+          <mat-label>{{'SEARCH.TICKET_NO_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="ticketNo" required>
           <mat-error>Required field</mat-error>
         </mat-form-field>
@@ -147,7 +147,7 @@
         
        
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Vehicle Type</mat-label>
+          <mat-label>{{'SEARCH.VECICLE_TYPE' | translate}}</mat-label>
           <mat-select formControlName="vehicleType" required>
             <mat-option *ngFor="let vehicle of vhicleTypes" [value]="vehicle.code">
               {{vehicle.descriptionAmh}}
@@ -157,13 +157,15 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Accused Time</mat-label>
-          <input matInput [matTimepicker]="timePicker" formControlName="violationTime" required>
+          <mat-label>{{'SEARCH.ACCUSED_TIME' | translate}}</mat-label>
+            <input matInput formControlName="violationTime" required>
+          <mat-error>Required field</mat-error>
+          <!-- <input matInput [matTimepicker]="timePicker" formControlName="violationTime" required>
           <mat-timepicker-toggle matSuffix [for]="timePicker"></mat-timepicker-toggle>
           <mat-timepicker #timePicker></mat-timepicker>
           <mat-error *ngIf="trafficForm.get('violationTime')?.invalid && trafficForm.get('violationTime')?.touched">
             Please select a valid time
-          </mat-error>
+          </mat-error> -->
         </mat-form-field>
 
       </div>
@@ -171,20 +173,20 @@
       <!-- Damage Assessment Section -->
     <div class="damage-section">
       <h3 class="section-title">
-        <mat-icon>handyman</mat-icon> Damage Assessment
+        <mat-icon>handyman</mat-icon>{{'SEARCH.DAMAGE_ASSESSMENT' | translate}}
       </h3>
       <div class="damage-checkboxes">
         <mat-checkbox class="damage-option" formControlName="isLightInjury">
           <mat-icon>miscellaneous_services</mat-icon>
-          Simple Body Damage
+          {{'SEARCH.SBD' | translate}}
         </mat-checkbox>
         <mat-checkbox class="damage-option" formControlName="isSevereInjury">
           <mat-icon>car_crash</mat-icon>
-          Heavy Body Damage
+          {{'SEARCH.HBD' | translate}}
         </mat-checkbox>
         <mat-checkbox class="damage-option" formControlName="isPropertyDamage">
           <mat-icon>home_repair_service</mat-icon>
-          Material/Property Damage
+          {{'SEARCH.MPD' | translate}}
         </mat-checkbox>
       </div>
     </div>

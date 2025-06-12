@@ -41,21 +41,21 @@ import { LanguageService } from '../../services/language.service';
   selector: 'app-penality',
   imports: [
     CommonModule,
-        ReactiveFormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatDatepickerModule,
-        MatNativeDateModule,
-        MatButtonModule,
-        MatIconModule,
-        MatCardModule,
-        MatRadioModule,
-        MatTableModule,
-        MatPaginatorModule,
-        MatStepperModule,
-        MatTabsModule,
-        TranslateModule
+    ReactiveFormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatButtonModule,
+    MatIconModule,
+    MatCardModule,
+    MatRadioModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatStepperModule,
+    MatTabsModule,
+    TranslateModule
   ],
   standalone: true,
   templateUrl: './penality.component.html',
@@ -65,7 +65,7 @@ export class PenalityComponent implements OnInit {
 
   @ViewChild('stepper') stepper!: MatStepper;
 
- private router = inject(Router);
+  private router = inject(Router);
   isLinear = true;
   firstFormGroup!: FormGroup;
   secondFormGroup!: FormGroup;
@@ -77,29 +77,29 @@ export class PenalityComponent implements OnInit {
 
 
   regions: Lookup.LicenceRegionDTO[] = [];
-  majors: Lookup.Majors[] =[];
-  violationgrades: Lookup.OffenceGradeDTO[] =[];
-  violationtypes: Lookup.OffenceNewDTO[] =[];
+  majors: Lookup.Majors[] = [];
+  violationgrades: Lookup.OffenceGradeDTO[] = [];
+  violationtypes: Lookup.OffenceNewDTO[] = [];
 
 
   displayedColumns: string[] = [
-    'number', 'yekefyaDay', 'yedersgeNumber', 'yeckeNumber', 
+    'number', 'yekefyaDay', 'yedersgeNumber', 'yeckeNumber',
     'fullName', 'kefya', 'action'
   ];
-  dataSource: any[] = [];  
+  dataSource: any[] = [];
   licenseNo: any;
 
   constructor(private fb: FormBuilder,
 
-              private lookupservice: LookupService,
-              private penalityService: PenalityService,
-              private driverService: TempDriverService,
-              private toastr: ToastrService,
-              private ordersService: OrdersService,
-              private dialog: MatDialog,
-              private translate : TranslateService
+    private lookupservice: LookupService,
+    private penalityService: PenalityService,
+    private driverService: TempDriverService,
+    private toastr: ToastrService,
+    private ordersService: OrdersService,
+    private dialog: MatDialog,
+    private translate: TranslateService
   ) {
-    
+
 
   }
   ngOnInit() {
@@ -108,23 +108,23 @@ export class PenalityComponent implements OnInit {
     this.loadViolationGrade();
     const data = this.driverService.getDriverData();
     this.createForms();
-    this.generateOrdderNumber();
+    this.generateOrderNumber();
     this.generateTicketNumber();
 
     if (data) {
-        console.log(data);
-        this.selectedDriver = data; 
-        this.firstFormGroup.patchValue({
+      console.log(data);
+      this.selectedDriver = data;
+      this.firstFormGroup.patchValue({
         mainGuid: data.mainGuid,
         fullName: data.fullName,
         licenseNumber: data.licenseNumber
       });
-       this.thirdFormGroup.patchValue({
+      this.thirdFormGroup.patchValue({
         fullName: data.fullName,
       });
     }
-    if (data) try{
-      console.log('resulting driver data',data);
+    if (data) try {
+      console.log('resulting driver data', data);
       this.secondFormGroup.patchValue({
         penalityPoints: data.NewPlateNo,
         amount: data.amount,
@@ -136,20 +136,20 @@ export class PenalityComponent implements OnInit {
 
       console.log(this.secondFormGroup.controls);
     }
-     catch (e) {
-  console.error('Patch error:', e);
-  }
-  if(data) {
-    this.thirdFormGroup.patchValue({
-      payment: data.amount
-    })
-  }
+      catch (e) {
+        console.error('Patch error:', e);
+      }
+    if (data) {
+      this.thirdFormGroup.patchValue({
+        payment: data.amount
+      })
+    }
   }
 
   createForms(): void {
     this.firstFormGroup = this.fb.group({
-      fullName: [{value: '', disabled: true}, Validators.required],
-      licenseNumber: [{value: '', disabled: true}, Validators.required],
+      fullName: [{ value: '', disabled: true }, Validators.required],
+      licenseNumber: [{ value: '', disabled: true }, Validators.required],
       ticketNo: [''],
       violationDate: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
       dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
@@ -158,17 +158,17 @@ export class PenalityComponent implements OnInit {
       plateRegion: ['', Validators.required],
       NewPlateCode: ['', Validators.required],
       NewPlateNo: ['', Validators.required],
-      
+
     },
-   { validators: this.dateRangeValidator });
+      { validators: this.dateRangeValidator });
 
     this.secondFormGroup = this.fb.group({
-      penalityPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      amount: [{value: '' , disabled: true}, Validators.required],
-      delayPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      delayAmount: [{value: '' , disabled: true}, Validators.required],
-      wozefPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
-      totalAmount: [{value: 0, disabled: true}]
+      penalityPoints: [{ value: '', disabled: true }, [Validators.required, Validators.min(0), Validators.max(100)]],
+      amount: [{ value: '', disabled: true }, Validators.required],
+      delayPoints: [{ value: '', disabled: true }, [Validators.required, Validators.min(0), Validators.max(100)]],
+      delayAmount: [{ value: '', disabled: true }, Validators.required],
+      wozefPoint: [{ value: '', disabled: true }, [Validators.required, Validators.min(0), Validators.max(100)]],
+      totalAmount: [{ value: 0, disabled: true }]
     });
 
     this.thirdFormGroup = this.fb.group({
@@ -178,7 +178,7 @@ export class PenalityComponent implements OnInit {
       checkNumber: [''], // removed Validators.required
       fullName: [{ value: '', disabled: true }, Validators.required],
       payment: [{ value: '', disabled: true }, [Validators.required]]
-});
+    });
 
     this.secondFormGroup.valueChanges.subscribe(() => {
       this.calculateTotal();
@@ -188,26 +188,26 @@ export class PenalityComponent implements OnInit {
 
   loadRegions() {
     this.lookupservice.getAllRegions().subscribe(data => {
-       this.regions = data;
+      this.regions = data;
     });
   }
 
   loadMajors() {
     this.lookupservice.getAllMajors().subscribe(data => {
-       this.majors = data;
+      this.majors = data;
     });
   }
 
   loadViolationGrade() {
     this.lookupservice.getAllOffences().subscribe(data => {
-       this.violationgrades = data;
+      this.violationgrades = data;
     });
   }
 
 
   loadViolationTypeByGrade(gradeCode: string) {
     const numericGradeCode = Number(gradeCode);
-  
+
     if (numericGradeCode > 3) {
       this.violationTypeDisabled = true;
       this.firstFormGroup.get('violationType')?.reset();
@@ -217,42 +217,42 @@ export class PenalityComponent implements OnInit {
       this.violationTypeDisabled = false;
       this.firstFormGroup.get('violationType')?.enable();
       this.lookupservice.getAllOffenceNew([gradeCode]).subscribe(data => {
-        this.violationtypes = data;
+      this.violationtypes = data;
       });
     }
   }
-  
+
 
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
     const yetKen = group.get('violationDate')?.value;
     const yetsKen = group.get('dateAccused')?.value;
 
-    if(yetKen && yetsKen && yetKen > yetsKen){
-        return { dateRangeInvalid: true };
+    if (yetKen && yetsKen && yetKen > yetsKen) {
+      return { dateRangeInvalid: true };
     }
     return null;
-}
+  }
 
   get minEndDate(): Date | null {
     return this.firstFormGroup.get('violationDate')?.value;
   }
 
-getErrorForPayDay(): string {
-  const field = this.thirdFormGroup.get('payDay');
+  getErrorForPayDay(): string {
+    const field = this.thirdFormGroup.get('payDay');
 
-  if (field?.hasError('required')) {
-    return this.translate.instant('ERROR.PAY_DAY_REQUIRED');
+    if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.PAY_DAY_REQUIRED');
+    }
+
+    if (field?.hasError('dateNotTheFuture')) {
+      return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
+    }
+
+    return '';
   }
 
-  if (field?.hasError('dateNotTheFuture')) {
-    return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
-  }
-
-  return '';
-}
-
-  generateOrdderNumber(){
+  generateOrderNumber() {
     const randomNum = Math.floor(100000 + Math.random() * 900000);
     const orderNumber = `${randomNum}`;
 
@@ -260,230 +260,203 @@ getErrorForPayDay(): string {
     this.thirdFormGroup?.get('orderNumber')?.disable();
   }
 
-   generateTicketNumber(){
+  generateTicketNumber() {
     const ticketNum = Math.floor(100000 + Math.random() * 900000);
     const ticketNo = `${ticketNum}`;
 
     this.firstFormGroup?.get('ticketNo')?.setValue(ticketNo);
     this.firstFormGroup?.get('ticketNo')?.disable();
   }
-  
-
-getErrorMessageForYetfesmbetKen(): string {
-  const field = this.firstFormGroup.get('violationDate');
-
-  if (field?.hasError('required')) {
-    return this.translate.instant('ERROR.VIOLATION_DATE_REQUIRED');
-  }
-
-  if (field?.hasError('dateNotTheFuture')) {
-    return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
-  }
-
-  return '';
-}
 
 
-getErrorMessageForYetfessmbetKen(): string {
-  const field = this.firstFormGroup.get('dateAccused');
+  getErrorMessageForYetfesmbetKen(): string {
+    const field = this.firstFormGroup.get('violationDate');
 
-  if (field?.hasError('required')) {
-    return this.translate.instant('ERROR.REQUIRED');
-  }
-
-  if (field?.hasError('dateNotTheFuture')) {
-    return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
-  }
-
-  if (this.firstFormGroup.hasError('dateRangeInvalid')) {
-    return this.translate.instant('ERROR.DATE_RANGE_INVALID');
-  }
-
-  return '';
-}
-
-
- getNumberErrorMessage(): string {
-  const field = this.firstFormGroup.get('ticketNo');
-
-  if (field?.hasError('required')) {
-    return this.translate.instant('ERROR.TICKET_REQUIRED');
-  }
-
-  if (field?.hasError('pattern')) {
-    return this.translate.instant('ERROR.TICKET_PATTERN');
-  }
-
-  return '';
-}
-
-
-
-calculateTotal(): void {
-  const values = this.secondFormGroup.getRawValue();
-  const total = (values.penalityPoints || 0) + (values.delayAmount || 0) + (values.wozefPoint || 0);
-  this.secondFormGroup.patchValue({ totalAmount: total });
-}
-
-submitFirstForm(): void {
-  console.log('Form validity:', this.firstFormGroup.valid);
-  console.log('Selected driver:', this.selectedDriver);
-
-  if (this.firstFormGroup.valid && this.selectedDriver?.mainGuid) {
-    const dto: Penality = {
-      ...this.firstFormGroup.value,
-      parentGuid: this.selectedDriver.mainGuid
-    };
-
-    const region = this.selectedDriver?.issuerRegion;
-    const licenseCategory = this.selectedDriver?.licenseCategory;
-    const licenseNumber = this.selectedDriver?.licenseNumber;
-
-    console.log('Sending to penalty service:', { region, licenseCategory, licenseNumber });
-
-    this.penalityService.createPenality(dto, licenseNumber)
-      .subscribe({
-        next: (response) => {
-           this.toastr.success(this.translate.instant('TOASTER.SUCCESS.PENAL'));
-
-          console.log("Response from backend:", response);
-
-          const {
-            amount,
-            penalityPoints,
-            delayPoints,
-            delayAmount,
-            wozefPoint,
-            totalAmount
-          } = response;
-
-          this.secondFormGroup.patchValue({
-            penalityPoints: penalityPoints,
-            amount: amount,
-            delayPoints: delayPoints,
-            delayAmount: delayAmount,
-            wozefPoint: wozefPoint ?? 0,
-            totalAmount: totalAmount
-          });
-
-          console.log('Second form group after patching:', this.secondFormGroup.value);
-        },
-        error: (err) => {
-          console.error('Error submitting form:', err);
-          this.toastr.error(this.translate.instant('TOASTER.ERROR.PENAL'));
-
-        }
-      });
-  } else {
-    // console.error('Form invalid or driver not selected');
-  }
-}
-
-
-
-
-
-
-
-
-  onKeyDown(event: KeyboardEvent){
-    const allowKey = ['Enter','Backspace', 'Escape', 'Delete','Tab','Dot'];
-    if(allowKey.includes(event.key)){
-      return;
+    if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.VIOLATION_DATE_REQUIRED');
     }
-    
-    if(event.ctrlKey && ['a','c','v','x'].includes(event.key.toLowerCase())){
+
+    if (field?.hasError('dateNotTheFuture')) {
+      return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
+    }
+
+    return '';
+  }
+
+
+  getErrorMessageForYetfessmbetKen(): string {
+    const field = this.firstFormGroup.get('dateAccused');
+
+    if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.REQUIRED');
+    }
+
+    if (field?.hasError('dateNotTheFuture')) {
+      return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
+    }
+
+    if (this.firstFormGroup.hasError('dateRangeInvalid')) {
+      return this.translate.instant('ERROR.DATE_RANGE_INVALID');
+    }
+
+    return '';
+  }
+
+
+  getNumberErrorMessage(): string {
+    const field = this.firstFormGroup.get('ticketNo');
+
+    if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.TICKET_REQUIRED');
+    }
+
+    if (field?.hasError('pattern')) {
+      return this.translate.instant('ERROR.TICKET_PATTERN');
+    }
+
+    return '';
+  }
+
+
+
+  calculateTotal(): void {
+    const values = this.secondFormGroup.getRawValue();
+    const total = (values.penalityPoints || 0) + (values.delayAmount || 0) + (values.wozefPoint || 0);
+    this.secondFormGroup.patchValue({ totalAmount: total });
+  }
+
+  submitFirstForm(): void {
+    console.log('Form validity:', this.firstFormGroup.valid);
+    console.log('Selected driver:', this.selectedDriver);
+
+    if (this.firstFormGroup.valid && this.selectedDriver?.mainGuid) {
+      const dto: Penality = {
+        ...this.firstFormGroup.value,
+        parentGuid: this.selectedDriver.mainGuid
+      };
+
+      const region = this.selectedDriver?.issuerRegion;
+      const licenseCategory = this.selectedDriver?.licenseCategory;
+      const licenseNumber = this.selectedDriver?.licenseNumber;
+
+      console.log('Sending to penalty service:', { region, licenseCategory, licenseNumber });
+
+      this.penalityService.createPenality(dto, licenseNumber)
+        .subscribe({
+          next: (response) => {
+            this.toastr.success(this.translate.instant('TOASTER.SUCCESS.PENAL'));
+
+            console.log("Response from backend:", response);
+
+            const {
+              amount,
+              penalityPoints,
+              delayPoints,
+              delayAmount,
+              wozefPoint,
+              totalAmount
+            } = response;
+
+            this.secondFormGroup.patchValue({
+              penalityPoints: penalityPoints,
+              amount: amount,
+              delayPoints: delayPoints,
+              delayAmount: delayAmount,
+              wozefPoint: wozefPoint ?? 0,
+              totalAmount: totalAmount
+            });
+
+            console.log('Second form group after patching:', this.secondFormGroup.value);
+          },
+          error: (err) => {
+            console.error('Error submitting form:', err);
+            this.toastr.error(this.translate.instant('TOASTER.ERROR.PENAL'));
+
+          }
+        });
+    } else {
+      // console.error('Form invalid or driver not selected');
+    }
+  }
+
+
+
+
+
+
+
+
+  onKeyDown(event: KeyboardEvent) {
+    const allowKey = ['Enter', 'Backspace', 'Escape', 'Delete', 'Tab', 'Dot'];
+    if (allowKey.includes(event.key)) {
       return;
     }
 
-    if(isNaN(Number(event.key))){
+    if (event.ctrlKey && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
+      return;
+    }
+
+    if (isNaN(Number(event.key))) {
       event.preventDefault();
     }
   }
- 
 
-//   saveSecondForm() {
-//   if (this.secondFormGroup.valid) {
-//     const rawValues = this.secondFormGroup.getRawValue(); 
+  onStepChange(event: StepperSelectionEvent): void {
+    if (event.selectedIndex === 2) {
+      const paymentAmount = this.secondFormGroup.get('amount')?.value;
+      this.thirdFormGroup.patchValue({ payment: paymentAmount });
+      console.log('Patched payment to third form:', paymentAmount);
+    }
+  }
 
-//     const totalPoints =
-//       +rawValues.PenalityPoints +
-//       +rawValues.DelayPoints +
-//       +rawValues.wozefPoint;
+  savethirdForm(): void {
 
-//     this.secondFormGroup.patchValue({ TotalAmount: totalPoints });
-
-//     const resultData = {
-//       yekefyaDay: new Date(),  // Today's date
-//       yedersgeNumber: this.firstFormGroup.value.yetketNumber,
-//       penalitypoints: this.firstFormGroup.value.penalitypoints,
-//       fullName: this.firstFormGroup.value.fullName,
-//       amount: rawValues.amount  // ⚠️ make sure this field exists
-
-//     };
-
-//     this.dataSource = [resultData];
-//     this.showResults = true;
-//   }
-// }
-onStepChange(event: StepperSelectionEvent): void {
-  if (event.selectedIndex === 2) {
     const paymentAmount = this.secondFormGroup.get('amount')?.value;
     this.thirdFormGroup.patchValue({ payment: paymentAmount });
-    console.log('Patched payment to third form:', paymentAmount);
-  }
-}
 
-savethirdForm(): void {
-  // this.thirdFormGroup.get('payment')?.enable();
-  // this.thirdFormGroup.get('fullName')?.enable();
+    this.thirdFormGroup.markAllAsTouched();
 
-  const paymentAmount = this.secondFormGroup.get('amount')?.value;
-  this.thirdFormGroup.patchValue({ payment: paymentAmount });
+    console.log('Third form validity:', this.thirdFormGroup.valid);
 
-  this.thirdFormGroup.markAllAsTouched();
+    const dialogRef = this.dialog.open(ConfirmationComponent, {
+      width: '450px'
+    });
 
-  console.log('Third form validity:', this.thirdFormGroup.valid);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === true) {
+        this.thirdFormGroup.markAllAsTouched();
 
-  const dialogRef = this.dialog.open(ConfirmationComponent, {
-    width: '450px'
-  });
+        if (this.thirdFormGroup.valid) {
+          const orderDto = this.thirdFormGroup.value;
+          const licenseNumber = this.selectedDriver?.licenseNumber;
 
-  dialogRef.afterClosed().subscribe(result => {
-    if (result === true) {
-      this.thirdFormGroup.markAllAsTouched();
-
-      if (this.thirdFormGroup.valid) {
-        const orderDto = this.thirdFormGroup.value;
-        const licenseNumber = this.selectedDriver?.licenseNumber;
-
-        if (!licenseNumber) {
-          this.toastr.error('License number is missing. Cannot submit order.');
-          return;
-        }
-
-        console.log('Submitting order with licenseNumber:', licenseNumber);
-        console.log('Order DTO:', orderDto);
-
-        this.ordersService.create(orderDto, licenseNumber).subscribe({
-          next: (response) => {
-            this.toastr.success(this.translate.instant('TOASTER.SUCCESS.ORDER'));
-            console.log('Order response:', response);
-
-            this.thirdFormGroup.get('payment')?.disable();
-            this.thirdFormGroup.get('fullName')?.disable();
-          },
-          error: (err) => {
-            this.toastr.error(this.translate.instant('TOASTER.ERROR.ORDER'));
-            console.error('Order submission error:', err);
+          if (!licenseNumber) {
+            this.toastr.error('License number is missing. Cannot submit order.');
+            return;
           }
-        });
-      } else {
-        console.warn('Third form invalid, cannot submit');
+
+          console.log('Submitting order with licenseNumber:', licenseNumber);
+          console.log('Order DTO:', orderDto);
+
+          this.ordersService.create(orderDto, licenseNumber).subscribe({
+            next: (response) => {
+              this.toastr.success(this.translate.instant('TOASTER.SUCCESS.ORDER'));
+              console.log('Order response:', response);
+
+              this.thirdFormGroup.get('payment')?.disable();
+              this.thirdFormGroup.get('fullName')?.disable();
+            },
+            error: (err) => {
+              this.toastr.error(this.translate.instant('TOASTER.ERROR.ORDER'));
+              console.error('Order submission error:', err);
+            }
+          });
+        } else {
+          console.warn('Third form invalid, cannot submit');
+        }
       }
-    }
-  });
-}
+    });
+  }
 
 
   formatDate(date: Date): string {

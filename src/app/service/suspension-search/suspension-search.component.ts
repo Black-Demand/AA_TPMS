@@ -25,6 +25,8 @@ import { LookupService } from '../../services/lookup.service';
 import { ToastrService } from 'ngx-toastr';
 import { MatMenuModule } from '@angular/material/menu';
 import { filter } from 'rxjs';
+import { LanguageService } from '../../services/language.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface Driver {
   mainGuid: string;
@@ -55,6 +57,7 @@ interface Driver {
     MatTabsModule,
     MatIconModule,
     MatMenuModule,
+    TranslateModule
   ],
   standalone: true,
   templateUrl: './suspension-search.component.html',
@@ -89,7 +92,8 @@ export class SuspensionSearchComponent {
     private licenceLookupService: LookupService, 
     private router: Router,
     private toastr: ToastrService,
-    private route: ActivatedRoute 
+    private route: ActivatedRoute,
+    private languageService: LanguageService 
   ) {
     this.createForm();
   }

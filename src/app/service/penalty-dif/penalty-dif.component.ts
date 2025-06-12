@@ -64,12 +64,29 @@ export class PenaltyDifComponent implements OnInit {
     private orderDetailService: OrderdetailService,
     private toastr: ToastrService
   ) {
+    
+  }
+  ngOnInit(): void {
+    this.loadCustomOffences();
+    this.generateTicketNumber();
+    this.penaltyForms();
+    
+  //  this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
+  //   const selectedOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
+  //   if (selectedOffence) {
+  //     this.penaltyForm.get('amount')?.setValue(selectedOffence.fineAmount);
+  //   }
+  // });
+  }
+
+  penaltyForms(): void{
+    
     this.penaltyForm = this.fb.group(
       {
         fullName: ['', Validators.required],
         violationGrade: ['', Validators.required],
         violationType: ['', Validators.required],
-        amount: [{ value: '', disabled: true }],
+        amount: [{ value: '', disabled: true }, Validators.required],
         violationDate: ['', [Validators.required, dateCannotBeTheFuture()]],
         dateAccused: ['', [Validators.required, dateCannotBeTheFuture()]],
         ticketNo: [''],
@@ -77,12 +94,6 @@ export class PenaltyDifComponent implements OnInit {
       },
       { validators: this.dateRangeValidator }
     );
-  }
-  ngOnInit(): void {
-    this.loadCustomOffences();
-    this.generateTicketNumber();
-    
-    // this.penaltyForm.patchValue({amount : response.amount})
   }
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
@@ -149,11 +160,38 @@ export class PenaltyDifComponent implements OnInit {
   }
 
   loadCustomOffences() {
-    this.lookupService.getCustomOffenceGrades().subscribe({
-      next: (data) => {
+    this.lookupService.getCustomOffenceGrades().subscribe(data =>{
         this.offences = data;
-      },
-      error: (err) => console.error('Failed to load offences', err),
+    });
+  }
+
+
+  loadViolationTypes(code: string) {
+    this.lookupService.getAllOffenceNew([code]).subscribe(data => {
+        this.violationtypes = data;
+
+        
+      //   this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
+      //   const selectOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
+      //   console.log(selectOffence);
+      //   if (selectOffence) {
+      //     this.penaltyForm.get('amount')?.setValue(selectOffence.fineAmount);
+      //   }
+
+      //   this.onPenaltyTypeChange(offenceId);
+      // });
+
+      this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
+        const selectedGrade = this.violationtypes.find(g => g.code === offenceId);
+        console.log(selectedGrade);
+        if (selectedGrade) {
+         this.penaltyForm.get('amount')?.setValue(String(selectedGrade.fineAmount));
+        }
+
+        this.onPenaltyTypeChange(offenceId);
+      });
+
+
     });
   }
 
@@ -162,14 +200,6 @@ export class PenaltyDifComponent implements OnInit {
     this.penaltyForm.get('yetCode')?.reset();
   }
 
-  loadViolationTypes(code: string) {
-    this.lookupService.getAllOffenceNew([code]).subscribe({
-      next: (data) => {
-        this.violationtypes = data;
-      },
-      error: (err) => console.error('Failed to load violation types', err),
-    });
-  }
 
   onSubmit(): void {
     if (this.penaltyForm.invalid) {

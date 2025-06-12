@@ -2,7 +2,7 @@
   <!-- Search Form Section -->
   <mat-card class="search-card">
     <mat-card-header>
-      <mat-card-title>Driver Search</mat-card-title>
+      <mat-card-title>{{'SEARCH.SEARCH_TITLE' | translate}}</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
@@ -11,10 +11,10 @@
         <div class="search-type-section">
           <mat-radio-group formControlName="searchType" (change)="onSearchTypeChange($event)">
             <mat-radio-button value="name" class="search-type-radio">
-              <mat-icon>person</mat-icon> Search by Name
+              <mat-icon>person</mat-icon> {{'SEARCH.NAME_SEARCH' | translate}}
             </mat-radio-button>
             <mat-radio-button value="license" class="search-type-radio">
-              <mat-icon>badge</mat-icon> Search by License
+              <mat-icon>badge</mat-icon> {{'SEARCH.LICENCE_SEARCH' | translate}}
             </mat-radio-button>
           </mat-radio-group>
         </div>
@@ -22,61 +22,61 @@
         <!-- Name Search Fields -->
         <div *ngIf="searchType === 'name'" class="search-fields name-fields">
           <mat-form-field appearance="outline">
-            <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" placeholder="Enter first name">
-            <mat-error *ngIf="searchForm.get('firstName')?.invalid">Required</mat-error>
+            <mat-label>{{'SEARCH.NAME_PLACEHOLDER' | translate}}</mat-label>
+            <input matInput formControlName="firstName" [placeholder]="'SEARCH.NAME_PLACEHOLDER' | translate">
+            <mat-error *ngIf="searchForm.get('firstName')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Father's Name</mat-label>
-            <input matInput formControlName="fatherName" placeholder="Enter father's name">
-            <mat-error *ngIf="searchForm.get('fatherName')?.invalid">Required</mat-error>
+            <mat-label>{{'SEARCH.F_NAME_PLACEHOLDER' | translate}}</mat-label>
+            <input matInput formControlName="fatherName"[placeholder]="'SEARCH.F_NAME_PLACEHOLDER' | translate">
+            <mat-error *ngIf="searchForm.get('fatherName')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Grandfather's Name</mat-label>
-            <input matInput formControlName="grandfatherName" placeholder="Enter grandfather's name">
-            <mat-error *ngIf="searchForm.get('grandfatherName')?.invalid">Required</mat-error>
+            <mat-label>{{'SEARCH.G_NAME_PLACEHOLDER' | translate}}</mat-label>
+            <input matInput formControlName="grandfatherName" [placeholder]="'SEARCH.G_NAME_PLACEHOLDER' | translate">
+            <mat-error *ngIf="searchForm.get('grandfatherName')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
         </div>
-
+ 
         <!-- License Search Fields -->
         <div *ngIf="searchType === 'license'" class="search-fields license-fields">
           <mat-form-field appearance="outline">
-            <mat-label>Region</mat-label>
-            <mat-select formControlName="region" placeholder="Region">
+            <mat-label>{{'SEARCH.ISSUER_REGION_PLACEHOLDER' | translate}}</mat-label>
+            <mat-select formControlName="region" [placeholder]="'SEARCH.ISSUER_REGION_PLACEHOLDER' | translate">
               <mat-option *ngFor="let region of licenseRegions" [value]="region.code">
                 {{ region.amDescription }}
               </mat-option>
             </mat-select>
 
-            <mat-error *ngIf="searchForm.get('region')?.invalid">Required</mat-error>
+            <mat-error *ngIf="searchForm.get('region')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>License Level</mat-label>
-            <mat-select formControlName="level" placeholder="License Category">
+            <mat-label>{{'SEARCH.LICENCE_GRADE_PLACEHOLDER' | translate}}</mat-label>
+            <mat-select formControlName="level" [placeholder]="'SEARCH.LICENCE_GRADE_PLACEHOLDER' | translate">
               <mat-option *ngFor="let level of licenseLevels" [value]="level.code">
                 {{ level.displayName }}
               </mat-option>
             </mat-select>
-            <mat-error *ngIf="searchForm.get('level')?.invalid">Required</mat-error>
+            <mat-error *ngIf="searchForm.get('level')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>License Number</mat-label>
-            <input matInput formControlName="licenseNumber" placeholder="Enter license number">
-            <mat-error *ngIf="searchForm.get('licenseNumber')?.invalid">Required</mat-error>
+            <mat-label>{{'SEARCH.LICENCE_NUMBER_PLACEHOLDER' | translate}}</mat-label>
+            <input matInput formControlName="licenseNumber" [placeholder]="'SEARCH.LICENCE_GRADE_PLACEHOLDER' | translate">
+            <mat-error *ngIf="searchForm.get('licenseNumber')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
         </div>
 
         <!-- Form Actions -->
         <div class="form-actions">
           <button mat-raised-button color="primary" type="submit" [disabled]="searchForm.invalid">
-            <mat-icon>search</mat-icon> Search
+            <mat-icon>search</mat-icon> {{'SEARCH.SEARCH_BUTTON' | translate}}
           </button>
           <button mat-button type="button" (click)="resetForm()">
-            <mat-icon>refresh</mat-icon> Reset
+            <mat-icon>refresh</mat-icon> {{'SEARCH.CANCEL_BUTTON' | translate}}
           </button>
         </div>
       </form>
@@ -87,8 +87,8 @@
   <div *ngIf="showResults" class="results-section">
     <mat-card>
       <mat-card-header>
-        <mat-card-title>Search Results</mat-card-title>
-        <mat-card-subtitle>Found {{dataSource.data.length}} records</mat-card-subtitle>
+        <mat-card-title>{{'SEARCH.SEARCH_TAB_TITLE' | translate}}</mat-card-title>
+        <mat-card-subtitle>{{dataSource.data.length}} {{'SEARCH.RESULTS_FOUND' | translate}}</mat-card-subtitle>
       </mat-card-header>
 
       <mat-card-content>
@@ -96,31 +96,31 @@
           <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
             <!-- Full Name Column -->
             <ng-container matColumnDef="fullName">
-              <th mat-header-cell *matHeaderCellDef>Full Name</th>
+              <th mat-header-cell *matHeaderCellDef>{{'SEARCH.FULL_NAME' | translate}}</th>
               <td mat-cell *matCellDef="let driver">{{ driver.fullName }}</td>
             </ng-container>
 
             <!-- License Number Column -->
             <ng-container matColumnDef="licenseNumber">
-              <th mat-header-cell *matHeaderCellDef>License Number</th>
+              <th mat-header-cell *matHeaderCellDef>{{'SEARCH.LICENCE_NUMBER_PLACEHOLDER' | translate}}</th>
               <td mat-cell *matCellDef="let driver">{{ driver.licenseNumber }}</td>
             </ng-container>
 
             <!-- Issuer Region Column -->
             <ng-container matColumnDef="issuerRegion">
-              <th mat-header-cell *matHeaderCellDef>License Region</th>
+              <th mat-header-cell *matHeaderCellDef>{{'SEARCH.ISSUER_REGION_PLACEHOLDER' | translate}}</th>
               <td mat-cell *matCellDef="let driver">{{ driver.issuerRegion }}</td>
             </ng-container>
 
             <!-- Issuer City Column -->
             <ng-container matColumnDef="issuerCity">
-              <th mat-header-cell *matHeaderCellDef>License Area</th>
+              <th mat-header-cell *matHeaderCellDef>{{'SEARCH.LICENCE_AREA_PLACEHOLDER' | translate}}</th>
               <td mat-cell *matCellDef="let driver">{{ driver.issuerCity }}</td>
             </ng-container>
 
             <!-- Issuer Date Column -->
             <ng-container matColumnDef="issuerDate">
-              <th mat-header-cell *matHeaderCellDef>Issued Date</th>
+              <th mat-header-cell *matHeaderCellDef>{{'SEARCH.ISSUED_DATE' | translate}}</th>
               <td mat-cell *matCellDef="let driver">{{ driver.issuanceDate | date: 'yyyy-MM-dd' }}</td>
             </ng-container>
 
@@ -129,7 +129,7 @@
 
             <!-- Actions Column -->
             <ng-container matColumnDef="actions">
-              <th mat-header-cell *matHeaderCellDef>Action</th>
+              <th mat-header-cell *matHeaderCellDef>{{'SEARCH.ACTION' | translate}}</th>
               <td mat-cell *matCellDef="let driver">
                 <!-- <button mat-raised-button color="primary" (click)="navigateToPenaltyForm(driver)">
                   <mat-icon></mat-icon>Next
@@ -161,3 +161,6 @@
     </mat-card>
   </div>
 </div>
+
+
+                

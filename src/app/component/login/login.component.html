@@ -1,64 +1,85 @@
 <app-header></app-header>
 <router-outlet />
 <div class="login-container">
-    <div class="login-card">
-      <!-- Left Column - Login Form -->
-      <div class="login-form-container">
-        <div class="login-header">
-          <h2>Welcome to TPS</h2>
-          <p>Traffic Penalty System</p>
+  <div class="login-card">
+    <!-- Left Column - Login Form -->
+    <div class="login-form-container">
+      <div class="login-header">
+        <div class="logo-mobile">
+          <img src="assets/logo2.jpeg" alt="TPS Logo" class="brand-logo-mobile">
         </div>
-  
-        <form [formGroup]="form" (ngSubmit)="onLogin()" class="login-form">
-          <!-- Username Field -->
-          <mat-form-field appearance="outline">
-            <mat-label>Username</mat-label>
-            <mat-icon matPrefix>person</mat-icon>
-            <input matInput formControlName="username" placeholder="Enter your username">
-            <mat-error *ngIf="form.get('username')?.hasError('required')">
-              Username is required
-            </mat-error>
-            <mat-error *ngIf="form.get('username')?.hasError('minlength')">
-              Username must be at least 3 characters
-            </mat-error>
-          </mat-form-field>
-  
-          <!-- Password Field -->
-          <mat-form-field appearance="outline">
-            <mat-label>Password</mat-label>
-            <mat-icon matPrefix>lock</mat-icon>
-            <input matInput formControlName="password" 
-                   [type]="showPassword ? 'text' : 'password'" 
-                   placeholder="Enter your password">
-            <button mat-icon-button matSuffix (click)="passVis()" type="button" aria-label="Toggle password visibility">
-              <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
-            </button>
-            <mat-error *ngIf="form.get('password')?.hasError('required')">
-              Password is required
-            </mat-error>
-            <mat-error *ngIf="form.get('password')?.hasError('minlength')">
-              Password must be at least 6 characters
-            </mat-error>
-          </mat-form-field>
-  
-          <!-- Login Button -->
-          <button mat-raised-button color="primary" type="submit" [disabled]="form.invalid" class="login-button">
-            Login
-            <mat-icon>arrow_forward</mat-icon>
-          </button>
-        </form>
+        <h2>Welcome to TPS</h2>
+        <p>Traffic Penalty System</p>
       </div>
-  
-      <!-- Right Column - Branding (hidden on mobile) -->
-      <div class="branding-container">
-        <div class="branding-content">
-          <img src="assets/logo2.jpeg" alt="TPS Logo" class="brand-logo">
-          <div class="support-info">
+
+      <form [formGroup]="form" (ngSubmit)="onLogin()" class="login-form">
+        <!-- Username Field -->
+        <mat-form-field appearance="outline">
+          <mat-label>Username</mat-label>
+          <mat-icon matPrefix>person</mat-icon>
+          <input matInput formControlName="username" placeholder="Enter your username">
+          <mat-error *ngIf="form.get('username')?.hasError('required')">
+            Username is required
+          </mat-error>
+          <mat-error *ngIf="form.get('username')?.hasError('minlength')">
+            Username must be at least 3 characters
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Password Field -->
+        <mat-form-field appearance="outline">
+          <mat-label>Password</mat-label>
+          <mat-icon matPrefix>lock</mat-icon>
+          <input matInput formControlName="password" 
+                [type]="showPassword ? 'text' : 'password'" 
+                placeholder="Enter your password">
+          <button mat-icon-button matSuffix (click)="togglePasswordVisibility()" type="button" 
+                  aria-label="Toggle password visibility">
+            <mat-icon>{{ showPassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+          </button>
+          <mat-error *ngIf="form.get('password')?.hasError('required')">
+            Password is required
+          </mat-error>
+          <mat-error *ngIf="form.get('password')?.hasError('minlength')">
+            Password must be at least 6 characters
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Remember Me & Forgot Password -->
+        <div class="form-options">
+          <mat-checkbox>Remember me</mat-checkbox>
+          <a href="#" class="forgot-password">Forgot password?</a>
+        </div>
+
+        <!-- Login Button -->
+        <button mat-raised-button color="primary" type="submit"
+         [disabled]="form.invalid" class="login-button">
+          Login
+          <mat-icon>arrow_forward</mat-icon>
+        </button>
+      </form>
+    </div>
+
+    <!-- Right Column - Branding -->
+    <div class="branding-container">
+      <div class="branding-content">
+        <div class="logo-container">
+          <img src="assets/logo2.jpeg" alt="TPS Logo" >
+        </div>
+        <h3>Efficient Traffic Management</h3>
+        <p class="branding-text">
+          Our system helps maintain road safety and enforce traffic regulations effectively.
+        </p>
+        <div class="support-info">
+          <div class="support-item">
             <mat-icon>phone</mat-icon>
-            <span>(251) 115 519 397</span>
-            <p>For Help or technical support</p>
+            <div>
+              <span>(251) 115 519 397</span>
+              <p>Technical support</p>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </div>
+</div>

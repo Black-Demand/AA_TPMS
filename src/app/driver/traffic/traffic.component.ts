@@ -29,6 +29,7 @@ import { Router } from '@angular/router';
 import { dateNotTheFuture, dateNotTheFutures } from '../../service/date.validate';
 import { ACTION_OPTIONS, ActionOption} from '../../Enums/actiontaken';
 import { PenalityfortrafficService } from '../../services/penalityfortraffic.service';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-traffic',
@@ -50,7 +51,8 @@ import { PenalityfortrafficService } from '../../services/penalityfortraffic.ser
     MatTabsModule,
     MatDividerModule,
     MatCheckboxModule,
-    MatTimepickerModule
+    MatTimepickerModule,
+    TranslateModule
   ],
   templateUrl: './traffic.component.html',
   styleUrl: './traffic.component.css'
@@ -61,7 +63,7 @@ export class TrafficComponent  implements OnInit {
   violationTypeDisabled = false;
   violations: any[] = [];
   displayedColumns: string[] = ['fullName', 'licenseNumber', 'ticket', 'dateAccused'];
- 
+
   zones: Lookup.ZoneDTO[] = [];
   woredas: Lookup.WoredaDTO[] = [];
   kebeles: Lookup.KebeleDTO[] = [];
@@ -70,7 +72,7 @@ export class TrafficComponent  implements OnInit {
   licenceCatagories: Lookup.LicenceCategoryDTO[] = [];
   nationalities: Lookup.LookupDTO[] = [];
 
-  selectedRegionCode!: number;  
+  selectedRegionCode!: number;
   selectedZoneCode!: number;
   selectedWoredaCode!: number;
   selectedLicenceRegionCode: number = 0;
@@ -78,12 +80,12 @@ export class TrafficComponent  implements OnInit {
   selectedAction = '';
 
 
-  
+
   violationgrades: Lookup.OffenceGradeDTO[] = [];
   violationtypes: Lookup.OffenceNewDTO[] = [];
   regions: Lookup.LicenceRegionDTO[] = [];
   majors: Lookup.Majors[] = [];
-  vhicleTypes: Lookup.VehicleBodyTypeDTO[] =[];
+  vhicleTypes: Lookup.VehicleBodyTypeDTO[] = [];
   actionOptions: ActionOption[] = ACTION_OPTIONS;
 
 
@@ -93,36 +95,46 @@ export class TrafficComponent  implements OnInit {
     private lookupservice: LookupService,
     private toastr: ToastrService,
     private router: Router,
-    private penalityForTraffic : PenalityfortrafficService
+    private penalityForTraffic: PenalityfortrafficService,
+    private translate: TranslateService
   ) {
 
   }
 
-    ngOnInit(): void {
-    this.loadRegions();
-    this.loadMajors();
-    this.loadViolationGrade();
-    this.loadVheicleBodyType();
-    const data = this.tdrs.getDriverData();
-    this.trafficForms();
-    this.generateOrdderNumber();
-   
+  ngOnInit(): void {
+  
+  this.trafficForms();
+  this.loadRegions();
+  this.loadMajors();
+  this.loadViolationGrade();
+  this.loadVheicleBodyType();
+  this.generateTicketNumber();
 
-    if(data){
-      this.selectedDriver = data;
-      this.trafficForm.patchValue({
-        mainGuid: data.mainGuid,
-        fullName: data.fullName,
-        licenseNumber: data.licenseNumber
-      })
+  this.trafficForm.get('offenceId')?.valueChanges.subscribe(offenceId => {
+    const selectedOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
+    if (selectedOffence) {
+      this.trafficForm.get('amount')?.setValue(selectedOffence.fineAmount);
     }
+  });
+
+
+  const data = this.tdrs.getDriverData();
+  if (data) {
+    this.selectedDriver = data;
+    this.trafficForm.patchValue({
+      mainGuid: data.mainGuid,
+      fullName: data.fullName,
+      licenseNumber: data.licenseNumber
+    });
   }
+}
+ 
+
 
   trafficForms(): void {
-    
-    this.trafficForm = this.fb.group({
-      fullName: [{value: '', disabled: true}, Validators.required],
-      licenseNumber: [{value: '', disabled: true}, Validators.required],
+  this.trafficForm = this.fb.group({
+      fullName: [{ value: '', disabled: true }, Validators.required],
+      licenseNumber: [{ value: '', disabled: true }, Validators.required],
       violationGrade: ['', Validators.required],
       offenceId: [{ value: '', disabled: false }, Validators.required],
       violationDate: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
@@ -133,141 +145,154 @@ export class TrafficComponent  implements OnInit {
       newPlateNo: ['', Validators.required],
       violationPlace: ['', Validators.required],
       dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
-      amount: ['', Validators.required],
-      ticketNo: ['', Validators.required],
+      amount: [{ value: '', disabled: true }, Validators.required],
+      ticketNo: [{ value: '', disabled: true }, Validators.required],
       vehicleType: ['', Validators.required],
       violationTime: ['', Validators.required],
       isLightInjury: [false],
       isSevereInjury: [false],
       isPropertyDamage: [false]
+  });
 
 
-    });
-  }
+}
 
-    loadViolationGrade() {
+  loadViolationGrade() {
     this.lookupservice.getAllOffences().subscribe(data => {
-       this.violationgrades = data;
+      this.violationgrades = data;
+
+      this.trafficForm.get('violationGrade')?.valueChanges.subscribe(gradeCode => {
+        const selectedGrade = this.violationgrades.find(g => g.code === gradeCode);
+        console.log(selectedGrade);
+        if (selectedGrade) {
+         this.trafficForm.get('amount')?.setValue(String(selectedGrade.fineAmount));
+        }
+
+        this.loadViolationTypeByGrade(gradeCode);
+      });
     });
   }
 
- loadViolationTypeByGrade(gradeCode: string) {
+
+
+
+
+  loadViolationTypeByGrade(gradeCode: string) {
     const numericGradeCode = Number(gradeCode);
-  
+
     if (numericGradeCode > 3) {
       this.violationTypeDisabled = true;
-      this.trafficForm.get('violationType')?.reset();
-      this.trafficForm.get('violationType')?.disable();
+      this.trafficForm.get('offenceId')?.reset();
+      this.trafficForm.get('offenceId')?.disable();
       this.violationtypes = [];
     } else {
       this.violationTypeDisabled = false;
-      this.trafficForm.get('violationType')?.enable();
+      this.trafficForm.get('offenceId')?.enable();
       this.lookupservice.getAllOffenceNew([gradeCode]).subscribe(data => {
         this.violationtypes = data;
       });
     }
   }
 
-    dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+
+  dateRangeValidator(group: AbstractControl): ValidationErrors | null {
     const yetKen = group.get('violationDate')?.value;
     const yetsKen = group.get('dateAccused')?.value;
 
-    if(yetKen && yetsKen && yetKen > yetsKen){
-        return { dateRangeInvalid: true };
+    if (yetKen && yetsKen && yetKen > yetsKen) {
+      return { dateRangeInvalid: true };
     }
     return null;
-}
+  }
 
   get minEndDate(): Date | null {
     return this.trafficForm.get('violationDate')?.value;
   }
-  getErrorMessageForYetfesmbetKen():string{
+  getErrorMessageForYetfesmbetKen(): string {
     let field = this.trafficForm.get('violationDate');
-    
-    if(field?.hasError('required')){
+
+    if (field?.hasError('required')) {
       return 'The field is Required';
     }
-    if(field?.hasError('dateNotTheFuture')){
+    if (field?.hasError('dateNotTheFuture')) {
       return field.getError('dateNotTheFuture').message;
     }
     return "";
   }
 
 
-   getErrorMessageForYetfessmbetKen():string{
+  getErrorMessageForYetfessmbetKen(): string {
     let field = this.trafficForm.get('dateAccused');
-    
-    if(field?.hasError('required')){
+
+    if (field?.hasError('required')) {
       return 'The field is Required';
     }
-    if(field?.hasError('dateNotTheFuture')){
+    if (field?.hasError('dateNotTheFuture')) {
       return field.getError('dateNotTheFuture').message;
     }
-    if(this.trafficForm.hasError('dateRangeInvalid')) {
+    if (this.trafficForm.hasError('dateRangeInvalid')) {
       return 'Yetkessbte Ken must be greater than or equal to Yetfesmbte Ken';
     }
     return "";
   }
 
-    generateOrdderNumber(){
+  generateTicketNumber() {
     const ticketNum = Math.floor(100000 + Math.random() * 900000);
-    const ticket = `${ticketNum}`;
+    const ticketNo = `${ticketNum}`;
 
-    this.trafficForm?.get('ticket')?.setValue(ticket);
-    this.trafficForm?.get('ticket')?.disable();
+    this.trafficForm?.get('ticketNo')?.setValue(ticketNo);
+    this.trafficForm?.get('ticketNo')?.disable();
   }
- 
 
-   loadRegions() {
+
+  loadRegions() {
     this.lookupservice.getAllRegions().subscribe(data => {
-       this.regions = data;
+      this.regions = data;
     });
   }
 
   loadMajors() {
     this.lookupservice.getAllMajors().subscribe(data => {
-       this.majors = data;
+      this.majors = data;
     });
   }
 
-    loadVheicleBodyType() {
-   this.lookupservice.getAllVehicles().subscribe( data => {
-    this.vhicleTypes = data;
-   })
+  loadVheicleBodyType() {
+    this.lookupservice.getAllVehicles().subscribe(data => {
+      this.vhicleTypes = data;
+    })
   }
-  
- onSubmit(): void {
+
+
+
+
+
+  onSubmit(): void {
+    
   if (this.trafficForm.valid) {
     const formValue = {
-      ...this.trafficForm.getRawValue(), 
+      ...this.trafficForm.getRawValue(),  // ✅ includes amount and all fields
       fullName: this.selectedDriver.fullName,
-      licenseNumber: this.selectedDriver.licenseNumber
+      licenseNumber: this.selectedDriver.licenseNumber,
+      ticket: this.trafficForm.get('ticketNo')?.value,
+    
     };
 
-    this.violations.push(formValue);
+    console.log('🚀 Form Submitted:', formValue);  // ✅ debug
 
-    // console.log('Violation submitted:', formValue);
-
-    try {
-      this.penalityForTraffic.createPenalityForTraffic(formValue, formValue.licenseNumber).subscribe({
-        next: (response) => {
-          this.toastr.success("Penality created successfully");
-        },
-        error: (err) => {
-          console.error('Error creating penality:', err);
-          this.toastr.error("Error creating penality");
-        }
-      });
-    } catch (error) {
-      console.error(error);
-    }
-
+    this.penalityForTraffic.createPenalityForTraffic(formValue, formValue.licenseNumber).subscribe({
+      next: () => this.toastr.success("Penalty created successfully"),
+      error: err => {
+        console.error('❌ Backend error:', err);
+        this.toastr.error("Error creating penalty");
+      }
+    });
   } else {
     this.trafficForm.markAllAsTouched();
   }
 }
 
-  
+
   onReset(): void {
     this.trafficForm.reset();
   }

@@ -56,7 +56,7 @@ namespace Lookup {
     code: string;
     amDescription: string;
     Description: string;
-    FineAmount: number;
+    fineAmount: number;
     OffenceGrade: string;
     OffencePoint: number;
   }
@@ -95,7 +95,7 @@ namespace Lookup {
     Description: string;
     amDescription: string;
     Parent: number;
-    FineAmount: number;
+    fineAmount: number;
   }
 
   export interface Majors {
