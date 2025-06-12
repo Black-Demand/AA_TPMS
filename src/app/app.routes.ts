@@ -13,6 +13,8 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { DriverInformationComponent } from './driver/driver-information/driver-information.component';
 import { TrafficComponent } from './driver/traffic/traffic.component';
 import { TrafficSearchComponent } from './driver/traffic-search/traffic-search.component';
+import { PenalityGridComponent } from './service/penality-grid/penality-grid.component';
+import { DatedemoComponent } from './component/datedemo/datedemo.component';
 
 export const routes: Routes = [
     {
@@ -46,7 +48,9 @@ export const routes: Routes = [
             {path: 'suspension-search', component: SuspensionSearchComponent},
             {path: 'drivers', component: DriverInformationComponent},
             {path: 'traffic', component: TrafficComponent},
-            {path: 'traffic-search', component: TrafficSearchComponent}
+            {path: 'traffic-search', component: TrafficSearchComponent},
+            {path: 'grid' , component: PenalityGridComponent},
+            {path: 'demo' , component: DatedemoComponent}
             // { path: 'suspension', redirectTo: 'suspension-search', pathMatch: 'full' },
             // { path: 'suspension-search', component: PenaltyDriverComponent },
             // { path: 'suspension-form/:id', component: SuspensionComponent }

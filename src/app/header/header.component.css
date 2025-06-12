@@ -23,19 +23,21 @@
   
   
   .spacer {
-    flex: 1 1 auto;
+    flex: 1 2 auto;
   }
   
   .header-controls {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    overflow: visible;
-    position: relative;
-  }
-  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  overflow: visible;
+  position: relative;
+  margin-left: 10px;
+  width: 15%;
+}
   .language-selector {
-    width: 140px;
+    width: 100px;
   }
   
   .language-selector .mat-form-field-outline {

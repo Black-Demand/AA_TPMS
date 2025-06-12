@@ -29,6 +29,7 @@ import { Router } from '@angular/router';
 import { dateNotTheFuture, dateNotTheFutures } from '../../service/date.validate';
 import { ACTION_OPTIONS, ActionOption} from '../../Enums/actiontaken';
 import { PenalityfortrafficService } from '../../services/penalityfortraffic.service';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-traffic',
@@ -93,31 +94,45 @@ export class TrafficComponent  implements OnInit {
     private lookupservice: LookupService,
     private toastr: ToastrService,
     private router: Router,
-    private penalityForTraffic : PenalityfortrafficService
+    private penalityForTraffic : PenalityfortrafficService,
+    private translate : TranslateService
   ) {
 
   }
 
     ngOnInit(): void {
-    this.loadRegions();
-    this.loadMajors();
-    this.loadViolationGrade();
-    this.loadVheicleBodyType();
-    const data = this.tdrs.getDriverData();
-    this.trafficForms();
-    this.generateOrdderNumber();
-   
+      this.loadRegions();
+      this.loadMajors();
+      this.loadViolationGrade();
+      this.loadVheicleBodyType();
+      const data = this.tdrs.getDriverData();
+      this.trafficForms();
+      this.generateOrdderNumber();
 
-    if(data){
-      this.selectedDriver = data;
-      this.trafficForm.patchValue({
-        mainGuid: data.mainGuid,
-        fullName: data.fullName,
-        licenseNumber: data.licenseNumber
-      })
+      if (data) {
+        this.selectedDriver = data;
+        this.trafficForm.patchValue({
+          mainGuid: data.mainGuid,
+          fullName: data.fullName,
+          licenseNumber: data.licenseNumber,
+        });
+      }
+
+// this.trafficForm.get('violationGrade')?.valueChanges.subscribe(id => {
+//   const selected = this.violationgrades.find(v => v.id === +id); // assuming id is string
+
+//   console.log('Selected grade:', selected);
+
+//   if (selected && selected.FineAmount != null) {
+//     this.trafficForm.get('amount')?.setValue(selected.FineAmount);
+//   } else {
+//     this.trafficForm.get('amount')?.reset();
+//   }
+// });
+
+
+
     }
-  }
-
   trafficForms(): void {
     
     this.trafficForm = this.fb.group({
@@ -133,7 +148,7 @@ export class TrafficComponent  implements OnInit {
       newPlateNo: ['', Validators.required],
       violationPlace: ['', Validators.required],
       dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
-      amount: ['', Validators.required],
+      amount: [{ value: '', disabled: true } , Validators.required],  
       ticketNo: ['', Validators.required],
       vehicleType: ['', Validators.required],
       violationTime: ['', Validators.required],
@@ -151,22 +166,37 @@ export class TrafficComponent  implements OnInit {
     });
   }
 
- loadViolationTypeByGrade(gradeCode: string) {
-    const numericGradeCode = Number(gradeCode);
-  
-    if (numericGradeCode > 3) {
-      this.violationTypeDisabled = true;
-      this.trafficForm.get('violationType')?.reset();
-      this.trafficForm.get('violationType')?.disable();
-      this.violationtypes = [];
-    } else {
-      this.violationTypeDisabled = false;
-      this.trafficForm.get('violationType')?.enable();
-      this.lookupservice.getAllOffenceNew([gradeCode]).subscribe(data => {
-        this.violationtypes = data;
-      });
-    }
+loadViolationTypeByGrade(gradeCode: string) {
+  const numericGradeCode = Number(gradeCode);
+
+  if (numericGradeCode > 3) {
+    this.violationTypeDisabled = true;
+    this.trafficForm.get('offenceId')?.reset();
+    this.trafficForm.get('offenceId')?.disable();
+    this.violationtypes = [];
+  } else {
+    this.violationTypeDisabled = false;
+    this.trafficForm.get('offenceId')?.enable();
+    this.lookupservice.getAllOffenceNew([gradeCode]).subscribe((data) => {
+      this.violationtypes = data;
+      console.log('Offence data:', data);
+    });
   }
+
+  const selectedGrade = this.violationgrades.find((v) => v.id === numericGradeCode);
+
+  if (selectedGrade && selectedGrade.fineAmount != null) {  // <-- use FineAmount if API returns that exact property
+    console.log('Selected grade:', selectedGrade);
+
+    this.trafficForm.get('amount')?.enable();
+    this.trafficForm.get('amount')?.patchValue(String(selectedGrade.fineAmount));
+    console.log('vPatched fine amount:', selectedGrade.fineAmount);
+  } else {
+    this.trafficForm.get('amount')?.reset();
+  }
+}
+
+
 
     dateRangeValidator(group: AbstractControl): ValidationErrors | null {
     const yetKen = group.get('violationDate')?.value;
@@ -251,11 +281,13 @@ export class TrafficComponent  implements OnInit {
     try {
       this.penalityForTraffic.createPenalityForTraffic(formValue, formValue.licenseNumber).subscribe({
         next: (response) => {
-          this.toastr.success("Penality created successfully");
+                    this.toastr.success(this.translate.instant('TOASTER.SUCCESS.TRAFF'));
+
         },
         error: (err) => {
           console.error('Error creating penality:', err);
-          this.toastr.error("Error creating penality");
+                     this.toastr.error(this.translate.instant('TOASTER.ERROR.TRAFF'));
+
         }
       });
     } catch (error) {

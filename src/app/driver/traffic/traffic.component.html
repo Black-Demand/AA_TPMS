@@ -27,7 +27,7 @@
       </div>
 
       <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
+        <mat-form-field appearance="outline" class="form-field"  style="flex: 0.5;" >
           <mat-label>Violation Grade</mat-label>
           <mat-select formControlName="violationGrade" required
             (selectionChange)="loadViolationTypeByGrade($event.value)">
@@ -42,7 +42,7 @@
           <mat-label>Violation Type</mat-label>
           <mat-select formControlName="offenceId" [disabled]="violationTypeDisabled">
             <mat-option *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
-              {{ violationtype.amDescription }}
+             {{ violationtype.code }} - {{ violationtype.amDescription }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -131,9 +131,9 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Payment</mat-label>
-          <input matInput formControlName="amount" required>
-          <mat-error>Required field</mat-error>
+          <input matInput formControlName="amount">
         </mat-form-field>
+
       </div>
 
       <div class="form-row">
@@ -155,7 +155,7 @@
           </mat-select>
           <mat-error>Required field</mat-error>
         </mat-form-field>
-
+<!-- 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>Accused Time</mat-label>
           <input matInput [matTimepicker]="timePicker" formControlName="violationTime" required>
@@ -164,6 +164,12 @@
           <mat-error *ngIf="trafficForm.get('violationTime')?.invalid && trafficForm.get('violationTime')?.touched">
             Please select a valid time
           </mat-error>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Accuesd Time</mat-label>
+          <input matInput formControlName="violationTime" required>
+          <mat-error>Required field</mat-error>
         </mat-form-field>
 
       </div>

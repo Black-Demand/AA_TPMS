@@ -56,7 +56,7 @@ namespace Lookup {
     code: string;
     amDescription: string;
     Description: string;
-    FineAmount: number;
+    fineAmount: number;
     OffenceGrade: string;
     OffencePoint: number;
   }

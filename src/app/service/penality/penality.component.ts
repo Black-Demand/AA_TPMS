@@ -34,6 +34,7 @@ import { ConfirmationComponent } from '../../dialog/confirmation/confirmation/co
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
+import { id } from '@swimlane/ngx-charts';
 
 
 
@@ -130,7 +131,7 @@ export class PenalityComponent implements OnInit {
         amount: data.amount,
         delayPoints: data.delayPoints,
         DelayAmount: data.delayAmount,
-        wozefPoint: data.wozefPoint ?? 0,
+        storedPoint: data.storedPointPoint ?? 0,
         totalAmount: data.totalAmount,
       });
 
@@ -167,7 +168,7 @@ export class PenalityComponent implements OnInit {
       amount: [{value: '' , disabled: true}, Validators.required],
       delayPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
       delayAmount: [{value: '' , disabled: true}, Validators.required],
-      wozefPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      storedPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
       totalAmount: [{value: 0, disabled: true}]
     });
 
@@ -220,15 +221,26 @@ export class PenalityComponent implements OnInit {
         this.violationtypes = data;
       });
     }
+
+  // const selectedGrade = this.violationgrades.find((v) => v.id === numericGradeCode);
+  // if (selectedGrade && selectedGrade.fineAmount != null) {  
+  //   console.log('Selected grade:', selectedGrade);
+
+  //   this.secondFormGroup.get('amount')?.enable();
+  //   this.secondFormGroup.get('amount')?.patchValue(String(selectedGrade.fineAmount));
+  //   console.log('Patched fine amount:', selectedGrade.fineAmount);
+  // } else {
+  //   this.secondFormGroup.get('amount')?.reset();
+  // }
   }
   
 
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const yetKen = group.get('violationDate')?.value;
-    const yetsKen = group.get('dateAccused')?.value;
+    const vioDate = group.get('violationDate')?.value;
+    const accuDate = group.get('dateAccused')?.value;
 
-    if(yetKen && yetsKen && yetKen > yetsKen){
+    if(vioDate && accuDate && vioDate > accuDate){
         return { dateRangeInvalid: true };
     }
     return null;
@@ -321,7 +333,7 @@ getErrorMessageForYetfessmbetKen(): string {
 
 calculateTotal(): void {
   const values = this.secondFormGroup.getRawValue();
-  const total = (values.penalityPoints || 0) + (values.delayAmount || 0) + (values.wozefPoint || 0);
+  const total = (values.penalityPoints || 0) + (values.delayAmount || 0) + (values.storedPoint || 0);
   this.secondFormGroup.patchValue({ totalAmount: total });
 }
 
@@ -353,7 +365,7 @@ submitFirstForm(): void {
             penalityPoints,
             delayPoints,
             delayAmount,
-            wozefPoint,
+            storedPoint,
             totalAmount
           } = response;
 
@@ -362,7 +374,7 @@ submitFirstForm(): void {
             amount: amount,
             delayPoints: delayPoints,
             delayAmount: delayAmount,
-            wozefPoint: wozefPoint ?? 0,
+            storedPoint: storedPoint ?? 0,
             totalAmount: totalAmount
           });
 
