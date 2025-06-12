@@ -42,7 +42,7 @@
           <mat-label>{{'SEARCH.VIOLATION_TYPE_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="offenceId" [disabled]="violationTypeDisabled">
             <mat-option *ngFor="let violationtype of violationtypes" [value]="violationtype.code">
-              {{ violationtype.amDescription }}
+             {{ violationtype.code }} - {{ violationtype.amDescription }}
             </mat-option>
           </mat-select>
         </mat-form-field>
@@ -134,6 +134,7 @@
           <input matInput formControlName="amount" required>
           <mat-error>Required field</mat-error>
         </mat-form-field>
+
       </div>
 
       <div class="form-row">
@@ -155,17 +156,23 @@
           </mat-select>
           <mat-error>Required field</mat-error>
         </mat-form-field>
-
+<!-- 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.ACCUSED_TIME' | translate}}</mat-label>
             <input matInput formControlName="violationTime" required>
           <mat-error>Required field</mat-error>
-          <!-- <input matInput [matTimepicker]="timePicker" formControlName="violationTime" required>
+           <input matInput [matTimepicker]="timePicker" formControlName="violationTime" required>
           <mat-timepicker-toggle matSuffix [for]="timePicker"></mat-timepicker-toggle>
           <mat-timepicker #timePicker></mat-timepicker>
           <mat-error *ngIf="trafficForm.get('violationTime')?.invalid && trafficForm.get('violationTime')?.touched">
             Please select a valid time
-          </mat-error> -->
+          </mat-error>
+        </mat-form-field> -->
+
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>Accuesd Time</mat-label>
+          <input matInput formControlName="violationTime" required>
+          <mat-error>Required field</mat-error>
         </mat-form-field>
 
       </div>

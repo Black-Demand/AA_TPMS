@@ -1,3 +1,4 @@
+import { ElementRef, HostListener } from "@angular/core";
 import { AbstractControl, ValidationErrors, ValidatorFn } from "@angular/forms";
 // validators.ts
 export function dateNotTheFuture(): ValidatorFn {
@@ -25,7 +26,7 @@ export function dateNotTheFutures(): ValidatorFn {
     if (date > today) {
       return {
         dateNotTheFuture: {
-          messageKey: 'ERROR.DATE_NOT_IN_FUTURE'
+          messageKey: 'ERROR.DATE_NOT_IN_FUTURE'  
         }
       };
     }
@@ -33,6 +34,7 @@ export function dateNotTheFutures(): ValidatorFn {
     return null;
   };
 }
+
 
 
 // export function dateRangeValidator(group: AbstractControl): ValidationErrors | null {

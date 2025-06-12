@@ -34,6 +34,7 @@ import { ConfirmationComponent } from '../../dialog/confirmation/confirmation/co
 import { StepperSelectionEvent } from '@angular/cdk/stepper';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../services/language.service';
+import { id } from '@swimlane/ngx-charts';
 
 
 
@@ -130,7 +131,7 @@ export class PenalityComponent implements OnInit {
         amount: data.amount,
         delayPoints: data.delayPoints,
         DelayAmount: data.delayAmount,
-        wozefPoint: data.wozefPoint ?? 0,
+        storedPoint: data.storedPointPoint ?? 0,
         totalAmount: data.totalAmount,
       });
 
@@ -163,12 +164,21 @@ export class PenalityComponent implements OnInit {
       { validators: this.dateRangeValidator });
 
     this.secondFormGroup = this.fb.group({
+<<<<<<< HEAD
       penalityPoints: [{ value: '', disabled: true }, [Validators.required, Validators.min(0), Validators.max(100)]],
       amount: [{ value: '', disabled: true }, Validators.required],
       delayPoints: [{ value: '', disabled: true }, [Validators.required, Validators.min(0), Validators.max(100)]],
       delayAmount: [{ value: '', disabled: true }, Validators.required],
       wozefPoint: [{ value: '', disabled: true }, [Validators.required, Validators.min(0), Validators.max(100)]],
       totalAmount: [{ value: 0, disabled: true }]
+=======
+      penalityPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      amount: [{value: '' , disabled: true}, Validators.required],
+      delayPoints: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      delayAmount: [{value: '' , disabled: true}, Validators.required],
+      storedPoint: [{value: '' , disabled: true}, [Validators.required, Validators.min(0), Validators.max(100)]],
+      totalAmount: [{value: 0, disabled: true}]
+>>>>>>> 2a952533e7f946b021b641cedc91bdb322eb4f70
     });
 
     this.thirdFormGroup = this.fb.group({
@@ -220,16 +230,32 @@ export class PenalityComponent implements OnInit {
       this.violationtypes = data;
       });
     }
+
+  // const selectedGrade = this.violationgrades.find((v) => v.id === numericGradeCode);
+  // if (selectedGrade && selectedGrade.fineAmount != null) {  
+  //   console.log('Selected grade:', selectedGrade);
+
+  //   this.secondFormGroup.get('amount')?.enable();
+  //   this.secondFormGroup.get('amount')?.patchValue(String(selectedGrade.fineAmount));
+  //   console.log('Patched fine amount:', selectedGrade.fineAmount);
+  // } else {
+  //   this.secondFormGroup.get('amount')?.reset();
+  // }
   }
 
 
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const yetKen = group.get('violationDate')?.value;
-    const yetsKen = group.get('dateAccused')?.value;
+    const vioDate = group.get('violationDate')?.value;
+    const accuDate = group.get('dateAccused')?.value;
 
+<<<<<<< HEAD
     if (yetKen && yetsKen && yetKen > yetsKen) {
       return { dateRangeInvalid: true };
+=======
+    if(vioDate && accuDate && vioDate > accuDate){
+        return { dateRangeInvalid: true };
+>>>>>>> 2a952533e7f946b021b641cedc91bdb322eb4f70
     }
     return null;
   }
@@ -272,8 +298,114 @@ export class PenalityComponent implements OnInit {
   getErrorMessageForYetfesmbetKen(): string {
     const field = this.firstFormGroup.get('violationDate');
 
+<<<<<<< HEAD
     if (field?.hasError('required')) {
       return this.translate.instant('ERROR.VIOLATION_DATE_REQUIRED');
+=======
+  if (field?.hasError('required')) {
+    return this.translate.instant('ERROR.REQUIRED');
+  }
+
+  if (field?.hasError('dateNotTheFuture')) {
+    return field.getError('dateNotTheFuture').message || this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
+  }
+
+  if (this.firstFormGroup.hasError('dateRangeInvalid')) {
+    return this.translate.instant('ERROR.DATE_RANGE_INVALID');
+  }
+
+  return '';
+}
+
+
+ getNumberErrorMessage(): string {
+  const field = this.firstFormGroup.get('ticketNo');
+
+  if (field?.hasError('required')) {
+    return this.translate.instant('ERROR.TICKET_REQUIRED');
+  }
+
+  if (field?.hasError('pattern')) {
+    return this.translate.instant('ERROR.TICKET_PATTERN');
+  }
+
+  return '';
+}
+
+
+
+calculateTotal(): void {
+  const values = this.secondFormGroup.getRawValue();
+  const total = (values.penalityPoints || 0) + (values.delayAmount || 0) + (values.storedPoint || 0);
+  this.secondFormGroup.patchValue({ totalAmount: total });
+}
+
+submitFirstForm(): void {
+  console.log('Form validity:', this.firstFormGroup.valid);
+  console.log('Selected driver:', this.selectedDriver);
+
+  if (this.firstFormGroup.valid && this.selectedDriver?.mainGuid) {
+    const dto: Penality = {
+      ...this.firstFormGroup.value,
+      parentGuid: this.selectedDriver.mainGuid
+    };
+
+    const region = this.selectedDriver?.issuerRegion;
+    const licenseCategory = this.selectedDriver?.licenseCategory;
+    const licenseNumber = this.selectedDriver?.licenseNumber;
+
+    console.log('Sending to penalty service:', { region, licenseCategory, licenseNumber });
+
+    this.penalityService.createPenality(dto, licenseNumber)
+      .subscribe({
+        next: (response) => {
+           this.toastr.success(this.translate.instant('TOASTER.SUCCESS.PENAL'));
+
+          console.log("Response from backend:", response);
+
+          const {
+            amount,
+            penalityPoints,
+            delayPoints,
+            delayAmount,
+            storedPoint,
+            totalAmount
+          } = response;
+
+          this.secondFormGroup.patchValue({
+            penalityPoints: penalityPoints,
+            amount: amount,
+            delayPoints: delayPoints,
+            delayAmount: delayAmount,
+            storedPoint: storedPoint ?? 0,
+            totalAmount: totalAmount
+          });
+
+          console.log('Second form group after patching:', this.secondFormGroup.value);
+        },
+        error: (err) => {
+          console.error('Error submitting form:', err);
+          this.toastr.error(this.translate.instant('TOASTER.ERROR.PENAL'));
+
+        }
+      });
+  } else {
+    // console.error('Form invalid or driver not selected');
+  }
+}
+
+
+
+
+
+
+
+
+  onKeyDown(event: KeyboardEvent){
+    const allowKey = ['Enter','Backspace', 'Escape', 'Delete','Tab','Dot'];
+    if(allowKey.includes(event.key)){
+      return;
+>>>>>>> 2a952533e7f946b021b641cedc91bdb322eb4f70
     }
 
     if (field?.hasError('dateNotTheFuture')) {

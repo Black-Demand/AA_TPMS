@@ -3,9 +3,9 @@
     <mat-card-header>
       <mat-card-title>{{'TEMP.TEMP_FORM_TITLE' | translate }}</mat-card-title>
     </mat-card-header>
-    <div style="margin: 20px 0;">
+    <!-- <div style="margin: 20px 0;">
       <mat-divider></mat-divider>
-    </div>
+    </div> -->
 
     <mat-card-content>
       <!-- Section 1: Issuer Information -->
@@ -87,20 +87,23 @@
         <!-- Amharic Names -->
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.NAME_PLACEHOLDER' | translate }}</mat-label>
-          <input matInput formControlName="firstNameAmh" required>
+          <input matInput formControlName="firstNameAmh" required  amharicOnly>
           <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+           <mat-error >{{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.F_NAME_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="fatherNameAmh" required>
           <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+          <mat-error >{{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.G_NAME_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="grandNameAmh" required>
           <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+          <mat-error >{{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}</mat-error>
         </mat-form-field>
       </div>
 
@@ -126,7 +129,7 @@
       </div>
 
       <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
+        <mat-form-field appearance="outline" class="form-field" style="flex: 0.62;">
           <mat-label>{{'SEARCH.NATIONALITY_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="nationality" required>
             <mat-option *ngFor="let country of nationalities" [value]="country.code">
@@ -146,23 +149,20 @@
           <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
-
-        <mat-form-field appearance="outline" class="form-field">
+        
+        <mat-form-field appearance="outline" class="form-field" style="flex: 0.8;">
           <mat-label>{{'TEMP.DOB_PLACEHOLDER' | translate }}</mat-label>
           <input matInput [matDatepicker]="dobPicker" formControlName="birthDate" required>
           <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
           <mat-datepicker #dobPicker></mat-datepicker>
           <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
-      <mat-error
-  *ngIf="registrationForm.get('birthDate')?.hasError('minAge') && registrationForm.get('birthDate')?.touched"
-  [translate]="'ERROR.MIN_AGE'"
-  [translateParams]="{ minAge: 18 }">
-</mat-error>
-
+          <mat-error *ngIf="registrationForm.get('birthDate')?.hasError('minAge') && registrationForm.get('birthDate')?.touched"
+            [translate]="'ERROR.MIN_AGE'" [translateParams]="{ minAge: 18 }">
+          </mat-error>
         </mat-form-field>
 
 
-        <mat-form-field appearance="outline" class="form-field phone-input-container" style="max-width: 250px;">
+        <mat-form-field appearance="outline" class="form-field phone-input-container" >
           <mat-label>{{'TEMP.TEL' | translate }}</mat-label>
           <span matPrefix>+251 &nbsp;</span>
           <input matInput formControlName="tel1" required maxlength="9" (input)="onPhoneInput($event)"

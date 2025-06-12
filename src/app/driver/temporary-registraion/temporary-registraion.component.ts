@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { dateCannotBeTheFuture, minAgeValidator } from '../age.validate';
  
@@ -28,7 +28,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-
+import { amharicOnlyValidator } from '../../service/amharicOnlyValidator';
 @Component({
   selector: 'app-temporary-registraion',
   standalone: true,
@@ -49,7 +49,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatStepperModule,
     MatTabsModule,
     MatDividerModule,
-    TranslateModule   
+    TranslateModule,
+    
   ],
   templateUrl: './temporary-registraion.component.html',
   styleUrls: ['./temporary-registraion.component.css']
@@ -81,6 +82,8 @@ export class TemporaryRegistraionComponent implements OnInit {
   selectedWoredaCode!: number;
   selectedLicenceRegionCode: number = 0;
 
+  amharicCharError = false;
+
 
 
   
@@ -91,7 +94,9 @@ export class TemporaryRegistraionComponent implements OnInit {
     private lookupservice: LookupService,
     private toastr: ToastrService,
     private router: Router,
-    private translate : TranslateService
+    private translate : TranslateService,
+    private cdr: ChangeDetectorRef
+
   ) {
     this.registrationForm = this.fb.group({
       licenceRegion: ['', Validators.required],
@@ -99,9 +104,9 @@ export class TemporaryRegistraionComponent implements OnInit {
       licenceGrade: ['', Validators.required],
       licenceNo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
       issuanceDate: ['', [Validators.required, dateCannotBeTheFuture()]],      
-      firstNameAmh: ['', Validators.required],
-      fatherNameAmh: ['', Validators.required],
-      grandNameAmh: ['', Validators.required],      
+      firstNameAmh: ['', [Validators.required , amharicOnlyValidator(), ]],
+      fatherNameAmh: ['', [Validators.required , amharicOnlyValidator()]],
+      grandNameAmh: ['', [Validators.required , amharicOnlyValidator()]],      
       firstName: ['', Validators.required],
       fatherName: ['', Validators.required],
       grandName: ['', Validators.required],      
@@ -118,6 +123,10 @@ export class TemporaryRegistraionComponent implements OnInit {
       photo: [null, Validators.required]
     });
   }
+
+
+
+
 
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -167,6 +176,8 @@ export class TemporaryRegistraionComponent implements OnInit {
     this.loadCategories();
     this.loadLicenceRegions();
     this.loadNationality();
+
+    
   }
    
   onRegionChange(regionCode: number) {
@@ -258,6 +269,8 @@ export class TemporaryRegistraionComponent implements OnInit {
 
 
   
+
+
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;

@@ -61,7 +61,14 @@
     "PAY_BUTTON": "Paid",
     "BACK_BUTTON": "Go Back"
   },
-
+  "PENAL_TABLE" : {
+        "TITLE" : "Penality Information Detail",
+        "SER_NO" : "Ser.No",
+        "POINT_AMOUNT" : "V.G Payment",
+        "TOTAL_PAY" : "Total Payment",
+        "PAY_STATUS" : "Payment Status",
+        "IS_SUS" : "Is Suspended?"        
+  },
   "TEMP": {
     "TEMP_FORM_TITLE": "Temporary Driver Registration",
     "SEX": "Gender",
@@ -83,7 +90,8 @@
     "DATE_RANGE_INVALID": "violation date can not execced Accused date",
     "MIN_AGE": "You must be at least {{minAge}} years old",
     "DOB_REQUIRED": "Date of birth is required",
-    "DATE_REQUIRED": "Date is required"
+    "DATE_REQUIRED": "Date is required",
+    "INVALID_AMHARIC_CHARACTERS" : "Use only amharic Characters"
   },
   "COMMON": {
     "DASHBOARD": "Dashboard",
@@ -114,12 +122,14 @@
     "SUCCESS" : {
       "PENAL" : "penality Submitted Succesfully",
       "ORDER" : "Order Submitted Succesfully",
-      "TEMP" : "Driver Submitted Succesfully"
+      "TEMP" : "Driver Submitted Succesfully",
+      "TRAFF" : "Traffic Penality submitted Succesfully"
     },
     "ERROR" :{
       "PENAL" : "Error Submitting Penlaity",
       "ORDER" : "Error Submitting Order",
-      "TEMP" : "Error Submitting Driver"
+      "TEMP" : "Error Submitting Driver",
+      "TRAFF" : "Error Submittig Traffic Penality"
     }
   }
 }
