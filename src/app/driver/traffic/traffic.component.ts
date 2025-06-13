@@ -212,7 +212,7 @@ export class TrafficComponent  implements OnInit {
     let field = this.trafficForm.get('violationDate');
 
     if (field?.hasError('required')) {
-      return 'The field is Required';
+      return this.translate.instant('ERROR.REQUIRED');
     }
     if (field?.hasError('dateNotTheFuture')) {
       return field.getError('dateNotTheFuture').message;
@@ -225,7 +225,7 @@ export class TrafficComponent  implements OnInit {
     let field = this.trafficForm.get('dateAccused');
 
     if (field?.hasError('required')) {
-      return 'The field is Required';
+    return this.translate.instant('ERROR.REQUIRED');
     }
     if (field?.hasError('dateNotTheFuture')) {
       return field.getError('dateNotTheFuture').message;

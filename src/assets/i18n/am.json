@@ -59,7 +59,14 @@
      "MPD": "የቁሳቁስ/ንብረት ጉዳት",
     "PAYMENT_PLACEHOLDER": "ክፍያ መጠን",
     "PAY_BUTTON": "ተከፍሏል",
-    "BACK_BUTTON": "ወድ ኋላ ተመልስ"
+    "BACK_BUTTON": "ወድ ኋላ ተመልስ",
+    "TIE": "የትራፊክ መረጃ ማስገቢያ",
+    "OFFENCE_POINT": "የጥፋት ነጥብ",
+    "OFFENCE_PAYMENT_AMOUNT": "የጥፋት ክፍያ መጠን",
+    "DELAY_PAIED_AMOUNT": "የተከፈለበት መጠን መዘግየት",
+    "DELAY_PAIED_POINT": "የተከፈለበት ነጥብ መዘግየት",
+    "STORED_POINT": "የተከማቸ ነጥብ",
+    "TOTAL_POINT": "ጠቅላላ ነጥብ"
   },
   "PENAL_TABLE" : {
         "TITLE" : "የቅጣት መረጃ ዝርዝር",

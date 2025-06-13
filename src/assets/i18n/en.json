@@ -59,7 +59,14 @@
     "MPD": "Material/Property Damage",
     "PAYMENT_PLACEHOLDER": "Payment Amount",
     "PAY_BUTTON": "Paid",
-    "BACK_BUTTON": "Go Back"
+    "BACK_BUTTON": "Go Back",
+    "TIE": "Traffic Information Entry",
+    "OFFENCE_POINT": "Offence Point",
+    "OFFENCE_PAYMENT_AMOUNT": "Offence payment amount",
+    "DELAY_PAIED_AMOUNT": "Delay Paied Point",
+    "DELAY_PAIED_POINT": "Delay Paied Point",
+    "STORED_POINT": "Stored Point",
+    "TOTAL_POINT": "Total Point"
   },
   "PENAL_TABLE" : {
         "TITLE" : "Penality Information Detail",

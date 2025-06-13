@@ -1,7 +1,7 @@
 <form [formGroup]="trafficForm" (ngSubmit)="onSubmit()" class="registration-form">
   <mat-card class="form-card">
     <mat-card-header>
-      <mat-card-title>Traffic Information Entry</mat-card-title>
+      <mat-card-title>{{'SEARCH.TIE' | translate}}</mat-card-title>
     </mat-card-header>
     <div style="margin: 20px 0;">
       <mat-divider></mat-divider>
@@ -35,6 +35,7 @@
               {{ violationgrade.code }}
             </mat-option>
           </mat-select>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
@@ -45,6 +46,7 @@
              {{ violationtype.code }} - {{ violationtype.amDescription }}
             </mat-option>
           </mat-select>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
@@ -70,6 +72,7 @@
               Two
             </mat-option>
           </mat-select>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
@@ -79,6 +82,7 @@
               {{action.label}}
             </mat-option>
           </mat-select>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
       </div>
 
@@ -91,6 +95,7 @@
               {{region.amDescription}}
             </mat-option>
           </mat-select>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
@@ -100,11 +105,13 @@
               {{major.majorCode}}
             </mat-option>
           </mat-select>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.PLATE_NO_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="newPlateNo" required>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
       </div>
 
@@ -117,7 +124,7 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.ACCUSED' | translate}}</mat-label>
           <input matInput formControlName="violationPlace" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
@@ -132,7 +139,7 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.PAYMENT_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="amount" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
       </div>
@@ -141,7 +148,7 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.TICKET_NO_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="ticketNo" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
@@ -154,25 +161,13 @@
               {{vehicle.descriptionAmh}}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
-<!-- 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>{{'SEARCH.ACCUSED_TIME' | translate}}</mat-label>
-            <input matInput formControlName="violationTime" required>
-          <mat-error>Required field</mat-error>
-           <input matInput [matTimepicker]="timePicker" formControlName="violationTime" required>
-          <mat-timepicker-toggle matSuffix [for]="timePicker"></mat-timepicker-toggle>
-          <mat-timepicker #timePicker></mat-timepicker>
-          <mat-error *ngIf="trafficForm.get('violationTime')?.invalid && trafficForm.get('violationTime')?.touched">
-            Please select a valid time
-          </mat-error>
-        </mat-form-field> -->
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Accuesd Time</mat-label>
+          <mat-label>{{'SEARCH.ACCUSED_TIME' | translate}}</mat-label>
           <input matInput formControlName="violationTime" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
       </div>

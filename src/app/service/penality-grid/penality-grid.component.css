@@ -1,101 +1,82 @@
+/* penalty-grid.component.css */
+
 .driver-license-container {
-  padding: 24px;
-  max-width: 1200px;
-  margin: 30px 24px 0 24px;
+  margin: 16px;
+  padding: 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-mat-card-header {
-  display: flex;
-  align-items: center;
-  width: 100%;
+.title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #3f51b5;
+  padding: 16px 0;
 }
 
-.spacer {
-  flex: 1 1 auto;
-}
-
-.wide-column {
-  min-width: 170px;
-  max-width: 300px;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-
-.back-button {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: inherit;
-  border: none;
-  box-shadow: none;
-}
-
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-  margin-bottom: 24px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 16px;
-  margin-top: 24px;
-}
-
-.results-section {
-  margin-top: 32px;
-}
-
-.table-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-/* ✅ SCROLLABLE WRAPPER */
-.table-scroll {
+.table-container {
   overflow-x: auto;
-  width: 100%;
+  margin-top: 16px;
 }
 
-/* ✅ SET A MINIMUM WIDTH TO ENABLE SCROLLING */
-table {
+.penalty-table {
   width: 100%;
-  min-width: 1000px; /* 👈 Adjust this as needed */
+  border-collapse: collapse;
 }
 
-th.mat-header-cell {
-  font-weight: bold;
+.penalty-table th {
+  background-color: #3f51b5;
+  color: white;
+  font-weight: 500;
+  padding: 12px 16px;
+  text-align: left;
+}
+
+.penalty-table td {
+  padding: 12px 16px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.penalty-table tr:hover {
   background-color: #f5f5f5;
 }
 
-.mat-column-action {
-  width: 80px;
-  text-align: center;
+.text-ellipsis {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 200px;
 }
 
-/* ✅ Responsive tweaks */
+.paid {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.unpaid {
+  color: #f44336;
+  font-weight: 500;
+}
+
+.suspended {
+  color: #ff9800;
+  font-weight: 500;
+}
+
+mat-paginator {
+  margin-top: 16px;
+  background-color: transparent;
+}
+
+/* Responsive adjustments */
 @media (max-width: 768px) {
   .driver-license-container {
-    padding: 16px;
-    margin: 0 8px;
+    margin: 8px;
+    padding: 8px;
   }
-
-  .form-grid {
-    grid-template-columns: 1fr;
+  
+  .penalty-table th, 
+  .penalty-table td {
+    padding: 8px 12px;
+    font-size: 0.9rem;
   }
-}
-
-/* Optional scrollbar styling (kept global) */
-.table-scroll::-webkit-scrollbar {
-  height: 6px;
-}
-.table-scroll::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 3px;
 }

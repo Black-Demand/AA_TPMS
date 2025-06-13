@@ -1,87 +1,92 @@
 <mat-card class="driver-license-container">
- <mat-card-header>
-  <mat-card-title>
-    {{ 'PENAL_TABLE.TITLE' | translate }}
-  </mat-card-title>
-</mat-card-header>
+  <mat-card-header>
+    <mat-card-title class="title">
+      {{ 'PENAL_TABLE.TITLE' | translate }}
+    </mat-card-title>
+  </mat-card-header>
 
-  <div class="results-section">
-      <div class="table-scroll">
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+  <mat-card-content>
+    <div class="table-container">
+      <table mat-table [dataSource]="dataSource" class="penalty-table" matSort>
+        <!-- Column Definitions -->
+        <ng-container matColumnDef="sr_no">
+          <th mat-header-cell *matHeaderCellDef> {{'PENAL_TABLE.SER_NO' | translate }} </th>
+          <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 + (pageIndex * pageSize) }} </td>
+        </ng-container>
 
-      <!-- Column Definitions -->
-      <ng-container matColumnDef="sr_no">
-        <th mat-header-cell *matHeaderCellDef> {{'PENAL_TABLE.SER_NO' | translate }} </th>
-        <td mat-cell *matCellDef="let element; let i = index"> {{ i + 1 }} </td>
-      </ng-container>
+        <ng-container matColumnDef="fullname">
+          <th mat-header-cell *matHeaderCellDef>{{'SEARCH.FULL_NAME' | translate }}</th>
+          <td mat-cell *matCellDef="let element" class="text-ellipsis"> {{ element.fullname }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="fullname">
-        <th mat-header-cell *matHeaderCellDef  class="wide-column" >{{'SEARCH.FULL_NAME' | translate  }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.fullname }} </td>
-      </ng-container>
+        <ng-container matColumnDef="licenseNo">
+          <th mat-header-cell *matHeaderCellDef>{{'SEARCH.LICENCE_NUMBER_PLACEHOLDER' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.licenseNo }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="licenseNo">
-        <th mat-header-cell *matHeaderCellDef class="wide-column">{{'SEARCH.LICENCE_NUMBER_PLACEHOLDER' | translate  }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.licenseNo }} </td>
-      </ng-container>
+        <ng-container matColumnDef="ticketNo">
+          <th mat-header-cell *matHeaderCellDef>{{'SEARCH.TICKET_NO_PLACEHOLDER' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ticketNo }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="ticketNo">
-        <th mat-header-cell *matHeaderCellDef>{{'SEARCH.TICKET_NO_PLACEHOLDER' | translate  }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.ticketNo }} </td>
-      </ng-container>
+        <ng-container matColumnDef="violationDate">
+          <th mat-header-cell *matHeaderCellDef>{{'SEARCH.VIOLATION_DATE_PLACEHOLDER' | translate }}</th>
+          <td mat-cell *matCellDef="let element" class="text-ellipsis"> {{ element.violationDate}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="violationDate">
-        <th mat-header-cell *matHeaderCellDef class="wide-column"  >{{'SEARCH.VIOLATION_DATE_PLACEHOLDER' | translate  }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.violationDate }} </td>
-      </ng-container>
+        <ng-container matColumnDef="accusedDate">
+          <th mat-header-cell *matHeaderCellDef>{{'SEARCH.DATE_ACCUSED_PLACEHOLDER' | translate }}</th>
+          <td mat-cell *matCellDef="let element" class="text-ellipsis"> {{ element.accusedDate }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="accusedDate">
-        <th mat-header-cell *matHeaderCellDef class="wide-column" >{{'SEARCH.DATE_ACCUSED_PLACEHOLDER' | translate  }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.accusedDate }} </td>
-      </ng-container>
+        <ng-container matColumnDef="violationGrade">
+          <th mat-header-cell *matHeaderCellDef>{{'SEARCH.VIOLATION_GRADE_PLACEHOLDER' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.violationGrade }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="violationGrade">
-        <th mat-header-cell *matHeaderCellDef>{{'SEARCH.VIOLATION_GRADE_PLACEHOLDER' | translate  }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.violationGrade }} </td>
-      </ng-container>
+        <ng-container matColumnDef="pointPayment">
+          <th mat-header-cell *matHeaderCellDef>{{'PENAL_TABLE.POINT_AMOUNT' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.pointPayment}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="pointPayment">
-        <th mat-header-cell *matHeaderCellDef>{{'PENAL_TABLE.POINT_AMOUNT' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.pointPayment }} </td>
-      </ng-container>
+        <ng-container matColumnDef="totalAmount">
+          <th mat-header-cell *matHeaderCellDef>{{'PENAL_TABLE.TOTAL_PAY' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.totalAmount}} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="totalAmount">
-        <th mat-header-cell *matHeaderCellDef>{{'PENAL_TABLE.TOTAL_PAY' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.totalAmount }} </td>
-      </ng-container>
+        <ng-container matColumnDef="orderNo">
+          <th mat-header-cell *matHeaderCellDef>{{'SEARCH.ORDER_NO_PLACEHOLDER' | translate }}</th>
+          <td mat-cell *matCellDef="let element"> {{ element.orderNo }} </td>
+        </ng-container>
 
-      <ng-container matColumnDef="orderNo">
-        <th mat-header-cell *matHeaderCellDef>{{'SEARCH.ORDER_NO_PLACEHOLDER' | translate  }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.orderNo }} </td>
-      </ng-container>
+        <ng-container matColumnDef="payStatus">
+          <th mat-header-cell *matHeaderCellDef>{{'PENAL_TABLE.PAY_STATUS' | translate }}</th>
+          <td mat-cell *matCellDef="let element" [class.paid]="element.payStatus === 'Paid'"
+              [class.unpaid]="element.payStatus === 'Unpaid'">
+            {{ element.payStatus }}
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="payStatus">
-        <th mat-header-cell *matHeaderCellDef>{{'PENAL_TABLE.PAY_STATUS' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.payStatus }} </td>
-      </ng-container>
+        <ng-container matColumnDef="suspened">
+          <th mat-header-cell *matHeaderCellDef>{{'PENAL_TABLE.IS_SUS' | translate }}</th>
+          <td mat-cell *matCellDef="let element" [class.suspended]="element.suspened === 'Yes'">
+            {{ element.suspened }}
+          </td>
+        </ng-container>
 
-      <ng-container matColumnDef="suspened">
-        <th mat-header-cell *matHeaderCellDef>{{'PENAL_TABLE.IS_SUS' | translate }}</th>
-        <td mat-cell *matCellDef="let element"> {{ element.suspened }} </td>
-      </ng-container>
+        <!-- Table Row Definitions -->
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
 
-      <!-- Table Row Definitions -->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-<mat-paginator
-  [length]="totalCount"
-  [pageSize]="pageSize"
-  [pageSizeOptions]="[5, 10, 20]"
-  [pageIndex]="pageIndex"
-  showFirstLastButtons
-  (page)="onPageChange($event)">
-</mat-paginator>
-  </div>
-  </div>
+      <mat-paginator
+        [length]="totalCount"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20]"
+        [pageIndex]="pageIndex"
+        showFirstLastButtons
+        (page)="onPageChange($event)">
+      </mat-paginator>
+    </div>
+  </mat-card-content>
 </mat-card>

@@ -16,6 +16,7 @@ import {
   MatPaginatorModule,
   PageEvent,
 } from '@angular/material/paginator';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-penality-grid',
@@ -28,6 +29,7 @@ import {
     MatTableModule,
     TranslateModule,
     MatPaginatorModule,
+  
   ],
   templateUrl: './penality-grid.component.html',
   styleUrl: './penality-grid.component.css',
@@ -43,6 +45,7 @@ export class PenalityGridComponent {
     private translate: TranslateService,
     private penalityService: PenalityService
   ) {}
+  
   displayedColumns: string[] = [
     'sr_no',
     'fullname',
@@ -68,8 +71,8 @@ export class PenalityGridComponent {
             fullname: p.fullName,
             licenseNo: p.licenceNo,
             ticketNo: p.ticketNo,
-            violationDate: p.violationDate,
-            accusedDate: p.dateAccused,
+            violationDate: p.violationDate ? new Date(p.violationDate).toISOString().split('T')[0] : '',
+            accusedDate: p.dateAccused ? new Date(p.dateAccused).toISOString().split('T')[0] : '',
             violationGrade: p.violationGrade,
             pointPayment: p.amount,
             totalAmount: p.totalAmount,

@@ -30,6 +30,7 @@ import { OrderdetailService } from '../../services/orderdetail.service';
 import { OrderWithPenalityRequest } from '../../Models/OrderDetail';
 import { ToastrService } from 'ngx-toastr';
 import { response } from 'express';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-penalty-dif',
@@ -49,6 +50,7 @@ import { response } from 'express';
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule,
+    TranslateModule
   ],
   templateUrl: './penalty-dif.component.html',
   styleUrl: './penalty-dif.component.css',
@@ -62,25 +64,17 @@ export class PenaltyDifComponent implements OnInit {
     private fb: FormBuilder,
     private lookupService: LookupService,
     private orderDetailService: OrderdetailService,
-    private toastr: ToastrService
-  ) {
-    
-  }
+    private toastr: ToastrService,
+    private translate: TranslateService
+  ) {}
+  
   ngOnInit(): void {
     this.loadCustomOffences();
-    this.generateTicketNumber();
     this.penaltyForms();
-    
-  //  this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
-  //   const selectedOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
-  //   if (selectedOffence) {
-  //     this.penaltyForm.get('amount')?.setValue(selectedOffence.fineAmount);
-  //   }
-  // });
+    this.generateTicketNumber();
   }
 
-  penaltyForms(): void{
-    
+  penaltyForms(): void {
     this.penaltyForm = this.fb.group(
       {
         fullName: ['', Validators.required],
@@ -94,27 +88,32 @@ export class PenaltyDifComponent implements OnInit {
       },
       { validators: this.dateRangeValidator }
     );
+
+    // Set up value change subscription for violationGrade
+    this.penaltyForm.get('violationGrade')?.valueChanges.subscribe(gradeCode => {
+      this.onPenaltyTypeChange(gradeCode);
+    });
   }
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const yetKen = group.get('yetfesmbteKen')?.value;
-    const yetsKen = group.get('yetkessbteKen')?.value;
+    const violationDate = group.get('violationDate')?.value;
+    const dateAccused = group.get('dateAccused')?.value;
 
-    if (yetKen && yetsKen && yetKen > yetsKen) {
+    if (violationDate && dateAccused && new Date(violationDate) > new Date(dateAccused)) {
       return { dateRangeInvalid: true };
     }
     return null;
   }
 
   get minEndDate(): Date | null {
-    return this.penaltyForm.get('yetfesmbteKen')?.value;
+    return this.penaltyForm.get('violationDate')?.value;
   }
 
   getErrorForViolationDate(): string {
     const field = this.penaltyForm.get('violationDate');
 
     if (field?.hasError('required')) {
-      return 'The violationDate  is required';
+      return 'The violationDate is required';
     }
 
     if (field?.hasError('dateCannotBeTheFuture')) {
@@ -128,18 +127,19 @@ export class PenaltyDifComponent implements OnInit {
     const field = this.penaltyForm.get('dateAccused');
 
     if (field?.hasError('required')) {
-      return 'The Yetkessbte Ken is required';
+      return 'The Date Accused is required';
     }
 
     if (field?.hasError('dateCannotBeTheFuture')) {
       return field.getError('dateCannotBeTheFuture').message;
     }
     if (this.penaltyForm.hasError('dateRangeInvalid')) {
-      return 'Date Accused  must be greater than or equal to Violation Date';
+      return 'Date Accused must be greater than or equal to Violation Date';
     }
 
     return '';
   }
+
   getPaymentErrorMessage(): string {
     let field = this.penaltyForm.get('amount');
     if (field?.hasError('required')) {
@@ -151,53 +151,49 @@ export class PenaltyDifComponent implements OnInit {
     return '';
   }
 
-   generateTicketNumber(){
+  
+
+  generateTicketNumber() {
     const ticketNum = Math.floor(100000 + Math.random() * 900000);
     const ticketNo = `${ticketNum}`;
-
     this.penaltyForm?.get('ticketNo')?.setValue(ticketNo);
     this.penaltyForm?.get('ticketNo')?.disable();
   }
 
   loadCustomOffences() {
-    this.lookupService.getCustomOffenceGrades().subscribe(data =>{
-        this.offences = data;
+    this.lookupService.getCustomOffenceGrades().subscribe(data => {
+      this.offences = data;
     });
   }
 
-
+ 
   loadViolationTypes(code: string) {
+    if (!code) {
+      this.violationtypes = [];
+      this.penaltyForm.get('violationType')?.reset();
+      this.penaltyForm.get('amount')?.reset();
+      return;
+    }
+
     this.lookupService.getAllOffenceNew([code]).subscribe(data => {
-        this.violationtypes = data;
+      this.violationtypes = data;
+      this.penaltyForm.get('violationType')?.reset();
+      this.penaltyForm.get('amount')?.reset();
 
-        
-      //   this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
-      //   const selectOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
-      //   console.log(selectOffence);
-      //   if (selectOffence) {
-      //     this.penaltyForm.get('amount')?.setValue(selectOffence.fineAmount);
-      //   }
-
-      //   this.onPenaltyTypeChange(offenceId);
-      // });
-
+     
       this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
-        const selectedGrade = this.violationtypes.find(g => g.code === offenceId);
-        console.log(selectedGrade);
-        if (selectedGrade) {
-         this.penaltyForm.get('amount')?.setValue(String(selectedGrade.fineAmount));
+        const selectedViolation = this.violationtypes.find(v => v.code === offenceId);
+        if (selectedViolation) {
+          this.penaltyForm.get('amount')?.setValue(selectedViolation.fineAmount.toString());
+        } else {
+          this.penaltyForm.get('amount')?.reset();
         }
-
-        this.onPenaltyTypeChange(offenceId);
       });
-
-
     });
   }
 
   onPenaltyTypeChange(code: string) {
     this.loadViolationTypes(code);
-    this.penaltyForm.get('yetCode')?.reset();
   }
 
 
@@ -207,7 +203,7 @@ export class PenaltyDifComponent implements OnInit {
       return;
     }
 
-    const formValue = this.penaltyForm.value;
+    const formValue = this.penaltyForm.getRawValue(); // Use getRawValue() to get disabled fields
 
     const request: OrderWithPenalityRequest = {
       orderDetailDTO: {
@@ -228,17 +224,20 @@ export class PenaltyDifComponent implements OnInit {
 
     this.orderDetailService.create(request).subscribe({
       next: (response) => {
-        this.toastr.success("Miscellaneous penality Created successfully")
+        this.toastr.success("Miscellaneous penality Created successfully");
         console.log('Miscellaneous penality Created successfully:', response);
+        this.onReset();
       },
       error: (error) => {
-        this.toastr.error("Error occured while creating miscellaneous penality" , error)
+        this.toastr.error("Error occurred while creating miscellaneous penality", error);
         console.error('Creation failed:', error);
       },
     });
   }
 
   onReset(): void {
-    this.penaltyForm.reset();
+    // this.penaltyForm.reset();
+    // this.generateTicketNumber();
+    // this.violationtypes = [];
   }
 }
