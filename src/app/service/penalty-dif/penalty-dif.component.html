@@ -24,10 +24,9 @@
           <mat-error>Required field</mat-error>
         </mat-form-field>
 
-
         <mat-form-field appearance="outline" class="form-field" style="width: 460px;">
           <mat-label>Violation Type</mat-label>
-          <mat-select formControlName="violationType" required>
+          <mat-select formControlName="offenceId" required (selectionChange)="onViolationTypeChange($event.value)">
             <mat-option *ngFor="let violation of violationtypes" [value]="violation.code">
               {{ violation.amDescription }}
             </mat-option>

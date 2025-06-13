@@ -63,29 +63,20 @@ export class PenaltyDifComponent implements OnInit {
     private lookupService: LookupService,
     private orderDetailService: OrderdetailService,
     private toastr: ToastrService
-  ) {
-    
-  }
+  ) {}
+
   ngOnInit(): void {
     this.loadCustomOffences();
     this.generateTicketNumber();
     this.penaltyForms();
-    
-  //  this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
-  //   const selectedOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
-  //   if (selectedOffence) {
-  //     this.penaltyForm.get('amount')?.setValue(selectedOffence.fineAmount);
-  //   }
-  // });
   }
 
-  penaltyForms(): void{
-    
+  penaltyForms(): void {
     this.penaltyForm = this.fb.group(
       {
         fullName: ['', Validators.required],
         violationGrade: ['', Validators.required],
-        violationType: ['', Validators.required],
+        offenceId: ['', Validators.required],
         amount: [{ value: '', disabled: true }, Validators.required],
         violationDate: ['', [Validators.required, dateCannotBeTheFuture()]],
         dateAccused: ['', [Validators.required, dateCannotBeTheFuture()]],
@@ -151,7 +142,7 @@ export class PenaltyDifComponent implements OnInit {
     return '';
   }
 
-   generateTicketNumber(){
+  generateTicketNumber() {
     const ticketNum = Math.floor(100000 + Math.random() * 900000);
     const ticketNo = `${ticketNum}`;
 
@@ -159,47 +150,37 @@ export class PenaltyDifComponent implements OnInit {
     this.penaltyForm?.get('ticketNo')?.disable();
   }
 
-  loadCustomOffences() {
-    this.lookupService.getCustomOffenceGrades().subscribe(data =>{
-        this.offences = data;
-    });
+ loadCustomOffences() {
+  this.lookupService.getCustomOffenceGrades().subscribe((data) => {
+    this.offences = data;
+    console.log('Custom Offence Grades:', data);
+  });
+}
+
+loadViolationTypes(code: string) {
+  if (!code) return;
+
+  this.lookupService.getAllOffenceNew([code]).subscribe((data) => {
+    this.violationtypes = data;
+    console.log('Loaded violation types:', data);
+
+    this.penaltyForm.get('offenceId')?.reset();
+    this.penaltyForm.get('amount')?.reset();
+  });
+}
+
+onPenaltyTypeChange(offenceGradeCode: string) {
+  this.loadViolationTypes(offenceGradeCode);
+}
+
+onViolationTypeChange(offenceCode: string) {
+  const selected = this.violationtypes.find(v => v.code === offenceCode);
+  console.log('Selected violation type:', selected);
+
+  if (selected) {
+    this.penaltyForm.get('amount')?.setValue(String(selected.fineAmount));
   }
-
-
-  loadViolationTypes(code: string) {
-    this.lookupService.getAllOffenceNew([code]).subscribe(data => {
-        this.violationtypes = data;
-
-        
-      //   this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
-      //   const selectOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
-      //   console.log(selectOffence);
-      //   if (selectOffence) {
-      //     this.penaltyForm.get('amount')?.setValue(selectOffence.fineAmount);
-      //   }
-
-      //   this.onPenaltyTypeChange(offenceId);
-      // });
-
-      this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
-        const selectedGrade = this.violationtypes.find(g => g.code === offenceId);
-        console.log(selectedGrade);
-        if (selectedGrade) {
-         this.penaltyForm.get('amount')?.setValue(String(selectedGrade.fineAmount));
-        }
-
-        this.onPenaltyTypeChange(offenceId);
-      });
-
-
-    });
-  }
-
-  onPenaltyTypeChange(code: string) {
-    this.loadViolationTypes(code);
-    this.penaltyForm.get('yetCode')?.reset();
-  }
-
+}
 
   onSubmit(): void {
     if (this.penaltyForm.invalid) {
@@ -222,17 +203,20 @@ export class PenaltyDifComponent implements OnInit {
         violationDate: formValue.violationDate,
         dateAccused: formValue.dateAccused,
         violationGrade: formValue.violationGrade,
-        offenceId: formValue.violationType,
+        offenceId: formValue.offenceId,
       },
     };
 
     this.orderDetailService.create(request).subscribe({
       next: (response) => {
-        this.toastr.success("Miscellaneous penality Created successfully")
+        this.toastr.success('Miscellaneous penality Created successfully');
         console.log('Miscellaneous penality Created successfully:', response);
       },
       error: (error) => {
-        this.toastr.error("Error occured while creating miscellaneous penality" , error)
+        this.toastr.error(
+          'Error occured while creating miscellaneous penality',
+          error
+        );
         console.error('Creation failed:', error);
       },
     });

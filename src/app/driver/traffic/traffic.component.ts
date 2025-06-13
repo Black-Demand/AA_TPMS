@@ -111,7 +111,7 @@ export class TrafficComponent  implements OnInit {
   this.generateTicketNumber();
 
   this.trafficForm.get('offenceId')?.valueChanges.subscribe(offenceId => {
-    const selectedOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
+    const selectedOffence = this.violationtypes.find(o => o.offenceId === Number(offenceId));
     if (selectedOffence) {
       this.trafficForm.get('amount')?.setValue(selectedOffence.fineAmount);
     }

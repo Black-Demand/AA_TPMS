@@ -90,7 +90,7 @@ namespace Lookup {
   }
 
   export interface OffenceNewDTO {
-    OffenceId: number;
+    offenceId: number;
     code: string;
     Description: string;
     amDescription: string;
