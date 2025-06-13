@@ -111,7 +111,7 @@ export class TrafficComponent  implements OnInit {
   this.generateTicketNumber();
 
   this.trafficForm.get('offenceId')?.valueChanges.subscribe(offenceId => {
-    const selectedOffence = this.violationtypes.find(o => o.OffenceId === Number(offenceId));
+    const selectedOffence = this.violationtypes.find(o => o.offenceId === Number(offenceId));
     if (selectedOffence) {
       this.trafficForm.get('amount')?.setValue(selectedOffence.fineAmount);
     }
@@ -271,14 +271,14 @@ export class TrafficComponent  implements OnInit {
     
   if (this.trafficForm.valid) {
     const formValue = {
-      ...this.trafficForm.getRawValue(),  // ✅ includes amount and all fields
+      ...this.trafficForm.getRawValue(), 
       fullName: this.selectedDriver.fullName,
       licenseNumber: this.selectedDriver.licenseNumber,
       ticket: this.trafficForm.get('ticketNo')?.value,
     
     };
 
-    console.log('🚀 Form Submitted:', formValue);  // ✅ debug
+    console.log('🚀 Form Submitted:', formValue); 
 
     this.penalityForTraffic.createPenalityForTraffic(formValue, formValue.licenseNumber).subscribe({
       next: () => this.toastr.success("Penalty created successfully"),

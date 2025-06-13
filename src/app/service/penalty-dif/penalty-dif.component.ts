@@ -79,7 +79,7 @@ export class PenaltyDifComponent implements OnInit {
       {
         fullName: ['', Validators.required],
         violationGrade: ['', Validators.required],
-        violationType: ['', Validators.required],
+        offenceId: ['', Validators.required],
         amount: [{ value: '', disabled: true }, Validators.required],
         violationDate: ['', [Validators.required, dateCannotBeTheFuture()]],
         dateAccused: ['', [Validators.required, dateCannotBeTheFuture()]],
@@ -151,8 +151,6 @@ export class PenaltyDifComponent implements OnInit {
     return '';
   }
 
-  
-
   generateTicketNumber() {
     const ticketNum = Math.floor(100000 + Math.random() * 900000);
     const ticketNo = `${ticketNum}`;
@@ -218,18 +216,21 @@ export class PenaltyDifComponent implements OnInit {
         violationDate: formValue.violationDate,
         dateAccused: formValue.dateAccused,
         violationGrade: formValue.violationGrade,
-        offenceId: formValue.violationType,
+        offenceId: formValue.offenceId,
       },
     };
 
     this.orderDetailService.create(request).subscribe({
       next: (response) => {
-        this.toastr.success("Miscellaneous penality Created successfully");
+        this.toastr.success('Miscellaneous penality Created successfully');
         console.log('Miscellaneous penality Created successfully:', response);
         this.onReset();
       },
       error: (error) => {
-        this.toastr.error("Error occurred while creating miscellaneous penality", error);
+        this.toastr.error(
+          'Error occured while creating miscellaneous penality',
+          error
+        );
         console.error('Creation failed:', error);
       },
     });

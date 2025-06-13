@@ -26,7 +26,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatMenuModule } from '@angular/material/menu';
 import { filter } from 'rxjs';
 import { LanguageService } from '../../services/language.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 interface Driver {
   mainGuid: string;
   fullName: string;
@@ -92,7 +92,8 @@ export class PenaltyDriverComponent {
     private router: Router,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private languageService: LanguageService
+    private languageService: LanguageService,
+    private translate : TranslateService
   ) {
     this.createForm();
   }
@@ -213,7 +214,7 @@ export class PenaltyDriverComponent {
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;
-            this.toastr.error('Driver not found with this information');
+            this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
           },
         });
     } else {
@@ -232,10 +233,7 @@ export class PenaltyDriverComponent {
             this.showResults = true;
           },
           error: (err) => {
-            this.toastr.error('Driver not found with this information', 'Error', {
-              timeOut: 2000,
-              progressBar: true,
-            });
+            this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;

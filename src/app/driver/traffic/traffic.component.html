@@ -27,7 +27,7 @@
       </div>
 
       <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
+        <mat-form-field appearance="outline" class="form-field" style="flex: 0.5;">
           <mat-label>{{'SEARCH.VIOLATION_GRADE_PLACEHOLDER' | translate}}</mat-label>
           <mat-select formControlName="violationGrade" required
             (selectionChange)="loadViolationTypeByGrade($event.value)">

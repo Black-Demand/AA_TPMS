@@ -37,12 +37,13 @@
                   <mat-label>{{'SEARCH.VIOLATION_TYPE_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="violationType" required>
             <mat-option *ngFor="let violation of violationtypes" [value]="violation.code">
-              {{ violation.amDescription }}
+            {{ violation.code }} - {{ violation.amDescription }}
             </mat-option>
           </mat-select>
           <mat-error>Required field</mat-error>
         </mat-form-field>
-      </div>
+        </div>
+
 
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
@@ -72,7 +73,11 @@
 
         
         <mat-form-field appearance="outline" class="form-field">
+<<<<<<< HEAD
            <mat-label>{{'SEARCH.REMARK_PLACEHOLDER' | translate }}</mat-label>
+=======
+          <mat-label>Description</mat-label>
+>>>>>>> 6a672964a5297915400317a4c1d493dbcebfa5e9
           <input matInput formControlName="desc" required>
           <mat-error>Required field</mat-error>
         </mat-form-field>
@@ -80,8 +85,8 @@
 
     </mat-card-content>
 
-    <mat-card-actions align="end">
-      <button mat-button type="button" (click)="onReset()">Reset</button>
+    <mat-card-actions align="end" class="form-actions">
+      <button mat-button type="button"  color="warn" (click)="onReset()">Reset</button>
       <button mat-raised-button color="primary" type="submit" >Submit</button>
     </mat-card-actions>
   </mat-card>
