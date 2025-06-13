@@ -9,6 +9,14 @@
         font-size: 26px;
     }
 }
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}
+
   .registration-form {
     display: flex;
     justify-content: center;

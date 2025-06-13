@@ -67,7 +67,8 @@
         "POINT_AMOUNT" : "V.G Payment",
         "TOTAL_PAY" : "Total Payment",
         "PAY_STATUS" : "Payment Status",
-        "IS_SUS" : "Is Suspended?"        
+        "IS_SUS" : "Is Suspended?",
+        "PENAL_BUTTON" : "Penality"        
   },
   "TEMP": {
     "TEMP_FORM_TITLE": "Temporary Driver Registration",
@@ -129,7 +130,8 @@
       "PENAL" : "Error Submitting Penlaity",
       "ORDER" : "Error Submitting Order",
       "TEMP" : "Error Submitting Driver",
-      "TRAFF" : "Error Submittig Traffic Penality"
+      "TRAFF" : "Error Submittig Traffic Penality",
+      "NOT_FOUND" : "Driver do not found with this information"
     }
   }
 }

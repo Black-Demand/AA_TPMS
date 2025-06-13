@@ -271,14 +271,14 @@ export class TrafficComponent  implements OnInit {
     
   if (this.trafficForm.valid) {
     const formValue = {
-      ...this.trafficForm.getRawValue(),  // ✅ includes amount and all fields
+      ...this.trafficForm.getRawValue(), 
       fullName: this.selectedDriver.fullName,
       licenseNumber: this.selectedDriver.licenseNumber,
       ticket: this.trafficForm.get('ticketNo')?.value,
     
     };
 
-    console.log('🚀 Form Submitted:', formValue);  // ✅ debug
+    console.log('🚀 Form Submitted:', formValue); 
 
     this.penalityForTraffic.createPenalityForTraffic(formValue, formValue.licenseNumber).subscribe({
       next: () => this.toastr.success("Penalty created successfully"),

@@ -28,7 +28,7 @@ import { filter } from 'rxjs';
 import { DriverInformationComponent } from '../driver-information/driver-information.component';
 import { MatDialog } from '@angular/material/dialog';
 import { LanguageService } from '../../services/language.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface Driver {
   mainGuid: string;
@@ -98,7 +98,9 @@ export class DriverInfoComponent {
     private toastr: ToastrService,
     private route: ActivatedRoute,
     private dialog: MatDialog,
-    private languageService: LanguageService 
+    private languageService: LanguageService ,
+    private translate : TranslateService
+
   ) {
     this.createForm();
   }
@@ -218,7 +220,8 @@ export class DriverInfoComponent {
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;
-            this.toastr.error('Driver not found with this information');
+            this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
+
           },
         });
     } else {
@@ -237,10 +240,7 @@ export class DriverInfoComponent {
             this.showResults = true;
           },
           error: (err) => {
-            this.toastr.error('Driver not found with this information', 'Error', {
-              timeOut: 2000,
-              progressBar: true,
-            });
+            this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;
