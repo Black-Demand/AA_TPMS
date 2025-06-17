@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
 import { dateNotTheFuture, dateNotTheFutures } from '../date.validate';
-import { RouterLink } from '@angular/router';
+import { Route, RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import { NgModule } from "@angular/core";
 import { CommonModule } from '@angular/common';
@@ -98,7 +98,8 @@ export class PenalityComponent implements OnInit {
     private toastr: ToastrService,
     private ordersService: OrdersService,
     private dialog: MatDialog,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private route : Router
   ) {
 
 
@@ -445,6 +446,7 @@ export class PenalityComponent implements OnInit {
           this.ordersService.create(orderDto, licenseNumber).subscribe({
             next: (response) => {
               this.toastr.success(this.translate.instant('TOASTER.SUCCESS.ORDER'));
+              this.router.navigate(['/grid']);
               console.log('Order response:', response);
 
               this.thirdFormGroup.get('payment')?.disable();

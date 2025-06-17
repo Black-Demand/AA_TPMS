@@ -31,6 +31,7 @@ import { OrderWithPenalityRequest } from '../../Models/OrderDetail';
 import { ToastrService } from 'ngx-toastr';
 import { response } from 'express';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { amharicOnlyValidator } from '../amharicOnlyValidator';
 
 @Component({
   selector: 'app-penalty-dif',
@@ -50,7 +51,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule,
-    TranslateModule
+    TranslateModule,
   ],
   templateUrl: './penalty-dif.component.html',
   styleUrl: './penalty-dif.component.css',
@@ -67,7 +68,7 @@ export class PenaltyDifComponent implements OnInit {
     private toastr: ToastrService,
     private translate: TranslateService
   ) {}
-  
+
   ngOnInit(): void {
     this.loadCustomOffences();
     this.penaltyForms();
@@ -77,9 +78,9 @@ export class PenaltyDifComponent implements OnInit {
   penaltyForms(): void {
     this.penaltyForm = this.fb.group(
       {
-        fullName: ['', Validators.required],
+        fullName: ['', [Validators.required, amharicOnlyValidator()]],
         violationGrade: ['', Validators.required],
-        offenceId: ['', Validators.required],
+        violationType: ['', Validators.required],
         amount: [{ value: '', disabled: true }, Validators.required],
         violationDate: ['', [Validators.required, dateCannotBeTheFuture()]],
         dateAccused: ['', [Validators.required, dateCannotBeTheFuture()]],
@@ -89,17 +90,22 @@ export class PenaltyDifComponent implements OnInit {
       { validators: this.dateRangeValidator }
     );
 
-    // Set up value change subscription for violationGrade
-    this.penaltyForm.get('violationGrade')?.valueChanges.subscribe(gradeCode => {
-      this.onPenaltyTypeChange(gradeCode);
-    });
+    this.penaltyForm
+      .get('violationGrade')
+      ?.valueChanges.subscribe((gradeCode) => {
+        this.onPenaltyTypeChange(gradeCode);
+      });
   }
 
   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
     const violationDate = group.get('violationDate')?.value;
     const dateAccused = group.get('dateAccused')?.value;
 
-    if (violationDate && dateAccused && new Date(violationDate) > new Date(dateAccused)) {
+    if (
+      violationDate &&
+      dateAccused &&
+      new Date(violationDate) > new Date(dateAccused)
+    ) {
       return { dateRangeInvalid: true };
     }
     return null;
@@ -112,12 +118,12 @@ export class PenaltyDifComponent implements OnInit {
   getErrorForViolationDate(): string {
     const field = this.penaltyForm.get('violationDate');
 
-    if (field?.hasError('required')) {
-      return 'The violationDate is required';
+     if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.REQUIRED');
     }
 
     if (field?.hasError('dateCannotBeTheFuture')) {
-      return field.getError('dateCannotBeTheFuture').message;
+      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
     }
 
     return '';
@@ -127,16 +133,16 @@ export class PenaltyDifComponent implements OnInit {
     const field = this.penaltyForm.get('dateAccused');
 
     if (field?.hasError('required')) {
-      return 'The Date Accused is required';
+      return this.translate.instant('ERROR.REQUIRED');
     }
 
     if (field?.hasError('dateCannotBeTheFuture')) {
-      return field.getError('dateCannotBeTheFuture').message;
-    }
-    if (this.penaltyForm.hasError('dateRangeInvalid')) {
-      return 'Date Accused must be greater than or equal to Violation Date';
+      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
     }
 
+    if (this.penaltyForm.hasError('dateRangeInvalid')) {
+      return this.translate.instant('ERROR.DATE_RANGE_INVALID');
+    }
     return '';
   }
 
@@ -159,12 +165,11 @@ export class PenaltyDifComponent implements OnInit {
   }
 
   loadCustomOffences() {
-    this.lookupService.getCustomOffenceGrades().subscribe(data => {
+    this.lookupService.getCustomOffenceGrades().subscribe((data) => {
       this.offences = data;
     });
   }
 
- 
   loadViolationTypes(code: string) {
     if (!code) {
       this.violationtypes = [];
@@ -173,27 +178,32 @@ export class PenaltyDifComponent implements OnInit {
       return;
     }
 
-    this.lookupService.getAllOffenceNew([code]).subscribe(data => {
+    this.lookupService.getAllOffenceNew([code]).subscribe((data) => {
       this.violationtypes = data;
       this.penaltyForm.get('violationType')?.reset();
       this.penaltyForm.get('amount')?.reset();
 
-     
-      this.penaltyForm.get('violationType')?.valueChanges.subscribe(offenceId => {
-        const selectedViolation = this.violationtypes.find(v => v.code === offenceId);
-        if (selectedViolation) {
-          this.penaltyForm.get('amount')?.setValue(selectedViolation.fineAmount.toString());
-        } else {
-          this.penaltyForm.get('amount')?.reset();
-        }
-      });
+      this.penaltyForm
+        .get('violationType')
+        ?.valueChanges.subscribe((offenceId) => {
+          const selectedViolation = this.violationtypes.find(
+            (v) => v.code === offenceId
+          );
+          if (selectedViolation) {
+            console.log(selectedViolation);
+            this.penaltyForm
+              .get('amount')
+              ?.setValue(selectedViolation.fineAmount.toString());
+          } else {
+            this.penaltyForm.get('amount')?.reset();
+          }
+        });
     });
   }
 
   onPenaltyTypeChange(code: string) {
     this.loadViolationTypes(code);
   }
-
 
   onSubmit(): void {
     if (this.penaltyForm.invalid) {
@@ -216,21 +226,18 @@ export class PenaltyDifComponent implements OnInit {
         violationDate: formValue.violationDate,
         dateAccused: formValue.dateAccused,
         violationGrade: formValue.violationGrade,
-        offenceId: formValue.offenceId,
+        offenceId: formValue.violationType,
       },
     };
 
     this.orderDetailService.create(request).subscribe({
       next: (response) => {
-        this.toastr.success('Miscellaneous penality Created successfully');
+        this.toastr.success(this.translate.instant('TOASTER.SUCCESS.MISL'));
         console.log('Miscellaneous penality Created successfully:', response);
         this.onReset();
       },
       error: (error) => {
-        this.toastr.error(
-          'Error occured while creating miscellaneous penality',
-          error
-        );
+        this.toastr.error(this.translate.instant('TOASTER.ERROR.MISL'));
         console.error('Creation failed:', error);
       },
     });

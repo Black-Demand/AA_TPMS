@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatTableDataSource } from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -27,6 +27,8 @@ import { TempDriverService } from '../../services/temp-driver.service';
 import { DriverDTO } from '../../Models/driver';
 import { ToastrService } from 'ngx-toastr';
 import { Router } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { MatDividerModule } from '@angular/material/divider';
 
 interface SuspensionRecord {
   fullName: string;
@@ -58,6 +60,8 @@ interface SuspensionRecord {
     MatPaginatorModule,
     MatStepperModule,
     MatTabsModule,
+    TranslateModule,
+    MatDividerModule,
   ],
   templateUrl: './suspension.component.html',
   styleUrls: ['./suspension.component.css'],
@@ -65,13 +69,16 @@ interface SuspensionRecord {
 export class SuspensionComponent implements OnInit {
   penaltyForm: FormGroup;
   showExpirationDate = false;
+  totalCount = 0;
+  pageSize = 10;
+  pageIndex = 0;
 
   displayedColumns: string[] = [
     'injunctionBody',
-    'regDate',
-    'letterNumber',
-    'susDate',
-    'susLevel',
+    'injunctionDate',
+    'injunctionLetterNo',
+    // 'injunctionDate',
+    'injunctionType',
     'status',
   ];
   dataSource: MatTableDataSource<InjunctionDTO>;
@@ -83,22 +90,26 @@ export class SuspensionComponent implements OnInit {
   selectedDriver!: DriverDTO;
   stepper: any;
 
-  constructor(private fb: FormBuilder,
-     private lookupService: LookupService,
-     private injunctionService: InjunctionService,
-     private driverService: TempDriverService,
-     private toastr : ToastrService,
-     private router: Router) {
-
-
+  constructor(
+    private fb: FormBuilder,
+    private lookupService: LookupService,
+    private injunctionService: InjunctionService,
+    private driverService: TempDriverService,
+    private toastr: ToastrService,
+    private router: Router,
+    private translate: TranslateService
+  ) {
     this.penaltyForm = this.fb.group({
       fullName: [{ value: '', disabled: true }, Validators.required],
       licenseNumber: [{ value: '', disabled: true }, Validators.required],
       injunctionBody: ['', Validators.required],
       injunctionDate: ['', [Validators.required, dateNotTheFutures()]],
-      injunctionRegisteredDate: ['', [Validators.required, dateNotTheFutures()]],
+      injunctionRegisteredDate: [
+        '',
+        [Validators.required, dateNotTheFutures()],
+      ],
       injunctionType: ['', Validators.required],
-      injunctionEndDate: [''], 
+      injunctionEndDate: [''],
       injunctionLetterNo: ['', Validators.required],
       reason: ['', Validators.required],
     });
@@ -108,28 +119,29 @@ export class SuspensionComponent implements OnInit {
 
   ngOnInit(): void {
     const driver = this.driverService.getDriverData(); // Add this method
-     if (!this.driverService.driverData$) {
-    this.router.navigate(['/penalty-driver'], {
-      queryParams: { redirectTo: 'suspension' }
-    });
-    return;
-  }
+    if (!this.driverService.driverData$) {
+      this.router.navigate(['/penalty-driver'], {
+        queryParams: { redirectTo: 'suspension' },
+      });
+      return;
+    }
 
-    this.penaltyForm.get('injunctionDTO.parentGuid')?.setValue(this.selectedDriver.mainGuid);
+    this.penaltyForm
+      .get('injunctionDTO.parentGuid')
+      ?.setValue(this.selectedDriver.mainGuid);
 
     this.loadInjunctionTypes();
     this.loadSuspensions();
     this.onSubmit();
-        const data = this.driverService.getDriverData();
+    const data = this.driverService.getDriverData();
 
-      if (data) {
-
-        this.selectedDriver = data; 
+    if (data) {
+      this.selectedDriver = data;
 
       this.penaltyForm.patchValue({
         mainGuid: data.mainGuid,
         fullName: data.fullName,
-        licenseNumber: data.licenseNumber
+        licenseNumber: data.licenseNumber,
       });
     }
   }
@@ -142,53 +154,50 @@ export class SuspensionComponent implements OnInit {
     });
   }
 
-  loadSuspensions() {
-  this.injunctionService.getAll().subscribe(suspensions => {
-    this.dataSource.data = suspensions;
-  });
+loadSuspensions() {
+  this.injunctionService
+    .getPagedInjunctions(this.pageIndex, this.pageSize, 'injunctionDate', 'DESC')
+    .subscribe((result) => {
+      this.dataSource.data = result.data;
+      this.totalCount = result.totalCount; 
+    });
+}
+onPageChange(event: PageEvent) {
+  this.pageSize = event.pageSize;
+  this.pageIndex = event.pageIndex;
+  this.loadSuspensions();
 }
 
+ 
+  onSubmit(): void {
+    console.log('Penalty form validity:', this.penaltyForm.valid);
+    console.log('Selected driver:', this.selectedDriver);
+    console.log('Full form value:', this.penaltyForm.value);
 
+    if (this.penaltyForm.valid && this.selectedDriver?.mainGuid) {
+      const injunctionDto: InjunctionDTO = {
+        ...this.penaltyForm.value,
+        parentGuid: this.selectedDriver.mainGuid,
+      };
 
-  ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
-  }
+      const licenseNo = this.selectedDriver?.licenseNumber;
 
-onSubmit(): void {
-  console.log('Penalty form validity:', this.penaltyForm.valid);
-  console.log('Selected driver:', this.selectedDriver);
-  console.log('Full form value:', this.penaltyForm.value);
+      console.log('Sending to penalty service:', injunctionDto);
 
-  if (this.penaltyForm.valid && this.selectedDriver?.mainGuid) {
-    const injunctionDto: InjunctionDTO = {
-      ...this.penaltyForm.value,    
-      parentGuid: this.selectedDriver.mainGuid
-    };
-
-    const licenseNo = this.selectedDriver?.licenseNumber; 
-
-    console.log('Sending to penalty service:', injunctionDto);
-
-    this.injunctionService.create(injunctionDto, licenseNo)
-      .subscribe({
+      this.injunctionService.create(injunctionDto, licenseNo).subscribe({
         next: () => {
-          this.toastr?.success("Suspension added successfully");
+          this.toastr?.success(this.translate.instant('TOASTER.SUCCESS.INJ'));
           this.loadSuspensions();
         },
         error: (err) => {
           console.error('Error submitting suspension:', err);
-          this.toastr?.error('Failed to submit suspension.');
-        }
+          this.toastr?.error(this.translate.instant('TOASTER.ERROR.INJ'));
+        },
       });
-  } else {
-    console.warn('Form invalid or driver not selected.');
+    } else {
+      console.warn('Form invalid or driver not selected.');
+    }
   }
-}
-
-
-
-
 
   onReset(): void {
     this.penaltyForm.reset();
@@ -197,33 +206,34 @@ onSubmit(): void {
   isActive(suspension: SuspensionRecord): boolean {
     return new Date(suspension.expDate) > new Date();
   }
- onSuspensionLevelChange(): void {
-  const selectedId = Number(this.penaltyForm.get('injunctionType')?.value); 
-  const selectedInjunction = this.injunctions.find(i => i.id === selectedId);
+  onSuspensionLevelChange(): void {
+    const selectedId = Number(this.penaltyForm.get('injunctionType')?.value);
+    const selectedInjunction = this.injunctions.find(
+      (i) => i.id === selectedId
+    );
 
-  const isTemporary = selectedInjunction?.id === 1; 
-  this.showExpirationDate = isTemporary;
+    const isTemporary = selectedInjunction?.id === 1;
+    this.showExpirationDate = isTemporary;
 
-  const expDateControl = this.penaltyForm.get('injunctionEndDate'); 
+    const expDateControl = this.penaltyForm.get('injunctionEndDate');
 
-  if (isTemporary) {
-    expDateControl?.setValidators(Validators.required);
-  } else {
-    expDateControl?.clearValidators();
-    expDateControl?.reset();
+    if (isTemporary) {
+      expDateControl?.setValidators(Validators.required);
+    } else {
+      expDateControl?.clearValidators();
+      expDateControl?.reset();
+    }
+
+    expDateControl?.updateValueAndValidity();
   }
-
-  expDateControl?.updateValueAndValidity();
-}
-
 
   getErrorForRegDate(): string {
     const field = this.penaltyForm.get('injunctionDate');
     if (field?.hasError('required')) {
-      return 'Registration Date is required';
+      return this.translate.instant('ERROR.REQUIRED');
     }
     if (field?.hasError('dateNotTheFuture')) {
-      return field.getError('dateNotTheFuture').message;
+      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
     }
     return '';
   }
@@ -231,18 +241,31 @@ onSubmit(): void {
   getErrorForSupDate(): string {
     const field = this.penaltyForm.get('injunctionRegisteredDate');
     if (field?.hasError('required')) {
-      return 'Suspension Date is required';
+      return this.translate.instant('ERROR.REQUIRED');
     }
     if (field?.hasError('dateNotTheFuture')) {
-      return field.getError('dateNotTheFuture').message;
+      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
     }
     return '';
   }
   getErrorForExpDate(): string {
     const field = this.penaltyForm.get('injunctionEndDate');
     if (field?.hasError('required')) {
-      return 'Expiration Date is required';
+      return this.translate.instant('ERROR.REQUIRED');
     }
     return '';
   }
+formatDate(date: string | Date | null | undefined): string {
+  if (!date) return '';
+  const parsedDate = typeof date === 'string' ? new Date(date) : date;
+  return parsedDate.toLocaleDateString('en-GB'); 
+}
+
+
+
+getInjunctionDescription(id: number): string {
+  const matched = this.injunctions.find(c => c.id === id);
+  return matched ? matched.descriptionAmh : id.toString(); 
+}
+
 }

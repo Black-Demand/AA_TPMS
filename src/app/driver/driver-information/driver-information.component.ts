@@ -11,6 +11,7 @@ import { LookupService } from '../../services/lookup.service';
 import { TempDriverService } from '../../services/temp-driver.service';
 import { DriverDTO } from '../../Models/driver';
 import Lookup from '../../Models/lookup';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-driver-information',
@@ -23,6 +24,7 @@ import Lookup from '../../Models/lookup';
     MatButtonModule,
     MatIconModule,
     MatDividerModule,
+    TranslateModule
   ],
   templateUrl: './driver-information.component.html',
   styleUrl: './driver-information.component.css'

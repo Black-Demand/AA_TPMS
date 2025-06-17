@@ -12,6 +12,11 @@
   width: 100%;
 }
 
+.spacer {
+  flex: 1 1 auto;
+}
+
+
 .form-actions {
   display: flex;
   justify-content: flex-end;

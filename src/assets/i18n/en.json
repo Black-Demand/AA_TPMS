@@ -48,8 +48,8 @@
     "PAY_DATE_PLACEHOLDER": "Payment Date",
     "RECIT_NO_PLACEHOLDER": "Receipt Number",
     "CHECK_NO_PLACEHOLDER": "Check Number",
-    "TPN":"Traffic Police Name",
-    "ACTIONS":"The Action Taken",
+    "TPN": "Traffic Police Name",
+    "ACTIONS": "The Action Taken",
     "ACCUSED": "Accused Place",
     "VECICLE_TYPE": "Vehicle Type",
     "ACCUSED_TIME": "Accused Time",
@@ -66,16 +66,18 @@
     "DELAY_PAIED_AMOUNT": "Delay Paied Point",
     "DELAY_PAIED_POINT": "Delay Paied Point",
     "STORED_POINT": "Stored Point",
-    "TOTAL_POINT": "Total Point"
+    "TOTAL_POINT": "Total Point",
+    "DRI_INFO": "Driver Information",
+    "CLOSE_BUT": "Close"
   },
-  "PENAL_TABLE" : {
-        "TITLE" : "Penality Information Detail",
-        "SER_NO" : "Ser.No",
-        "POINT_AMOUNT" : "V.G Payment",
-        "TOTAL_PAY" : "Total Payment",
-        "PAY_STATUS" : "Payment Status",
-        "IS_SUS" : "Is Suspended?",
-        "PENAL_BUTTON" : "Penality"        
+  "PENAL_TABLE": {
+    "TITLE": "Penality Information Detail",
+    "SER_NO": "Ser.No",
+    "POINT_AMOUNT": "V.G Payment",
+    "TOTAL_PAY": "Total Payment",
+    "PAY_STATUS": "Payment Status",
+    "IS_SUS": "Is Suspended?",
+    "PENAL_BUTTON": "Penality"
   },
   "TEMP": {
     "TEMP_FORM_TITLE": "Temporary Driver Registration",
@@ -99,7 +101,9 @@
     "MIN_AGE": "You must be at least {{minAge}} years old",
     "DOB_REQUIRED": "Date of birth is required",
     "DATE_REQUIRED": "Date is required",
-    "INVALID_AMHARIC_CHARACTERS" : "Use only amharic Characters"
+    "INVALID_AMHARIC_CHARACTERS": "Use only amharic Characters",
+    "LOGIN_UN": "Username is required",
+    "LOGIN_PAS": "Password is required"
   },
   "COMMON": {
     "DASHBOARD": "Dashboard",
@@ -118,27 +122,51 @@
     },
     "PUN_MONITOR": "Punishment Monitoring",
     "DIFF": "Miscellaneous Services",
-    "REPORT": "Report"
+    "REPORT": "Report",
+    "TITLE": "Welcome to TPS",
+    "READING": "Traffic Penalty System",
+    "USER_NAME": "Username",
+    "PASS": "Password",
+    "LOG_BUTTON": "Login",
+    "T1": "Efficient Traffic Management",
+    "T2": "Our system helps maintain road safety and enforce traffic regulations effectively.",
+    "T3": "Technical support",
+    "SUS_TITLE": "Suspension Information",
+    "INJ_BODY": "Injunction Body",
+    "REG_DATE": "Registration Date",
+    "SUS_DATE": "Suspension Date",
+    "SUS_LEVEL": "Suspension Level",
+    "SUS_EXP_DATE": "Expiration Date",
+    "SUS_LETT_NO": "Suspension Letter Number",
+    "SUS_RES_BAN": "Reason for Ban",
+    "SUS_STATUS": "Suspension Status",
+    "SUS_TABLE": "Suspension Records"
   },
-  "CONFIRMATION" : {
-    "CON_TITLE" : "Payment Confirmation",
-    "CON_SUB_TI" : "You are about to confirm this payment",
-    "MESSAGE" : "This action cannot be undone. Please verify all details before confirming",
-    "CON_BUTTON" : "Confirm Payment"
+  "CONFIRMATION": {
+    "CON_TITLE": "Payment Confirmation",
+    "CON_SUB_TI": "You are about to confirm this payment",
+    "MESSAGE": "This action cannot be undone. Please verify all details before confirming",
+    "CON_BUTTON": "Confirm Payment"
   },
-  "TOASTER" : {
-    "SUCCESS" : {
-      "PENAL" : "penality Submitted Succesfully",
-      "ORDER" : "Order Submitted Succesfully",
-      "TEMP" : "Driver Submitted Succesfully",
-      "TRAFF" : "Traffic Penality submitted Succesfully"
+  "TOASTER": {
+    "SUCCESS": {
+      "PENAL": "penality Submitted Succesfully",
+      "ORDER": "Order Submitted Succesfully",
+      "TEMP": "Driver Submitted Succesfully",
+      "TRAFF": "Traffic Penality submitted Succesfully",
+      "LOGIN": "Login Successfuly",
+      "MISL": "Miscellaneous penality Created successfully",
+      "INJ": "Suspenstion submittrd Succesfully"
     },
-    "ERROR" :{
-      "PENAL" : "Error Submitting Penlaity",
-      "ORDER" : "Error Submitting Order",
-      "TEMP" : "Error Submitting Driver",
-      "TRAFF" : "Error Submittig Traffic Penality",
-      "NOT_FOUND" : "Driver do not found with this information"
+    "ERROR": {
+      "PENAL": "Error Submitting Penlaity",
+      "ORDER": "Error Submitting Order",
+      "TEMP": "Error Submitting Driver",
+      "TRAFF": "Error Submittig Traffic Penality",
+      "LOGIN": "Error logging in",
+      "MISL": "Error submitting Micscllinous penality information",
+      "NOT_FOUND": "Driver do not found with this information",
+      "INJ": "Error submitting suspension information"
     }
   }
 }

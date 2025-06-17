@@ -4,25 +4,21 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { DriverDTO } from '../Models/driver';
 import { environment } from '../../environments/environment.development';
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class TempDriverService {
-  
   private driverData: any;
   private baseUrl = environment.baseUrl;
   navigationTarget$: any;
-  constructor(private http: HttpClient) { }
- 
-
+  constructor(private http: HttpClient) {}
 
   private _driverData = new BehaviorSubject<DriverDTO | null>(null);
   public driverData$ = this._driverData.asObservable();
 
-
   setDriverData(data: any) {
     this.driverData = data;
   }
-   
+
   getDriverData() {
     return this.driverData;
   }
@@ -46,25 +42,38 @@ export class TempDriverService {
     return this.http.delete<void>(`${this.baseUrl}/${licenseNo}`);
   }
 
-  searchByLicense(licenceRegion: number, licenseCategory: number, licenseNumber: string): Observable<DriverDTO> {
+  searchByLicense(
+    licenceRegion: number,
+    licenseCategory: number,
+    licenseNumber: string
+  ): Observable<DriverDTO> {
     if (!licenseNumber || !licenseNumber.trim()) {
       throw new Error('License number is required.');
     }
-  
+
     const params = new HttpParams()
-    .set('licenseRegion', licenceRegion.toString())  
-    .set('licenseCategory', licenseCategory.toString())
-    .set('licenseNumber', licenseNumber.trim());
-  
-    return this.http.get<DriverDTO>(`${this.baseUrl}/Driver/search-by-license`, { params });
+      .set('licenseRegion', licenceRegion.toString())
+      .set('licenseCategory', licenseCategory.toString())
+      .set('licenseNumber', licenseNumber.trim());
+
+    return this.http.get<DriverDTO>(
+      `${this.baseUrl}/Driver/search-by-license`,
+      { params }
+    );
   }
-  
-  searchByName(firstName: string, middleName?: string, lastName?: string): Observable<DriverDTO> {
+
+  searchByName(
+    firstName: string,
+    middleName?: string,
+    lastName?: string
+  ): Observable<DriverDTO[]> {
     let params = new HttpParams().set('firstName', firstName.trim());
 
     if (middleName) params = params.set('middleName', middleName.trim());
     if (lastName) params = params.set('lastName', lastName.trim());
 
-    return this.http.get<DriverDTO>(`${this.baseUrl}/Driver/search-by-name`, { params });
+    return this.http.get<DriverDTO[]>(`${this.baseUrl}/Driver/search-by-name`, {
+      params,
+    });
   }
 }

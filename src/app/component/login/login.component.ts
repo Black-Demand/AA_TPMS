@@ -9,6 +9,7 @@ import { CommonModule } from '@angular/common';
 import { ToastrService } from 'ngx-toastr';
 import { HeaderComponent } from "../../header/header.component";
 import { Router, RouterOutlet } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login',
@@ -22,7 +23,8 @@ import { Router, RouterOutlet } from '@angular/router';
     MatIconModule,
     MatCheckboxModule,
     HeaderComponent,
-    RouterOutlet
+    RouterOutlet,
+    TranslateModule
   ],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
@@ -31,6 +33,7 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
   private toastr = inject(ToastrService);
+  private translte = inject(TranslateService)
   
   showPassword = false;
   isLoading = false;
@@ -55,16 +58,10 @@ export class LoginComponent {
     await new Promise(resolve => setTimeout(resolve, 1000));
     
     if (username === 'Admin' && password === '123456') {
-      this.toastr.success('Login successful', 'Welcome', {
-        timeOut: 2000,
-        progressBar: true,
-      });
+     this.toastr.success(this.translte.instant('TOASTER.SUCCESS.LOGIN'));
       this.router.navigate(['/nav-menu']);
     } else {
-      this.toastr.error('Invalid username or password', 'Login Failed', {
-        timeOut: 2000,
-        progressBar: true,
-      });
+      this.toastr.error(this.translte.instant('TOASTER.ERROR.LOGIN'));
     }
     
     this.isLoading = false;
