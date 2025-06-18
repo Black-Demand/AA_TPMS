@@ -167,10 +167,7 @@
           <input matInput [matDatepicker]="dobPicker" formControlName="birthDate" required>
           <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
           <mat-datepicker #dobPicker></mat-datepicker>
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
-          <mat-error *ngIf="registrationForm.get('birthDate')?.hasError('minAge') && registrationForm.get('birthDate')?.touched"
-            [translate]="'ERROR.MIN_AGE'" [translateParams]="{ minAge: 18 }">
-          </mat-error>
+          <mat-error>{{getErrorForBirthDate()}}</mat-error>
         </mat-form-field>
 
 

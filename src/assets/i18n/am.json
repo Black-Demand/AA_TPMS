@@ -68,7 +68,8 @@
     "STORED_POINT": "የተከማቸ ነጥብ",
     "TOTAL_POINT": "ጠቅላላ ነጥብ",
     "DRI_INFO": "የአሽከርካሪ መረጃ",
-    "CLOSE_BUT": "ዝጋ"
+    "CLOSE_BUT": "ዝጋ",
+    "Lang" : "አማርኛ"
   },
   "PENAL_TABLE": {
     "TITLE": "የቅጣት መረጃ ዝርዝር",

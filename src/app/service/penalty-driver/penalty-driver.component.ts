@@ -297,11 +297,14 @@ export class PenaltyDriverComponent {
     );
   }
 
-  private getCityName(code: string): string {
-    return (
-      this.licenseAreas.find((c) => c.code === code)?.amDescription || code
-    );
-  }
+private getCityName(code: string): string {
+  const matched = this.licenseAreas.find(
+    (c) => c.code.toString().trim() === code.toString().trim()
+  );
+  console.log(this.licenseAreas);
+  return matched?.amDescription || code;
+} 
+
 
   // navigateToPenaltyForm(driver: any, action: 'penalty' | 'suspension') {
   //   this.driverService.setDriverData({

@@ -151,8 +151,8 @@ export class DriverInfoComponent {
     this.searchForm = this.fb.group({
       searchType: ['name'],
       firstName: ['', Validators.required],
-      fatherName: ['', Validators.required],
-      grandfatherName: ['', Validators.required],
+      fatherName: [''],
+      grandfatherName: [''],
       region: [''],
       level: [''],
       licenseNumber: [''],
@@ -167,7 +167,7 @@ export class DriverInfoComponent {
   }
 
   toggleValidators(): void {
-    const nameControls = ['firstName', 'fatherName', 'grandfatherName'];
+    const nameControls = ['firstName'];
     const licenseControls = ['region', 'level', 'licenseNumber'];
 
     if (this.searchType === 'name') {

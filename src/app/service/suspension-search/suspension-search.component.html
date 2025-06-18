@@ -30,13 +30,13 @@
           <mat-form-field appearance="outline">
             <mat-label>{{'SEARCH.F_NAME_PLACEHOLDER' | translate}}</mat-label>
             <input matInput formControlName="fatherName"[placeholder]="'SEARCH.F_NAME_PLACEHOLDER' | translate">
-            <mat-error *ngIf="searchForm.get('fatherName')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
+            <!-- <mat-error *ngIf="searchForm.get('fatherName')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error> -->
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{'SEARCH.G_NAME_PLACEHOLDER' | translate}}</mat-label>
             <input matInput formControlName="grandfatherName" [placeholder]="'SEARCH.G_NAME_PLACEHOLDER' | translate">
-            <mat-error *ngIf="searchForm.get('grandfatherName')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
+            <!-- <mat-error *ngIf="searchForm.get('grandfatherName')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error> -->
           </mat-form-field>
         </div>
  

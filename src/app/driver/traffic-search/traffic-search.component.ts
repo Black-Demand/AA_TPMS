@@ -156,8 +156,8 @@ export class TrafficSearchComponent {
     this.searchForm = this.fb.group({
       searchType: ['name'],
       firstName: ['', Validators.required],
-      fatherName: ['', Validators.required],
-      grandfatherName: ['', Validators.required],
+      fatherName: [''],
+      grandfatherName: [''],
       region: [''],
       level: [''],
       licenseNumber: [''],
@@ -172,7 +172,7 @@ export class TrafficSearchComponent {
   }
 
   toggleValidators(): void {
-    const nameControls = ['firstName', 'fatherName', 'grandfatherName'];
+    const nameControls = ['firstName'];
     const licenseControls = ['region', 'level', 'licenseNumber'];
 
     if (this.searchType === 'name') {

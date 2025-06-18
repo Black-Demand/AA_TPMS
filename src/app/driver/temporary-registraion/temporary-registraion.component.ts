@@ -50,23 +50,19 @@ import { amharicOnlyValidator } from '../../service/amharicOnlyValidator';
     MatTabsModule,
     MatDividerModule,
     TranslateModule,
-    
   ],
   templateUrl: './temporary-registraion.component.html',
-  styleUrls: ['./temporary-registraion.component.css']
+  styleUrls: ['./temporary-registraion.component.css'],
 })
 export class TemporaryRegistraionComponent implements OnInit {
-
   registrationForm: FormGroup;
   imagePreview: string | ArrayBuffer | null = null;
   selectedPhotoFile: File | null = null;
 
-  
-  
   genderEnum = Gender;
   genderOptions = [
     { value: Gender.Male, label: GenderDescriptions[Gender.Male] },
-    { value: Gender.Female, label: GenderDescriptions[Gender.Female] }
+    { value: Gender.Female, label: GenderDescriptions[Gender.Female] },
   ];
   regions: Lookup.RegionDTO[] = [];
   zones: Lookup.ZoneDTO[] = [];
@@ -77,16 +73,12 @@ export class TemporaryRegistraionComponent implements OnInit {
   licenceCatagories: Lookup.LicenceCategoryDTO[] = [];
   nationalities: Lookup.LookupDTO[] = [];
 
-  selectedRegionCode!: number;  
+  selectedRegionCode!: number;
   selectedZoneCode!: number;
   selectedWoredaCode!: number;
   selectedLicenceRegionCode: number = 0;
 
   amharicCharError = false;
-
-
-
-  
 
   constructor(
     private fb: FormBuilder,
@@ -94,49 +86,47 @@ export class TemporaryRegistraionComponent implements OnInit {
     private lookupservice: LookupService,
     private toastr: ToastrService,
     private router: Router,
-    private translate : TranslateService,
+    private translate: TranslateService,
     private cdr: ChangeDetectorRef
-
   ) {
     this.registrationForm = this.fb.group({
       licenceRegion: ['', Validators.required],
       licenceArea: ['', Validators.required],
       licenceGrade: ['', Validators.required],
-      licenceNo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
-      issuanceDate: ['', [Validators.required, dateCannotBeTheFuture()]],      
-      firstNameAmh: ['', [Validators.required , amharicOnlyValidator(), ]],
-      fatherNameAmh: ['', [Validators.required , amharicOnlyValidator()]],
-      grandNameAmh: ['', [Validators.required , amharicOnlyValidator()]],      
+      licenceNo: [
+        '',
+        [Validators.required, Validators.minLength(6), Validators.maxLength(6)],
+      ],
+      issuanceDate: ['', [Validators.required, dateCannotBeTheFuture()]],
+      firstNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
+      fatherNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
+      grandNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
       firstName: ['', Validators.required],
       fatherName: ['', Validators.required],
-      grandName: ['', Validators.required],      
+      grandName: ['', Validators.required],
       nationality: ['', Validators.required],
       sex: ['', Validators.required],
       birthDate: ['', [Validators.required, minAgeValidator(18)]],
-      tel1: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],      
+      tel1: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
       region: ['', Validators.required],
       zone: ['', Validators.required],
       woreda: ['', Validators.required],
       kebele: ['', Validators.required],
       houseNo: [''],
-      remark: [''],      
-      photo: [null, Validators.required]
+      remark: [''],
+      photo: [null, Validators.required],
     });
   }
-
-
-
-
 
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
-    
+
     // Ensure we don't exceed max length
     if (value.length > 9) {
       value = value.substring(0, 9);
     }
-    
+
     input.value = value;
     this.registrationForm.get('phone')?.setValue(value, { emitEvent: false });
   }
@@ -152,10 +142,12 @@ export class TemporaryRegistraionComponent implements OnInit {
 
   getErrorForLicenseNumber(): string {
     if (this.licenseNumberControl?.hasError('required')) {
-      return 'Driver\'s License Number is required';
+      return "Driver's License Number is required";
     }
-    if (this.licenseNumberControl?.hasError('minlength') || 
-        this.licenseNumberControl?.hasError('maxlength')) {
+    if (
+      this.licenseNumberControl?.hasError('minlength') ||
+      this.licenseNumberControl?.hasError('maxlength')
+    ) {
       return 'Must be exactly 6 characters';
     }
     return '';
@@ -163,137 +155,133 @@ export class TemporaryRegistraionComponent implements OnInit {
 
   getErrorForIssueDate(): string {
     const field = this.registrationForm.get('issuanceDate');
-  
+
     if (field?.hasError('dateCannotBeTheFuture')) {
       return 'Issue date cannot be in the future';
     }
-  
+
     return '';
   }
 
+  getErrorForBirthDate(): string {
+    const field = this.registrationForm.get('birthDate');
+
+    if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.DOB_REQUIRED');
+    }
+    const minAgeError = field?.getError('minAge');
+    if (minAgeError) {
+      return this.translate.instant(minAgeError.messageKey, minAgeError.params);
+    }
+    return '';
+  }
   ngOnInit(): void {
     this.loadRegions();
     this.loadCategories();
     this.loadLicenceRegions();
     this.loadNationality();
-
-    
   }
-   
+
   onRegionChange(regionCode: number) {
-    this.selectedRegionCode = regionCode; 
+    this.selectedRegionCode = regionCode;
     this.loadZones(regionCode);
   }
-  
+
   onZoneChange(zoneCode: number) {
     console.log('Zone changed:', zoneCode);
     this.selectedZoneCode = zoneCode;
     this.loadWoredas(zoneCode);
   }
-  
 
   onWoredaChange(woredaCode: number) {
     console.log('Woreda changed:', woredaCode);
     this.selectedWoredaCode = woredaCode;
     this.loadKebeles(woredaCode);
   }
-  
-
 
   loadRegions() {
-    this.lookupservice.getRegions().subscribe(data => {
+    this.lookupservice.getRegions().subscribe((data) => {
       this.regions = data;
       this.zones = [];
       this.woredas = [];
       this.kebeles = [];
     });
   }
-  
+
   loadZones(regionCode: number) {
-    this.lookupservice.getZonesByRegion(regionCode).subscribe(data => {
+    this.lookupservice.getZonesByRegion(regionCode).subscribe((data) => {
       this.zones = data;
       this.woredas = [];
       this.kebeles = [];
     });
   }
-  
+
   loadWoredas(zoneCode: number) {
-    this.lookupservice.getWoredasByZone(zoneCode).subscribe(data => {
+    this.lookupservice.getWoredasByZone(zoneCode).subscribe((data) => {
       this.woredas = data;
       this.kebeles = [];
     });
   }
-  
-  
+
   loadKebeles(woredaCode: number) {
-    this.lookupservice.getKebelesByWoreda(woredaCode).subscribe(data => {
+    this.lookupservice.getKebelesByWoreda(woredaCode).subscribe((data) => {
       this.kebeles = data;
     });
   }
 
   loadLicenceRegions(): void {
-    this.lookupservice.getAllRegions().subscribe(data => {
+    this.lookupservice.getAllRegions().subscribe((data) => {
       console.log('Loaded Regions:', data);
       this.licenceRegions = data;
     });
   }
   onIssuerRegionChange(regionCode: number): void {
-    console.log('Selected Region Code:', regionCode); 
+    console.log('Selected Region Code:', regionCode);
     if (regionCode != null) {
       this.selectedLicenceRegionCode = regionCode;
       this.loadAreasByLicenceRegion(regionCode);
     }
   }
-  
+
   loadAreasByLicenceRegion(regionCode: number): void {
-    this.lookupservice.getAllAreas(regionCode).subscribe(data => {
+    this.lookupservice.getAllAreas(regionCode).subscribe((data) => {
       this.licenceAreas = data;
     });
   }
-  
-  
 
   loadCategories() {
-    this.lookupservice.getAllCategories().subscribe(data => {
+    this.lookupservice.getAllCategories().subscribe((data) => {
       this.licenceCatagories = data;
-    })
+    });
   }
   loadNationality() {
-    this.lookupservice.getAllNationality().subscribe(
-      data => {
-        this.nationalities = data;
-      }
-    );
+    this.lookupservice.getAllNationality().subscribe((data) => {
+      this.nationalities = data;
+    });
   }
-
-
-
-  
-
-
 
   onFileSelected(event: Event): void {
     const input = event.target as HTMLInputElement;
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
-      
+
       // Validate file type
       if (!['image/jpeg', 'image/png'].includes(file.type)) {
         this.registrationForm.get('photo')?.setErrors({ fileType: true });
         return;
       }
-      
+
       // Validate file size (5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.registrationForm.get('photo')?.setErrors({ fileSize: true });
         return;
       }
-      
+
       // Update form control
       this.selectedPhotoFile = file;
       this.registrationForm.patchValue({ photo: file });
       this.registrationForm.get('photo')?.updateValueAndValidity();
-      
+
       // Create preview
       const reader = new FileReader();
       reader.onload = () => {
@@ -305,28 +293,29 @@ export class TemporaryRegistraionComponent implements OnInit {
 
   onSubmit(): void {
     console.log(this.registrationForm.value);
-  
+
     if (this.registrationForm.valid) {
       const driver: DriverDTO = this.registrationForm.value;
-  
+
       this.tdrs.createDriver(driver).subscribe({
         next: (response) => {
           // alert('Driver created successfully');
-         this.toastr.success(this.translate.instant('TOASTER.SUCCESS.TEMP'));
-        //this.router.navigate(['/penality']);
+          this.toastr.success(this.translate.instant('TOASTER.SUCCESS.TEMP'));
+          //this.router.navigate(['/penality']);
         },
         error: (err) => {
           console.error('Error creating driver:', err);
-          alert('Error: ' + (err.error?.message || err.message || 'Unknown error'));
+          alert(
+            'Error: ' + (err.error?.message || err.message || 'Unknown error')
+          );
           this.toastr.error(this.translate.instant('TOASTER.ERROR.TEMP'));
-        }
+        },
       });
     } else {
-      this.registrationForm.markAllAsTouched(); 
+      this.registrationForm.markAllAsTouched();
     }
   }
-  
-  
+
   onReset(): void {
     this.registrationForm.reset();
     this.imagePreview = null;

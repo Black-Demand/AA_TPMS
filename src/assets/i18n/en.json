@@ -68,7 +68,8 @@
     "STORED_POINT": "Stored Point",
     "TOTAL_POINT": "Total Point",
     "DRI_INFO": "Driver Information",
-    "CLOSE_BUT": "Close"
+    "CLOSE_BUT": "Close",
+     "Lang" : "Amharic"
   },
   "PENAL_TABLE": {
     "TITLE": "Penality Information Detail",

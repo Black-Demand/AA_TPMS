@@ -3,3 +3,13 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 /* Example: Change background color */
+
+
+.teal-button {
+  background-color: #009688; /* Teal 500 */
+  color: white;
+}
+
+.teal-button:hover {
+  background-color: #00796b; /* Teal 700 */
+}
