@@ -2,33 +2,41 @@
   <!-- Form Section -->
   <form [formGroup]="penaltyForm" (ngSubmit)="onSubmit()" class="registration-form">
     <mat-card class="form-card">
-      <mat-card-header>
-        <mat-card-title>Suspension Information</mat-card-title>
-      </mat-card-header>
+    <mat-card-header>
+      <div>
+        <mat-card-title style="margin-bottom: 20px;">{{ 'COMMON.SUS_TITLE' | translate }}</mat-card-title>
+        <span style="margin-left: auto; width: 200px;"></span>
+      </div>
+      <span></span>
+    </mat-card-header>
+
+
+
+     
 
       <mat-card-content>
-        <h3 class="section-title">Information</h3>
+        <!-- <h3 class="section-title">Information</h3> -->
         <div class="form-row">
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Full Name</mat-label>
+            <mat-label>{{'SEARCH.FULL_NAME' | translate }}</mat-label>
             <input matInput formControlName="fullName" readonly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Driver License ID</mat-label>
+            <mat-label>{{'SEARCH.LICENCE_NUMBER_PLACEHOLDER' | translate }}</mat-label>
             <input matInput formControlName="licenseNumber" readonly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Injunction Body</mat-label>
+            <mat-label>{{'COMMON.INJ_BODY' | translate }}</mat-label>
             <input matInput formControlName="injunctionBody">
-            <mat-error>The field is required</mat-error>
+            <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
         </div>
 
         <div class="form-row">
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Registration Date</mat-label>
+            <mat-label>{{'COMMON.REG_DATE' | translate }}</mat-label>
             <input matInput [matDatepicker]="reg_date" formControlName="injunctionDate">
             <mat-datepicker-toggle matSuffix [for]="reg_date"></mat-datepicker-toggle>
             <mat-datepicker #reg_date></mat-datepicker>
@@ -36,7 +44,7 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Suspension Date</mat-label>
+            <mat-label>{{'COMMON.SUS_DATE' | translate }}</mat-label>
             <input matInput [matDatepicker]="sus_date" formControlName="injunctionRegisteredDate">
             <mat-datepicker-toggle matSuffix [for]="sus_date"></mat-datepicker-toggle>
             <mat-datepicker #sus_date></mat-datepicker>
@@ -45,7 +53,7 @@
 
 
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Suspension Level</mat-label>
+            <mat-label>{{'COMMON.SUS_LEVEL' | translate }}</mat-label>
             <mat-select formControlName="injunctionType" required (selectionChange)="onSuspensionLevelChange()">
               <mat-option *ngFor="let injunction of injunctions" [value]="injunction.id.toString()">
                 {{ injunction.descriptionAmh }}
@@ -61,7 +69,7 @@
         <div class="form-row">
           <!-- Conditional Expiration Date Field -->
           <mat-form-field appearance="outline" class="form-field" *ngIf="showExpirationDate">
-            <mat-label>Expiration Date</mat-label>
+            <mat-label>{{'COMMON.SUS_EXP_DATE' | translate }}</mat-label>
             <input matInput [matDatepicker]="exp_date" formControlName="injunctionEndDate">
             <mat-datepicker-toggle matSuffix [for]="exp_date"></mat-datepicker-toggle>
             <mat-datepicker #exp_date></mat-datepicker>
@@ -69,21 +77,21 @@
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Suspension Letter Number</mat-label>
+            <mat-label>{{'COMMON.SUS_LETT_NO' | translate }}</mat-label>
             <input matInput formControlName="injunctionLetterNo">
-            <mat-error>The field is required</mat-error>
+            <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" class="form-field">
-            <mat-label>Reason for Ban</mat-label>
+            <mat-label>{{'COMMON.SUS_RES_BAN' | translate }}</mat-label>
             <input matInput formControlName="reason">
-            <mat-error>The field is required</mat-error>
+            <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
           </mat-form-field>
         </div>
 
         <mat-card-actions align="end"  class="form-actions">
-          <button mat-button type="button" (click)="onReset()">Reset</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="penaltyForm.invalid">Save</button>
+          <button mat-button type="button" (click)="onReset()">{{'SEARCH.CANCEL_BUTTON' | translate }}</button>
+          <button mat-raised-button color="primary" type="submit" [disabled]="penaltyForm.invalid">{{'SEARCH.SAVE_BUTTON' | translate }}</button>
         </mat-card-actions>
       </mat-card-content>
     </mat-card>
@@ -92,7 +100,7 @@
   <!-- Table Section -->
   <mat-card class="table-card">
     <mat-card-header>
-      <mat-card-title>Suspension Records</mat-card-title>
+      <mat-card-title>{{'COMMON.SUS_TABLE' | translate }}</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
@@ -102,45 +110,44 @@
         <table mat-table [dataSource]="dataSource" class="suspension-table">
           <!-- Blocking Body Column -->
           <ng-container matColumnDef="injunctionBody">
-            <th mat-header-cell *matHeaderCellDef>Blocking Body</th>
-            <td mat-cell *matCellDef="let element">{{element.blocked}}</td>
+            <th mat-header-cell *matHeaderCellDef>{{'COMMON.INJ_BODY' | translate }}</th>
+            <td mat-cell *matCellDef="let element">{{element.injunctionBody}}</td>
           </ng-container>
           
           <!-- Registration Date Column -->
-          <ng-container matColumnDef="regDate">
-            <th mat-header-cell *matHeaderCellDef>Registration Date</th>
-            <td mat-cell *matCellDef="let element">{{element.regDate }}</td>
-          </ng-container>
+          <!-- <ng-container matColumnDef="injunctionDate">
+            <th mat-header-cell *matHeaderCellDef>{{'COMMON.REG_DATE' | translate }}</th>
+            <td mat-cell *matCellDef="let element">{{element.injunctionDate }}</td>
+          </ng-container> -->
 
           <!-- Letter Number Column -->
-          <ng-container matColumnDef="letterNumber">
-            <th mat-header-cell *matHeaderCellDef>Letter Number</th>
-            <td mat-cell *matCellDef="let element">{{element.letterNumber}}</td>
+          <ng-container matColumnDef="injunctionLetterNo">
+            <th mat-header-cell *matHeaderCellDef>{{'COMMON.SUS_LETT_NO' | translate }}</th>
+            <td mat-cell *matCellDef="let element">{{element.injunctionLetterNo}}</td>
           </ng-container>
 
           <!-- Suspension Date Column -->
-          <ng-container matColumnDef="susDate">
-            <th mat-header-cell *matHeaderCellDef>Suspension Date</th>
-            <td mat-cell *matCellDef="let element">{{element.susDate}}</td>
+          <ng-container matColumnDef="injunctionDate">
+            <th mat-header-cell *matHeaderCellDef>{{'COMMON.SUS_DATE' | translate }}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element.injunctionDate | date: 'yyyy-MM-dd' }}
+            </td>
           </ng-container>
 
           <!-- Suspension Level Column -->
-          <ng-container matColumnDef="susLevel">
-            <th mat-header-cell *matHeaderCellDef>Suspension Level</th>
-            <td mat-cell *matCellDef="let element">
-              <span class="level-badge" [class.temporary]="element.susLevel === 'Temporary'"
-                [class.fixed]="element.susLevel === 'Fixed'">
-                {{element.susLevel}}
-              </span>
-            </td>
+          <ng-container matColumnDef="injunctionType">
+            <th mat-header-cell *matHeaderCellDef>{{'COMMON.SUS_LEVEL' | translate }}</th>
+          <td mat-cell *matCellDef="let element">
+               {{ getInjunctionDescription(+element.injunctionType) }}
+          </td>
           </ng-container>
 
           <!-- Status Column -->
           <ng-container matColumnDef="status">
-            <th mat-header-cell *matHeaderCellDef>Suspension Status</th>
+            <th mat-header-cell *matHeaderCellDef>{{'COMMON.SUS_STATUS' | translate }}</th>
             <td mat-cell *matCellDef="let element">
               <span class="status-badge" [class.active]="isActive(element)" [class.expired]="!isActive(element)">
-                {{isActive(element) ? 'Suspended' : 'Lifted'}}
+                {{isActive(element) ? 'Suspended' : 'ታግዷል'}}
               </span>
             </td>
           </ng-container>
@@ -152,7 +159,14 @@
         </table>
       </div>
 
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+ <mat-paginator
+        [length]="totalCount"
+        [pageSize]="pageSize"
+        [pageSizeOptions]="[5, 10, 20]"
+        [pageIndex]="pageIndex"
+        showFirstLastButtons
+        (page)="onPageChange($event)">
+      </mat-paginator>
     </mat-card-content>
   </mat-card>
 </div>

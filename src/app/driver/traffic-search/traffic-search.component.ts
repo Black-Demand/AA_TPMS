@@ -2,7 +2,12 @@ import { Component, inject, NgModule } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatRadioChange } from '@angular/material/radio';
 import { MatTableDataSource } from '@angular/material/table';
-import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterLink,
+} from '@angular/router';
 import { CommonModule, formatDate } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,8 +31,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatMenuModule } from '@angular/material/menu';
 import { filter } from 'rxjs';
 import { LanguageService } from '../../services/language.service';
-import { TranslateModule } from '@ngx-translate/core';
-
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 interface Driver {
   mainGuid: string;
   fullName: string;
@@ -37,23 +41,10 @@ interface Driver {
   issuanceDate: string;
   licenseCategory?: number;
 }
-
-
-interface Driver {
-  mainGuid: string;
-  fullName: string;
-  issuerRegion: string;
-  issuerCity: string;
-  licenseNumber: string;
-  issuanceDate: string;
-  licenseCategory?: number;
-}
-
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-traffic-search',
-    imports: [
+  imports: [
     CommonModule,
     ReactiveFormsModule,
     MatFormFieldModule,
@@ -70,8 +61,9 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
     MatTabsModule,
     MatIconModule,
     MatMenuModule,
-    TranslateModule
+    TranslateModule,
   ],
+  standalone: true,
   templateUrl: './traffic-search.component.html',
   styleUrl: './traffic-search.component.css'
 })
@@ -85,7 +77,7 @@ export class TrafficSearchComponent {
   licenseLevels: Lookup.LicenceCategoryDTO[] = [];
   selectedDriver: any;
   action: 'penalty' | 'suspension' = 'penalty'; // default
-  currentUrl! : string;
+  currentUrl!: string;
 
   // Results Table
   displayedColumns: string[] = [
@@ -101,22 +93,24 @@ export class TrafficSearchComponent {
   constructor(
     private fb: FormBuilder,
     private driverService: TempDriverService,
-    private licenceLookupService: LookupService, 
+    private licenceLookupService: LookupService,
     private router: Router,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private languageService: LanguageService 
+    private languageService: LanguageService,
+    private translate: TranslateService
   ) {
     this.createForm();
   }
   ngOnInit(): void {
-    this.route.queryParams.subscribe(params => {
-      console.log('Query Params:', params);  
-      this.action = params['action'] === 'suspension' ? 'suspension' : 'penalty';
+    const currentLang = this.languageService.getCurrentLang();
+
+    this.route.queryParams.subscribe((params) => {
+      console.log('Query Params:', params);
+      this.action =
+        params['action'] === 'suspension' ? 'suspension' : 'penalty';
       console.log('Action set to:', this.action);
       console.log('Current URL:', window.location.href);
-
-
     });
 
     this.loadRegions();
@@ -156,8 +150,8 @@ export class TrafficSearchComponent {
     this.searchForm = this.fb.group({
       searchType: ['name'],
       firstName: ['', Validators.required],
-      fatherName: ['', Validators.required],
-      grandfatherName: ['', Validators.required],
+      fatherName: [''],
+      grandName: [''],
       region: [''],
       level: [''],
       licenseNumber: [''],
@@ -172,7 +166,7 @@ export class TrafficSearchComponent {
   }
 
   toggleValidators(): void {
-    const nameControls = ['firstName', 'fatherName', 'grandfatherName'];
+    const nameControls = ['firstName', 'fatherName', 'grandName'];
     const licenseControls = ['region', 'level', 'licenseNumber'];
 
     if (this.searchType === 'name') {
@@ -181,8 +175,14 @@ export class TrafficSearchComponent {
         this.searchForm.get(control)?.reset();
         this.searchForm.get(control)?.updateValueAndValidity();
       });
-      nameControls.forEach((control) => {
-        this.searchForm.get(control)?.setValidators([Validators.required]);
+
+      // Only firstName required, others optional
+      this.searchForm.get('firstName')?.setValidators([Validators.required]);
+      this.searchForm.get('firstName')?.updateValueAndValidity();
+
+      // Clear validators for fatherName and grandName
+      ['fatherName', 'grandName'].forEach((control) => {
+        this.searchForm.get(control)?.clearValidators();
         this.searchForm.get(control)?.updateValueAndValidity();
       });
     } else {
@@ -210,13 +210,13 @@ export class TrafficSearchComponent {
         .searchByName(
           formValue.firstName,
           formValue.fatherName,
-          formValue.grandfatherName
+          formValue.grandName
         )
         .subscribe({
-          next: (driver) => {
-            const mapped = this.mapDtoToDriver(driver);
-            this.dataSource.data = [mapped];
-            this.selectedDriver = mapped; 
+          next: (drivers) => {
+            const mappedDrivers = drivers.map((d) => this.mapDtoToDriver(d));
+            this.dataSource.data = mappedDrivers;
+            this.selectedDriver = mappedDrivers[0]; // Or handle selection differently
             this.showResults = true;
           },
           error: (err) => {
@@ -224,7 +224,9 @@ export class TrafficSearchComponent {
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;
-            this.toastr.error('Driver not found with this information');
+            this.toastr.error(
+              this.translate.instant('TOASTER.ERROR.NOT_FOUND')
+            );
           },
         });
     } else {
@@ -238,15 +240,14 @@ export class TrafficSearchComponent {
           next: (driver) => {
             const mapped = this.mapDtoToDriver(driver);
             this.dataSource.data = [mapped];
-            this.selectedDriver = mapped; 
-            console.log('Mapped driver:', this.selectedDriver); 
+            this.selectedDriver = mapped;
+            console.log('Mapped driver:', this.selectedDriver);
             this.showResults = true;
           },
           error: (err) => {
-            this.toastr.error('Driver not found with this information', 'Error', {
-              timeOut: 2000,
-              progressBar: true,
-            });
+            this.toastr.error(
+              this.translate.instant('TOASTER.ERROR.NOT_FOUND')
+            );
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;
@@ -255,10 +256,29 @@ export class TrafficSearchComponent {
     }
   }
 
+  // private mapDtoToDriver(dto: DriverDTO): Driver {
+  //   return {
+  //     mainGuid: dto.mainGuid,
+  //     fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
+  //     issuerRegion: dto.licenceRegion
+  //       ? this.getRegionName(dto.licenceRegion)
+  //       : 'Unknown',
+  //     issuerCity: dto.licenceArea
+  //       ? this.getCityName(dto.licenceArea)
+  //       : 'Unknown',
+  //     issuanceDate: dto.issuanceDate || '',
+  //     licenseNumber: dto.licenceNo?.trim() || '',
+  //     licenseCategory: dto.licenceGrade != null ? +dto.licenceGrade : undefined,
+  //   };
+  // }
+
   private mapDtoToDriver(dto: DriverDTO): Driver {
     return {
       mainGuid: dto.mainGuid,
-      fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
+      fullName: [dto.firstName, dto.fatherName, dto.grandName]
+        .filter(Boolean)
+        .join(' ')
+        .trim(),
       issuerRegion: dto.licenceRegion
         ? this.getRegionName(dto.licenceRegion)
         : 'Unknown',
@@ -320,7 +340,7 @@ export class TrafficSearchComponent {
     });
 
     // if (this.currentUrl === 'penalty') {
-      this.router.navigate(['/traffic']);
+    this.router.navigate(['/traffic']);
     // } else {
     //   console.log('Navigating to suspension-search with action=suspension');
 
@@ -328,7 +348,6 @@ export class TrafficSearchComponent {
     // }
   }
 
-  
   onNext(driver: Driver): void {
     console.log('Proceeding with driver:', driver);
   }
@@ -348,3 +367,4 @@ export class TrafficSearchComponent {
     this.showResults = false;
   }
 }
+

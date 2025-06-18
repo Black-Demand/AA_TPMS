@@ -1,7 +1,7 @@
 <div class="dialog-container">
   <h1 mat-dialog-title class="dialog-title">
     <mat-icon class="title-icon">person</mat-icon>
-    Driver Information
+    {{'SEARCH.DRI_INFO' | translate }}
   </h1>
 
   <mat-divider class="divider"></mat-divider>
@@ -28,39 +28,39 @@
       <div class="form-grid">
         <!-- Row 1 -->
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Full Name</mat-label>
+          <mat-label>{{'SEARCH.FULL_NAME' | translate }}</mat-label>
           <input matInput [readonly]="true" formControlName="fullName">
           <mat-icon matPrefix>badge</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Nationality</mat-label>
+          <mat-label>{{'SEARCH.NATIONALITY_PLACEHOLDER' | translate }}</mat-label>
           <input matInput [readonly]="true" formControlName="nationality">
           <mat-icon matPrefix>public</mat-icon>
         </mat-form-field>
 
         <!-- Row 2 -->
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Gender</mat-label>
+          <mat-label>{{'TEMP.SEX' | translate }}</mat-label>
           <input matInput [readonly]="true" formControlName="gender">
           <mat-icon matPrefix>transgender</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Date of Birth</mat-label>
+          <mat-label>{{'TEMP.DOB_PLACEHOLDER' | translate }}</mat-label>
           <input matInput [readonly]="true" formControlName="birthDate">
           <mat-icon matPrefix>cake</mat-icon>
         </mat-form-field>
 
         <!-- Row 3 -->
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Address</mat-label>
+          <mat-label>{{'SEARCH.REGION_PLACEHOLDER' | translate }}</mat-label>
           <input matInput [readonly]="true" formControlName="address">
           <mat-icon matPrefix>home</mat-icon>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-          <mat-label>Town</mat-label>
+          <mat-label>{{'SEARCH.WOREDA_PLACEHOLDER' | translate }}</mat-label>
           <input matInput [readonly]="true" formControlName="town">
           <mat-icon matPrefix>home</mat-icon>
         </mat-form-field>
@@ -70,8 +70,8 @@
   </div>
 
   <div mat-dialog-actions class="dialog-actions">
-    <button mat-stroked-button mat-dialog-close class="close-btn">
-      <mat-icon>close</mat-icon> Close
+    <button mat-raised-button   mat-dialog-close class="close-btn" color="primary">
+      <mat-icon>close</mat-icon> {{'SEARCH.CLOSE_BUT' | translate }}
     </button>
   </div>
 </div>

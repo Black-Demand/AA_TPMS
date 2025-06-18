@@ -9,45 +9,51 @@
       <h3 class="section-title"></h3>
       <div class="form-row">
         <mat-form-field appearance="outline" class="form-field">
-           <mat-label>{{'SEARCH.FULL_NAME' | translate}}</mat-label>
+          <mat-label>{{'SEARCH.FULL_NAME' | translate}}</mat-label>
           <input matInput formControlName="fullName" required>
-          <mat-error>Required field</mat-error>
+          <mat-error *ngIf="penaltyForm.get('fullName')?.hasError('required')">
+            {{ 'ERROR.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="penaltyForm.get('fullName')?.hasError('amharicOnly')">
+            {{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}
+          </mat-error>
         </mat-form-field>
 
-            <mat-form-field appearance="outline" class="form-field">
-           <mat-label>{{'SEARCH.TICKET_NO_PLACEHOLDER' | translate}}</mat-label>
+        <mat-form-field appearance="outline" class="form-field">
+          <mat-label>{{'SEARCH.TICKET_NO_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="ticketNo" required>
           <mat-error></mat-error>
         </mat-form-field>
       </div>
-      <div class="form-row">
 
+
+      <div class="form-row">
         <mat-form-field appearance="outline" class="form-field" style="flex: 0.32;">
-         <mat-label>{{'SEARCH.VIOLATION_GRADE_PLACEHOLDER' | translate}}</mat-label>
+          <mat-label>{{'SEARCH.VIOLATION_GRADE_PLACEHOLDER' | translate}}</mat-label>
           <mat-select formControlName="violationGrade" required (selectionChange)="onPenaltyTypeChange($event.value)">
             <mat-option *ngFor="let penalty of offences" [value]="penalty.code">
               {{ penalty.amDescription }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
 
 
         <mat-form-field appearance="outline" class="form-field" style="width: 460px;">
-                  <mat-label>{{'SEARCH.VIOLATION_TYPE_PLACEHOLDER' | translate }}</mat-label>
+          <mat-label>{{'SEARCH.VIOLATION_TYPE_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="violationType" required>
             <mat-option *ngFor="let violation of violationtypes" [value]="violation.code">
-            {{ violation.code }} - {{ violation.amDescription }}
+              {{ violation.code }} - {{ violation.amDescription }}
             </mat-option>
           </mat-select>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
-        </div>
+      </div>
 
 
       <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field">
-           <mat-label>{{'SEARCH.PAYMENT_PLACEHOLDER' | translate }}</mat-label>
+        <mat-form-field appearance="outline" class="form-field" >
+          <mat-label>{{'SEARCH.PAYMENT_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="amount" readonly>
           <mat-error>{{ getPaymentErrorMessage() }}</mat-error>
         </mat-form-field>
@@ -63,7 +69,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
-                  <mat-label>{{'SEARCH.DATE_ACCUSED_PLACEHOLDER' | translate}}</mat-label>
+          <mat-label>{{'SEARCH.DATE_ACCUSED_PLACEHOLDER' | translate}}</mat-label>
           <input matInput [matDatepicker]="yetss_ken" formControlName="dateAccused" [min]="minEndDate" required
             (dateChange)="penaltyForm.updateValueAndValidity()">
           <mat-datepicker-toggle matSuffix [for]="yetss_ken"></mat-datepicker-toggle>
@@ -71,23 +77,21 @@
           <mat-error>{{getErrorForDateAccused()}}</mat-error>
         </mat-form-field>
 
-        
+
         <mat-form-field appearance="outline" class="form-field">
-<<<<<<< HEAD
-           <mat-label>{{'SEARCH.REMARK_PLACEHOLDER' | translate }}</mat-label>
-=======
-          <mat-label>Description</mat-label>
->>>>>>> 6a672964a5297915400317a4c1d493dbcebfa5e9
+          <mat-label>{{'SEARCH.REMARK_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="desc" required>
-          <mat-error>Required field</mat-error>
+          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
         </mat-form-field>
       </div>
 
     </mat-card-content>
 
     <mat-card-actions align="end" class="form-actions">
-      <button mat-button type="button"  color="warn" (click)="onReset()">Reset</button>
-      <button mat-raised-button color="primary" type="submit" >Submit</button>
+      <button mat-button type="button" color="warn" (click)="onReset()">{{'SEARCH.CANCEL_BUTTON' | translate }}</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="penaltyForm.invalid">
+        {{ 'SEARCH.SAVE_BUTTON' | translate }}
+      </button>
     </mat-card-actions>
   </mat-card>
 

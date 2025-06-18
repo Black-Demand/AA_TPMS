@@ -26,7 +26,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatMenuModule } from '@angular/material/menu';
 import { filter } from 'rxjs';
 import { LanguageService } from '../../services/language.service';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface Driver {
   mainGuid: string;
@@ -57,7 +57,8 @@ interface Driver {
     MatTabsModule,
     MatIconModule,
     MatMenuModule,
-    TranslateModule
+    TranslateModule,
+    
   ],
   standalone: true,
   templateUrl: './suspension-search.component.html',
@@ -93,7 +94,8 @@ export class SuspensionSearchComponent {
     private router: Router,
     private toastr: ToastrService,
     private route: ActivatedRoute,
-    private languageService: LanguageService 
+    private languageService: LanguageService,
+    private translate : TranslateService
   ) {
     this.createForm();
   }
@@ -193,26 +195,26 @@ export class SuspensionSearchComponent {
 
     const formValue = this.searchForm.value;
 
-    if (this.searchType === 'name') {
-      this.driverService
-        .searchByName(
-          formValue.firstName,
-          formValue.fatherName,
-          formValue.grandfatherName
-        )
-        .subscribe({
-          next: (driver) => {
-            const mapped = this.mapDtoToDriver(driver);
-            this.dataSource.data = [mapped];
-            this.selectedDriver = mapped; 
-            this.showResults = true;
-          },
+     if (this.searchType === 'name') {
+  this.driverService
+    .searchByName(
+      formValue.firstName,
+      formValue.fatherName,
+      formValue.grandName
+    )
+    .subscribe({
+      next: (drivers) => {
+        const mappedDrivers = drivers.map((d) => this.mapDtoToDriver(d));
+        this.dataSource.data = mappedDrivers;
+        this.selectedDriver = mappedDrivers[0]; // Or handle selection differently
+        this.showResults = true;
+      },
           error: (err) => {
             console.error('Search by name failed:', err);
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;
-            this.toastr.error('Driver not found with this information');
+            this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
           },
         });
     } else {
@@ -231,10 +233,7 @@ export class SuspensionSearchComponent {
             this.showResults = true;
           },
           error: (err) => {
-            this.toastr.error('Driver not found with this information', 'Error', {
-              timeOut: 2000,
-              progressBar: true,
-            });
+            this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;

@@ -42,6 +42,13 @@
    
     }
   }
+
+  .form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 16px;
+}
   .image-upload-container {
     width: 100%;
     margin: 1rem 0;

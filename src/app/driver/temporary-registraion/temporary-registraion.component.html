@@ -88,22 +88,34 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.NAME_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="firstNameAmh" required  amharicOnly>
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
-           <mat-error >{{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}</mat-error>
+          <mat-error *ngIf="registrationForm.get('firstNameAmh')?.hasError('required')">
+            {{ 'ERROR.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('firstNameAmh')?.hasError('amharicOnly')">
+            {{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.F_NAME_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="fatherNameAmh" required>
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
-          <mat-error >{{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}</mat-error>
+           <mat-error *ngIf="registrationForm.get('fatherNameAmh')?.hasError('required')">
+            {{ 'ERROR.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('fatherNameAmh')?.hasError('amharicOnly')">
+            {{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.G_NAME_PLACEHOLDER' | translate }}</mat-label>
           <input matInput formControlName="grandNameAmh" required>
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
-          <mat-error >{{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}</mat-error>
+           <mat-error *ngIf="registrationForm.get('grandNameAmh')?.hasError('required')">
+            {{ 'ERROR.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('grandNameAmh')?.hasError('amharicOnly')">
+            {{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}
+          </mat-error>
         </mat-form-field>
       </div>
 
@@ -265,7 +277,7 @@
       </div>
     </mat-card-content>
 
-    <mat-card-actions align="end">
+    <mat-card-actions align="end" class="form-actions">
       <button mat-button type="button" (click)="onReset()">
         <mat-icon>refresh</mat-icon>{{'SEARCH.CANCEL_BUTTON' | translate }}</button>
       <button mat-raised-button color="primary" type="submit" [disabled]="registrationForm.invalid">{{'SEARCH.SAVE_BUTTON' | translate }}</button>
