@@ -8,13 +8,13 @@
     <mat-card-content>
       <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
         <!-- Search Type Selection -->
-        <div class="search-type-section">
+       <div class="search-type-section">
           <mat-radio-group formControlName="searchType" (change)="onSearchTypeChange($event)">
-            <mat-radio-button value="name" class="search-type-radio">
-              <mat-icon>person</mat-icon> {{'SEARCH.NAME_SEARCH' | translate}}
-            </mat-radio-button>
             <mat-radio-button value="license" class="search-type-radio">
               <mat-icon>badge</mat-icon> {{'SEARCH.LICENCE_SEARCH' | translate}}
+            </mat-radio-button>
+            <mat-radio-button value="name" class="search-type-radio">
+              <mat-icon>person</mat-icon> {{'SEARCH.NAME_SEARCH' | translate}}
             </mat-radio-button>
           </mat-radio-group>
         </div>
