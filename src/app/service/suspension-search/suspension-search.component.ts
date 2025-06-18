@@ -67,7 +67,7 @@ interface Driver {
 export class SuspensionSearchComponent {
   // Search Form
   searchForm!: FormGroup;
-  searchType: 'name' | 'license' = 'name';
+  searchType: 'license' | 'name' = 'license';
   showResults = false;
   licenseAreas: Lookup.LicenceAreaDTO[] = [];
   licenseRegions: Lookup.LicenceRegionDTO[] = [];
@@ -144,7 +144,7 @@ export class SuspensionSearchComponent {
 
   createForm(): void {
     this.searchForm = this.fb.group({
-      searchType: ['name'],
+      searchType: ['license'],
       firstName: ['', Validators.required],
       fatherName: [''],
       grandfatherName: [''],
@@ -188,15 +188,39 @@ export class SuspensionSearchComponent {
     }
   }
 
-  onSubmit(): void {
+   onSubmit(): void {
     if (this.searchForm.invalid) {
       return;
     }
 
     const formValue = this.searchForm.value;
 
-     if (this.searchType === 'name') {
-  this.driverService
+    if (this.searchType === 'license') {
+ this.driverService
+        .searchByLicense(
+          formValue.region,
+          formValue.level,
+          formValue.licenseNumber
+        )
+        .subscribe({
+          next: (driver) => {
+            const mapped = this.mapDtoToDriver(driver);
+            this.dataSource.data = [mapped];
+            this.selectedDriver = mapped;
+            console.log('Mapped driver:', this.selectedDriver);
+            this.showResults = true;
+          },
+          error: (err) => {
+            this.toastr.error(
+              this.translate.instant('TOASTER.ERROR.NOT_FOUND')
+            );
+            this.dataSource.data = [];
+            this.selectedDriver = null;
+            this.showResults = false;
+          },
+        });
+    } else {
+        this.driverService
     .searchByName(
       formValue.firstName,
       formValue.fatherName,
@@ -214,29 +238,9 @@ export class SuspensionSearchComponent {
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;
-            this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
-          },
-        });
-    } else {
-      this.driverService
-        .searchByLicense(
-          formValue.region,
-          formValue.level,
-          formValue.licenseNumber
-        )
-        .subscribe({
-          next: (driver) => {
-            const mapped = this.mapDtoToDriver(driver);
-            this.dataSource.data = [mapped];
-            this.selectedDriver = mapped; 
-            console.log('Mapped driver:', this.selectedDriver); 
-            this.showResults = true;
-          },
-          error: (err) => {
-            this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
-            this.dataSource.data = [];
-            this.selectedDriver = null;
-            this.showResults = false;
+            this.toastr.error(
+              this.translate.instant('TOASTER.ERROR.NOT_FOUND')
+            );
           },
         });
     }
@@ -331,7 +335,6 @@ export class SuspensionSearchComponent {
 
   resetForm(): void {
     this.searchForm.reset();
-    this.createForm();
     this.showResults = false;
   }
 }

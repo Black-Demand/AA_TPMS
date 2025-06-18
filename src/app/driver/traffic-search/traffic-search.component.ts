@@ -71,7 +71,7 @@ interface Driver {
 export class TrafficSearchComponent {
   // Search Form
   searchForm!: FormGroup;
-  searchType: 'name' | 'license' = 'name';
+  searchType: 'license' | 'name' = 'license';
   showResults = false;
   licenseAreas: Lookup.LicenceAreaDTO[] = [];
   licenseRegions: Lookup.LicenceRegionDTO[] = [];
@@ -149,7 +149,7 @@ export class TrafficSearchComponent {
 
   createForm(): void {
     this.searchForm = this.fb.group({
-      searchType: ['name'],
+      searchType: ['license'],
       firstName: ['', Validators.required],
       fatherName: [''],
       grandName: [''],
@@ -206,32 +206,8 @@ export class TrafficSearchComponent {
 
     const formValue = this.searchForm.value;
 
-    if (this.searchType === 'name') {
-  this.driverService
-    .searchByName(
-      formValue.firstName,
-      formValue.fatherName,
-      formValue.grandName
-    )
-    .subscribe({
-      next: (drivers) => {
-        const mappedDrivers = drivers.map((d) => this.mapDtoToDriver(d));
-        this.dataSource.data = mappedDrivers;
-        this.selectedDriver = mappedDrivers[0]; // Or handle selection differently
-        this.showResults = true;
-      },
-          error: (err) => {
-            console.error('Search by name failed:', err);
-            this.dataSource.data = [];
-            this.selectedDriver = null;
-            this.showResults = false;
-            this.toastr.error(
-              this.translate.instant('TOASTER.ERROR.NOT_FOUND')
-            );
-          },
-        });
-    } else {
-      this.driverService
+    if (this.searchType === 'license') {
+ this.driverService
         .searchByLicense(
           formValue.region,
           formValue.level,
@@ -252,6 +228,30 @@ export class TrafficSearchComponent {
             this.dataSource.data = [];
             this.selectedDriver = null;
             this.showResults = false;
+          },
+        });
+    } else {
+        this.driverService
+    .searchByName(
+      formValue.firstName,
+      formValue.fatherName,
+      formValue.grandName
+    )
+    .subscribe({
+      next: (drivers) => {
+        const mappedDrivers = drivers.map((d) => this.mapDtoToDriver(d));
+        this.dataSource.data = mappedDrivers;
+        this.selectedDriver = mappedDrivers[0]; // Or handle selection differently
+        this.showResults = true;
+      },
+          error: (err) => {
+            console.error('Search by name failed:', err);
+            this.dataSource.data = [];
+            this.selectedDriver = null;
+            this.showResults = false;
+            this.toastr.error(
+              this.translate.instant('TOASTER.ERROR.NOT_FOUND')
+            );
           },
         });
     }
@@ -364,7 +364,6 @@ export class TrafficSearchComponent {
 
   resetForm(): void {
     this.searchForm.reset();
-    this.createForm();
     this.showResults = false;
   }
 }
