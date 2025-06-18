@@ -30,6 +30,7 @@ import { dateNotTheFuture, dateNotTheFutures } from '../../service/date.validate
 import { ACTION_OPTIONS, ActionOption} from '../../Enums/actiontaken';
 import { PenalityfortrafficService } from '../../services/penalityfortraffic.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { dateCannotBeTheFuture } from '../age.validate';
 
 @Component({
   selector: 'app-traffic',
@@ -137,14 +138,14 @@ export class TrafficComponent  implements OnInit {
       licenseNumber: [{ value: '', disabled: true }, Validators.required],
       violationGrade: ['', Validators.required],
       offenceId: [{ value: '', disabled: false }, Validators.required],
-      violationDate: new FormControl<Date | null>(null, [Validators.required, dateNotTheFuture()]),
+      violationDate: new FormControl<Date | null>(null, [Validators.required, dateCannotBeTheFuture()]),
       actionTakenBy: ['', Validators.required],
       actionTaken: ['', Validators.required],
       plateRegion: ['', Validators.required],
       newPlateCode: ['', Validators.required],
-      newPlateNo: ['', Validators.required],
+      newPlateNo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
       violationPlace: ['', Validators.required],
-      dateAccused: new FormControl<Date | null>(null, [Validators.required, dateNotTheFutures()]),
+      dateAccused: new FormControl<Date | null>(null, [Validators.required, dateCannotBeTheFuture()]),
       amount: [{ value: '', disabled: true }, Validators.required],
       ticketNo: [{ value: '', disabled: true }, Validators.required],
       vehicleType: ['', Validators.required],
@@ -152,7 +153,9 @@ export class TrafficComponent  implements OnInit {
       isLightInjury: [false],
       isSevereInjury: [false],
       isPropertyDamage: [false]
-  });
+  },
+  { validators: this.dateRangeValidator }
+);
 
 
 }
@@ -195,46 +198,96 @@ export class TrafficComponent  implements OnInit {
   }
 
 
-  dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const yetKen = group.get('violationDate')?.value;
-    const yetsKen = group.get('dateAccused')?.value;
+  // dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+  //   const yetKen = group.get('violationDate')?.value;
+  //   const yetsKen = group.get('dateAccused')?.value;
 
-    if (yetKen && yetsKen && yetKen > yetsKen) {
+  //   if (yetKen && yetsKen && yetKen > yetsKen) {
+  //     return { dateRangeInvalid: true };
+  //   }
+  //   return null;
+  // }
+
+  // get minEndDate(): Date | null {
+  //   return this.trafficForm.get('violationDate')?.value;
+  // }
+
+  // getErrorMessageForYetfesmbetKen(): string {
+  //   let field = this.trafficForm.get('violationDate');
+
+  //   if (field?.hasError('required')) {
+  //     return this.translate.instant('ERROR.REQUIRED');
+  //   }
+  //   if (field?.hasError('dateNotTheFuture')) {
+  //     return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE')
+  //   }
+  //   return "";
+  // }
+
+
+  // getErrorMessageForYetfessmbetKen(): string {
+  //   let field = this.trafficForm.get('dateAccused');
+
+  //   if (field?.hasError('required')) {
+  //   return this.translate.instant('ERROR.REQUIRED');
+  //   }
+  //   if (field?.hasError('dateNotTheFuture')) {
+  //     return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE')
+  //   }
+  //   if (this.trafficForm.hasError('dateRangeInvalid')) {
+  //     return this.translate.instant('ERROR.DATE_RANGE_INVALID')
+  //   }
+  //   return "";
+  // }
+
+
+   dateRangeValidator(group: AbstractControl): ValidationErrors | null {
+    const violationDate = group.get('violationDate')?.value;
+    const dateAccused = group.get('dateAccused')?.value;
+
+    if (
+      violationDate &&
+      dateAccused &&
+      new Date(violationDate) > new Date(dateAccused)
+    ) {
       return { dateRangeInvalid: true };
     }
     return null;
   }
 
-  get minEndDate(): Date | null {
+   get minEndDate(): Date | null {
     return this.trafficForm.get('violationDate')?.value;
   }
-  getErrorMessageForYetfesmbetKen(): string {
-    let field = this.trafficForm.get('violationDate');
+
+  getErrorForViolationDate(): string {
+    const field = this.trafficForm.get('violationDate');
+
+     if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.REQUIRED');
+    }
+    if (field?.hasError('dateNotTheFuture')) {
+      return field.getError('dateNotTheFuture').message;
+    }
+
+    return '';
+  }
+
+ getErrorForDateAccused(): string {
+    const field = this.trafficForm.get('dateAccused');
 
     if (field?.hasError('required')) {
       return this.translate.instant('ERROR.REQUIRED');
     }
     if (field?.hasError('dateNotTheFuture')) {
-      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE')
+      return field.getError('dateNotTheFuture').message;
     }
-    return "";
-  }
 
-
-  getErrorMessageForYetfessmbetKen(): string {
-    let field = this.trafficForm.get('dateAccused');
-
-    if (field?.hasError('required')) {
-    return this.translate.instant('ERROR.REQUIRED');
-    }
-    if (field?.hasError('dateNotTheFuture')) {
-      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE')
-    }
     if (this.trafficForm.hasError('dateRangeInvalid')) {
-      return this.translate.instant('ERROR.DATE_RANGE_INVALID')
+      return 'Yetkessbte Ken must be greater than or equal to Yetfesmbte Ken';
     }
-    return "";
+    return '';
   }
+
 
   generateTicketNumber() {
     const ticketNum = Math.floor(100000 + Math.random() * 900000);

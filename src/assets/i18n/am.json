@@ -1,5 +1,6 @@
 {
   "SEARCH": {
+    "AMHARIC": "አማርኛ",
     "LOGOUT": "ውጣ",
     "SETTING": "ቅንብሮች ",
     "PROFILE": "የኔ መገለጫ",
@@ -95,7 +96,7 @@
   "ERROR": {
     "REQUIRED": "ይህ መረጃ ያስፈልጋል",
     "PAY_DAY_REQUIRED": "የክፍያ ቀን አስፈላጊ ነው",
-    "DATE_NOT_IN_FUTURE": "ቀኑ በወደፊት መሆን የለበትም",
+    "DATE_NOT_IN_FUTURE": "ቀኑ ወደፊት መሆን የለበትም",
     "TICKET_REQUIRED": "የትኬት ቁጥር አስፈላጊ ነው",
     "TICKET_PATTERN": "ቁጥሮች ብቻ ያስገቡያስገቡ",
     "VIOLATION_DATE_REQUIRED": "የጥሰት ቀን አስፈላጊ ነው",
