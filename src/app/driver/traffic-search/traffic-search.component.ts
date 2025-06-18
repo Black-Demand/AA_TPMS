@@ -206,19 +206,19 @@ export class TrafficSearchComponent {
     const formValue = this.searchForm.value;
 
     if (this.searchType === 'name') {
-      this.driverService
-        .searchByName(
-          formValue.firstName,
-          formValue.fatherName,
-          formValue.grandName
-        )
-        .subscribe({
-          next: (drivers) => {
-            const mappedDrivers = drivers.map((d) => this.mapDtoToDriver(d));
-            this.dataSource.data = mappedDrivers;
-            this.selectedDriver = mappedDrivers[0]; // Or handle selection differently
-            this.showResults = true;
-          },
+  this.driverService
+    .searchByName(
+      formValue.firstName,
+      formValue.fatherName,
+      formValue.grandName
+    )
+    .subscribe({
+      next: (drivers) => {
+        const mappedDrivers = drivers.map((d) => this.mapDtoToDriver(d));
+        this.dataSource.data = mappedDrivers;
+        this.selectedDriver = mappedDrivers[0]; // Or handle selection differently
+        this.showResults = true;
+      },
           error: (err) => {
             console.error('Search by name failed:', err);
             this.dataSource.data = [];

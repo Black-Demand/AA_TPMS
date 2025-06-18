@@ -265,9 +265,8 @@ export class TrafficComponent  implements OnInit {
      if (field?.hasError('required')) {
       return this.translate.instant('ERROR.REQUIRED');
     }
-
-    if (field?.hasError('dateCannotBeTheFuture')) {
-      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
+    if (field?.hasError('dateNotTheFuture')) {
+      return field.getError('dateNotTheFuture').message;
     }
 
     return '';
@@ -279,13 +278,12 @@ export class TrafficComponent  implements OnInit {
     if (field?.hasError('required')) {
       return this.translate.instant('ERROR.REQUIRED');
     }
-
-    if (field?.hasError('dateCannotBeTheFuture')) {
-      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE');
+    if (field?.hasError('dateNotTheFuture')) {
+      return field.getError('dateNotTheFuture').message;
     }
 
     if (this.trafficForm.hasError('dateRangeInvalid')) {
-      return this.translate.instant('ERROR.DATE_RANGE_INVALID');
+      return 'Yetkessbte Ken must be greater than or equal to Yetfesmbte Ken';
     }
     return '';
   }
