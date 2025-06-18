@@ -367,5 +367,5 @@ private getCityName(code: string): string {
   resetForm(): void {
     this.searchForm.reset();
     this.showResults = false;
-  }
+  } 
 }
