@@ -24,7 +24,13 @@
           <mat-form-field appearance="outline">
             <mat-label>{{'SEARCH.NAME_PLACEHOLDER' | translate}}</mat-label>
             <input matInput formControlName="firstName" [placeholder]="'SEARCH.NAME_PLACEHOLDER' | translate">
-            <mat-error *ngIf="searchForm.get('firstName')?.invalid">{{'ERROR.REQUIRED' | translate }}</mat-error>
+        <mat-error *ngIf="searchForm.get('firstName')?.hasError('required')">
+          {{ 'ERROR.REQUIRED' | translate }}
+        </mat-error>
+       <!-- <mat-error *ngIf="searchForm.get('firstName')?.hasError('amharicOnly')">
+  {{ 'ERROR.INVALID_AMHARIC_CHARACTERS' | translate }}
+</mat-error> -->
+
           </mat-form-field>
 
           <mat-form-field appearance="outline">

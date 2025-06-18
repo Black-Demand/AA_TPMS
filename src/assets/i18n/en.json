@@ -105,7 +105,10 @@
     "DATE_REQUIRED": "Date is required",
     "INVALID_AMHARIC_CHARACTERS": "Use only amharic Characters",
     "LOGIN_UN": "Username is required",
-    "LOGIN_PAS": "Password is required"
+    "LOGIN_PAS": "Password is required",
+    "Min_LE" : "License number must be exactly 6 characters",
+    "PHONE_PATTERN": "Please  exactly 9 digits (after +251)."
+
   },
   "COMMON": {
     "DASHBOARD": "Dashboard",

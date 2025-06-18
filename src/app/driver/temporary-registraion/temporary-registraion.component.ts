@@ -29,6 +29,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { amharicOnlyValidator } from '../../service/amharicOnlyValidator';
+import { dateNotTheFutures } from '../../service/date.validate';
 @Component({
   selector: 'app-temporary-registraion',
   standalone: true,
@@ -106,7 +107,7 @@ export class TemporaryRegistraionComponent implements OnInit {
       grandName: ['', Validators.required],
       nationality: ['', Validators.required],
       sex: ['', Validators.required],
-      birthDate: ['', [Validators.required, minAgeValidator(18)]],
+      birthDate: ['', [Validators.required, minAgeValidator(18) , dateCannotBeTheFuture()]],
       tel1: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
       region: ['', Validators.required],
       zone: ['', Validators.required],
@@ -139,6 +140,21 @@ export class TemporaryRegistraionComponent implements OnInit {
   get licenseNumberControl() {
     return this.registrationForm.get('licenseNumber');
   }
+
+  getErrorForPhonrNo(): string {
+  const field = this.registrationForm.get('tel1');
+
+  if (field?.hasError('required')) {
+    return this.translate.instant('ERROR.REQUIRED'); 
+  }
+
+  if (field?.hasError('pattern')) {
+    return this.translate.instant('ERROR.PHONE_PATTERN'); 
+  }
+
+  return '';
+}
+
 
   getErrorForLicenseNumber(): string {
     if (this.licenseNumberControl?.hasError('required')) {
@@ -173,6 +189,12 @@ export class TemporaryRegistraionComponent implements OnInit {
     if (minAgeError) {
       return this.translate.instant(minAgeError.messageKey, minAgeError.params);
     }
+
+  const futureDateError = field?.getError('dateCannotBeTheFuture');
+  if (futureDateError) {
+    return this.translate.instant(futureDateError.messageKey);
+  }
+    
     return '';
   }
   ngOnInit(): void {

@@ -141,7 +141,7 @@
       </div>
 
       <div class="form-row">
-        <mat-form-field appearance="outline" class="form-field" style="flex: 0.62;">
+        <mat-form-field appearance="outline" class="form-field" style="flex: 1.5;">
           <mat-label>{{'SEARCH.NATIONALITY_PLACEHOLDER' | translate }}</mat-label>
           <mat-select formControlName="nationality" required>
             <mat-option *ngFor="let country of nationalities" [value]="country.code">
@@ -162,7 +162,7 @@
         </mat-form-field>
 
         
-        <mat-form-field appearance="outline" class="form-field" style="flex: 0.8;">
+        <mat-form-field appearance="outline" class="form-field" >
           <mat-label>{{'TEMP.DOB_PLACEHOLDER' | translate }}</mat-label>
           <input matInput [matDatepicker]="dobPicker" formControlName="birthDate" required>
           <mat-datepicker-toggle matSuffix [for]="dobPicker"></mat-datepicker-toggle>
@@ -171,15 +171,12 @@
         </mat-form-field>
 
 
-        <mat-form-field appearance="outline" class="form-field phone-input-container" >
+        <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'TEMP.TEL' | translate }}</mat-label>
           <span matPrefix>+251 &nbsp;</span>
           <input matInput formControlName="tel1" required maxlength="9" (input)="onPhoneInput($event)"
             placeholder="912345678" type="tel">
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
-          <mat-error *ngIf="registrationForm.get('tel1')?.hasError('pattern')">
-            Please enter exactly 9 digits (after +251)
-          </mat-error>
+            <mat-error>{{getErrorForPhonrNo()}}</mat-error>
         </mat-form-field>
 
 

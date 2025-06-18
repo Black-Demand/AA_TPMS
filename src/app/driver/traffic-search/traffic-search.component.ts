@@ -32,6 +32,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { filter } from 'rxjs';
 import { LanguageService } from '../../services/language.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { amharicOnlyValidator } from '../../service/amharicOnlyValidator';
 interface Driver {
   mainGuid: string;
   fullName: string;
@@ -151,11 +152,7 @@ export class TrafficSearchComponent {
       searchType: ['name'],
       firstName: ['', Validators.required],
       fatherName: [''],
-<<<<<<< HEAD
-      grandfatherName: [''],
-=======
       grandName: [''],
->>>>>>> 82ef7331a1da1a74fcc0382875a2cbc261ce5375
       region: [''],
       level: [''],
       licenseNumber: [''],
@@ -170,11 +167,7 @@ export class TrafficSearchComponent {
   }
 
   toggleValidators(): void {
-<<<<<<< HEAD
     const nameControls = ['firstName'];
-=======
-    const nameControls = ['firstName', 'fatherName', 'grandName'];
->>>>>>> 82ef7331a1da1a74fcc0382875a2cbc261ce5375
     const licenseControls = ['region', 'level', 'licenseNumber'];
 
     if (this.searchType === 'name') {

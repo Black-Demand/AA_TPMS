@@ -111,14 +111,8 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.PLATE_NO_PLACEHOLDER' | translate}}</mat-label>
           <input matInput formControlName="newPlateNo" required minlength="6" maxlength="6" #licenseNumberInput>
-          <!-- Error messages -->
-          <mat-error *ngIf="trafficForm.get('licenceNo')?.hasError('required')">
-            {{'ERROR.REQUIRED' | translate }}
-          </mat-error>
-          <mat-error *ngIf="trafficForm.get('licenceNo')?.hasError('minlength') || 
-                                  trafficForm.get('licenceNo')?.hasError('maxlength')">
-            License number must be exactly 6 characters
-          </mat-error>
+        
+          <mat-error>{{getErrorForPlateNumber()}}</mat-error>
         </mat-form-field>
       </div>
 
