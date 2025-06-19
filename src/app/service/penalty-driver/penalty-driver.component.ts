@@ -164,97 +164,107 @@ export class PenaltyDriverComponent {
     this.searchType = event.value;
     this.toggleValidators();
   }
+toggleValidators(): void {
+  const nameControls = ['firstName', 'fatherName', 'grandName'];
+  const licenseControls = ['region', 'level', 'licenseNumber'];
 
-  toggleValidators(): void {
-    const nameControls = ['firstName', 'fatherName', 'grandName'];
-    const licenseControls = ['region', 'level', 'licenseNumber'];
+  const allControls = [...nameControls, ...licenseControls];
 
-    if (this.searchType === 'name') {
-      licenseControls.forEach((control) => {
-        this.searchForm.get(control)?.clearValidators();
-        this.searchForm.get(control)?.reset();
-        this.searchForm.get(control)?.updateValueAndValidity();
-      });
-
-      // Only firstName required, others optional
-      this.searchForm.get('firstName')?.setValidators([Validators.required]);
-      this.searchForm.get('firstName')?.updateValueAndValidity();
-
-      // Clear validators for fatherName and grandName
-      ['fatherName', 'grandName'].forEach((control) => {
-        this.searchForm.get(control)?.clearValidators();
-        this.searchForm.get(control)?.updateValueAndValidity();
-      });
-    } else {
-      nameControls.forEach((control) => {
-        this.searchForm.get(control)?.clearValidators();
-        this.searchForm.get(control)?.reset();
-        this.searchForm.get(control)?.updateValueAndValidity();
-      });
-      licenseControls.forEach((control) => {
-        this.searchForm.get(control)?.setValidators([Validators.required]);
-        this.searchForm.get(control)?.updateValueAndValidity();
-      });
+  // Clear validators and errors for all fields
+  allControls.forEach(control => {
+    const formControl = this.searchForm.get(control);
+    if (formControl) {
+      formControl.clearValidators();
+      formControl.setErrors(null); // Remove any existing error
+      formControl.updateValueAndValidity();
     }
+  });
+
+  if (this.searchType === 'name') {
+    this.searchForm.get('firstName')?.setValidators(Validators.required);
+  } else {
+    licenseControls.forEach(control => {
+      this.searchForm.get(control)?.setValidators(Validators.required);
+    });
   }
 
-   onSubmit(): void {
-    if (this.searchForm.invalid) {
-      return;
-    }
+  // Re-validate only the relevant fields
+  const activeControls = this.searchType === 'name' ? ['firstName'] : licenseControls;
+  activeControls.forEach(control => {
+    this.searchForm.get(control)?.updateValueAndValidity();
+  });
+}
+onSubmit(): void {
+  let relevantFields: string[] = [];
 
-    const formValue = this.searchForm.value;
-
-    if (this.searchType === 'license') {
- this.driverService
-        .searchByLicense(
-          formValue.region,
-          formValue.level,
-          formValue.licenseNumber
-        )
-        .subscribe({
-          next: (driver) => {
-            const mapped = this.mapDtoToDriver(driver);
-            this.dataSource.data = [mapped];
-            this.selectedDriver = mapped;
-            console.log('Mapped driver:', this.selectedDriver);
-            this.showResults = true;
-          },
-          error: (err) => {
-            this.toastr.error(
-              this.translate.instant('TOASTER.ERROR.NOT_FOUND')
-            );
-            this.dataSource.data = [];
-            this.selectedDriver = null;
-            this.showResults = false;
-          },
-        });
-    } else {
-        this.driverService
-    .searchByName(
-      formValue.firstName,
-      formValue.fatherName,
-      formValue.grandName
-    )
-    .subscribe({
-      next: (drivers) => {
-        const mappedDrivers = drivers.map((d) => this.mapDtoToDriver(d));
-        this.dataSource.data = mappedDrivers;
-        this.selectedDriver = mappedDrivers[0]; // Or handle selection differently
-        this.showResults = true;
-      },
-          error: (err) => {
-            console.error('Search by name failed:', err);
-            this.dataSource.data = [];
-            this.selectedDriver = null;
-            this.showResults = false;
-            this.toastr.error(
-              this.translate.instant('TOASTER.ERROR.NOT_FOUND')
-            );
-          },
-        });
-    }
+  if (this.searchType === 'license') {
+    relevantFields = ['region', 'level', 'licenseNumber'];
+  } else {
+    relevantFields = ['firstName']; // only firstName is required
   }
+
+  // Mark relevant fields as touched and validate them
+  let hasError = false;
+  relevantFields.forEach(field => {
+    const control = this.searchForm.get(field);
+    control?.markAsTouched();
+    control?.updateValueAndValidity();
+    if (control?.invalid) {
+      hasError = true;
+    }
+  });
+
+  if (hasError) {
+    return;
+  }
+
+  const formValue = this.searchForm.value;
+
+  if (this.searchType === 'license') {
+    this.driverService
+      .searchByLicense(
+        formValue.region,
+        formValue.level,
+        formValue.licenseNumber
+      )
+      .subscribe({
+        next: (driver) => {
+          const mapped = this.mapDtoToDriver(driver);
+          this.dataSource.data = [mapped];
+          this.selectedDriver = mapped;
+          this.showResults = true;
+        },
+        error: () => {
+          this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
+          this.dataSource.data = [];
+          this.selectedDriver = null;
+          this.showResults = false;
+        },
+      });
+  } else {
+    this.driverService
+      .searchByName(
+        formValue.firstName,
+        formValue.fatherName,
+        formValue.grandName
+      )
+      .subscribe({
+        next: (drivers) => {
+          const mappedDrivers = drivers.map(d => this.mapDtoToDriver(d));
+          this.dataSource.data = mappedDrivers;
+          this.selectedDriver = mappedDrivers[0];
+          this.showResults = true;
+        },
+        error: () => {
+          this.toastr.error(this.translate.instant('TOASTER.ERROR.NOT_FOUND'));
+          this.dataSource.data = [];
+          this.selectedDriver = null;
+          this.showResults = false;
+        },
+      });
+  }
+}
+
 
   // private mapDtoToDriver(dto: DriverDTO): Driver {
   //   return {

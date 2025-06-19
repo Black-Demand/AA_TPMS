@@ -29,10 +29,10 @@ export interface DriverDTO {
   remark?: string | null;
   issuanceDate?: string | null;
   mainGuid: string;
+  photo?: string | null;   // Uncomment if you want to handle binary data
 
   // issuanceDate?: string | null; // Date string in ISO format
   // town?: string | null;
-  // photo?: Uint8Array | null;   // Uncomment if you want to handle binary data
   //   firstNameSx?: string | null;
   //   fatherNameSx?: string | null;
   //   grandNameSx?: string | null;

@@ -8,19 +8,29 @@
 
   <div mat-dialog-content class="dialog-content">
     <!-- Profile Header -->
-  <form [formGroup]="form">
+    <form [formGroup]="form">
       <div class="profile-header">
-      <div class="photo-container">
-        <div class="photo-wrapper">
-          <img src="assets/logo2.jpeg" alt="Driver Photo" class="driver-photo">
-          <div class="status-badge active"></div>
+        <div class="photo-container">
+          <div class="photo-wrapper">
+           <img
+  *ngIf="imageSrc; else placeholder"
+  [src]="imageSrc"
+  alt="Driver Photo"
+  class="driver-photo"
+/>
+
+<ng-template #placeholder>
+  <div class="no-photo">No Photo Available</div>
+</ng-template>
+
+            <div class="status-badge active"></div>
+          </div>
+        </div>
+  
+        <div class="driver-info">
+          <h2>{{ form.value.fullName }}</h2>
         </div>
       </div>
-      
-      <div class="driver-info">
-       <h2>{{ form.value.fullName }}</h2>
-      </div>
-    </div>
 
     <!-- Details Section -->
     <div class="details-section">
