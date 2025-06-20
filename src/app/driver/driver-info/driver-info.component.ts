@@ -73,7 +73,7 @@ export class DriverInfoComponent {
   searchType: 'license' | 'name' = 'license';
   showResults = false;
   licenseAreas: Lookup.LicenceAreaDTO[] = [];
-  licenseRegions: Lookup.LicenceRegionDTO[] = [];
+  licenseRegions: Lookup.RegionDTO[] = [];
   licenseLevels: Lookup.LicenceCategoryDTO[] = [];
   nationalitys: Lookup.LookupDTO[] = [];
   selectedDriver: any;
@@ -128,7 +128,7 @@ export class DriverInfoComponent {
   }
 
   private loadRegions(): void {
-    this.licenceLookupService.getAllRegions().subscribe({
+    this.licenceLookupService.getRegions().subscribe({
       next: (data) => (this.licenseRegions = data),
       error: (err) => console.error('Failed to load regions', err),
     });
@@ -256,8 +256,8 @@ export class DriverInfoComponent {
     return {
       mainGuid: dto.mainGuid,
       fullName: `${dto.firstName} ${dto.fatherName} ${dto.grandName}`.trim(),
-      issuerRegion: dto.licenceRegion
-        ? this.getRegionName(dto.licenceRegion)
+      issuerRegion: dto.region
+        ? this.getRegionName(dto.region)
         : 'Unknown',
       issuerCity: dto.licenceArea
         ? this.getCityName(dto.licenceArea)
@@ -266,10 +266,10 @@ export class DriverInfoComponent {
       licenseNumber: dto.licenceNo?.trim() || '',
       licenseCategory: dto.licenceGrade != null ? +dto.licenceGrade : undefined,
       nationality: dto.nationality ?
-      this.getNationality(dto.nationality) : 'Unknown',
+      this.getNationality(dto.nationality) : 'Unksnown',
       sex: dto.sex != null ? +dto.sex :undefined,
       birthDate: dto.birthDate || '',
-      photo: dto.photo || '' // ✅ Add this line
+      photo: dto.photo || '' 
 
     };
   }

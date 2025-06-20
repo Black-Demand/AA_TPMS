@@ -170,7 +170,7 @@ export class TrafficSearchComponent {
     const nameControls = ['firstName'];
     const licenseControls = ['region', 'level', 'licenseNumber'];
 
-    if (this.searchType === 'license') {
+    if (this.searchType === 'name') {
       licenseControls.forEach((control) => {
         this.searchForm.get(control)?.clearValidators();
         this.searchForm.get(control)?.reset();
@@ -349,9 +349,9 @@ export class TrafficSearchComponent {
     // }
   }
 
-  onNext(driver: Driver): void {
-    console.log('Proceeding with driver:', driver);
-  }
+  // onNext(driver: Driver): void {
+  //   console.log('Proceeding with driver:', driver);
+  // }
 
   formatDate(value: Date | string | null, format = 'yyyy-MM-dd'): string {
     if (!value) return '';

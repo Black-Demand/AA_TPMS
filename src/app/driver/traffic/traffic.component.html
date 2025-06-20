@@ -66,10 +66,10 @@
           <mat-label>{{'SEARCH.TPN' | translate}}</mat-label>
           <mat-select formControlName="actionTakenBy">
             <mat-option value="one">
-              One
+              አበበ 
             </mat-option>
             <mat-option value="two">
-              Two
+              ከበደ
             </mat-option>
           </mat-select>
           <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
@@ -142,8 +142,8 @@
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'SEARCH.PAYMENT_PLACEHOLDER' | translate}}</mat-label>
-          <input matInput formControlName="amount" required>
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+          <input matInput formControlName="amount" >
+          <!-- <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error> -->
         </mat-form-field>
 
       </div>
@@ -201,8 +201,8 @@
 
     <mat-card-actions align="end" class="form-actions">
       <button mat-button type="button" (click)="onReset()">
-        <mat-icon>refresh</mat-icon> Reset</button>
-      <button mat-raised-button color="primary" type="submit" [disabled]="trafficForm.invalid">Submit</button>
+        <mat-icon>refresh</mat-icon> {{'SEARCH.CANCEL_BUTTON' | translate }}</button>
+      <button mat-raised-button color="primary" type="submit" [disabled]="trafficForm.invalid">{{'SEARCH.SAVE_BUTTON' | translate }}</button>
     </mat-card-actions>
   </mat-card>
 </form>

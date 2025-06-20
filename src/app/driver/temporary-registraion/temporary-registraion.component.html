@@ -124,19 +124,29 @@
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'TEMP.NAME_PLACEHOLDER_EN' | translate }}</mat-label>
           <input matInput formControlName="firstName" required>
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+          <mat-error *ngIf="registrationForm.get('firstName')?.hasError('required')">{{'ERROR.REQUIRED' | translate }} </mat-error>
+            <mat-error *ngIf="registrationForm.get('firstName')?.hasError('englishonly')">
+            {{ 'ERROR.INVALID_ENGLISH_CHARACTERS' | translate }}
+          </mat-error>
         </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'TEMP.F_NAME_PLACEHOLDER_EN' | translate }}</mat-label>
           <input matInput formControlName="fatherName" required>
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
-        </mat-form-field>
+          <mat-error *ngIf="registrationForm.get('fatherName')?.hasError('required')">{{'ERROR.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('fatherName')?.hasError('englishonly')">
+            {{ 'ERROR.INVALID_ENGLISH_CHARACTERS' | translate }}
+          </mat-error> </mat-form-field>
 
         <mat-form-field appearance="outline" class="form-field">
           <mat-label>{{'TEMP.G_NAME_PLACEHOLDER_EN' | translate }}</mat-label>
           <input matInput formControlName="grandName" required>
-          <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+          <mat-error *ngIf="registrationForm.get('grandName')?.hasError('required')">{{'ERROR.REQUIRED' | translate }}
+          </mat-error>
+          <mat-error *ngIf="registrationForm.get('grandName')?.hasError('englishonly')">
+            {{ 'ERROR.INVALID_ENGLISH_CHARACTERS' | translate }}
+          </mat-error>
         </mat-form-field>
       </div>
 

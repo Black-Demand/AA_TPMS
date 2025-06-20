@@ -105,6 +105,7 @@
     "DOB_REQUIRED": "Date of birth is required",
     "DATE_REQUIRED": "Date is required",
     "INVALID_AMHARIC_CHARACTERS": "Use only amharic Characters",
+    "INVALID_ENGLISH_CHARACTERS": "Use only english Characters",
     "LOGIN_UN": "Username is required",
     "LOGIN_PAS": "Password is required",
     "Min_LE" : "License number must be exactly 6 characters",

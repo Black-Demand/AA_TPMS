@@ -28,7 +28,7 @@ import { ToastrService } from 'ngx-toastr';
 import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { amharicOnlyValidator } from '../../service/amharicOnlyValidator';
+import { amharicOnlyValidator, englishOnlyValidator } from '../../service/amharicOnlyValidator';
 import { dateNotTheFutures } from '../../service/date.validate';
 @Component({
   selector: 'app-temporary-registraion',
@@ -80,8 +80,6 @@ export class TemporaryRegistraionComponent implements OnInit {
   selectedWoredaCode!: number;
   selectedLicenceRegionCode: number = 0;
 
-  amharicCharError = false;
-
   constructor(
     private fb: FormBuilder,
     private tdrs: TempDriverService,
@@ -91,43 +89,50 @@ export class TemporaryRegistraionComponent implements OnInit {
     private translate: TranslateService,
     private cdr: ChangeDetectorRef
   ) {
-    this.registrationForm = this.fb.group({
-      licenceRegion: ['', Validators.required],
-      licenceArea: ['', Validators.required],
-      licenceGrade: ['', Validators.required],
-      licenceNo: [
-        '',
-        [Validators.required, Validators.minLength(6), Validators.maxLength(6)],
-      ],
-      issuanceDate: ['', [Validators.required, dateCannotBeTheFuture()]],
-      firstNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
-      fatherNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
-      grandNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
-      firstName: ['', Validators.required],
-      fatherName: ['', Validators.required],
-      grandName: ['', Validators.required],
-      nationality: ['', Validators.required],
-      sex: ['', Validators.required],
-      birthDate: [
-        '',
-        [Validators.required, minAgeValidator(18), dateCannotBeTheFuture()],
-      ],
-      tel1: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
-      region: ['', Validators.required],
-      zone: ['', Validators.required],
-      woreda: ['', Validators.required],
-      kebele: ['', Validators.required],
-      houseNo: [''],
-      remark: [''],
-      photo: ['', Validators.required],
-    });
+    this.registrationForm = this.fb.group(
+      {
+        licenceRegion: ['', Validators.required],
+        licenceArea: ['', Validators.required],
+        licenceGrade: ['', Validators.required],
+        licenceNo: [
+          '',
+          [
+            Validators.required,
+            Validators.minLength(6),
+            Validators.maxLength(6),
+          ],
+        ],
+        issuanceDate: ['', [Validators.required, dateCannotBeTheFuture()]],
+        firstNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
+        fatherNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
+        grandNameAmh: ['', [Validators.required, amharicOnlyValidator()]],
+        firstName: ['', [Validators.required, englishOnlyValidator()]],
+        fatherName: ['', [Validators.required, englishOnlyValidator()]],
+        grandName: ['', [Validators.required, englishOnlyValidator()]],
+        nationality: ['', Validators.required],
+        sex: ['', Validators.required],
+        birthDate: [
+          '',
+          [Validators.required, minAgeValidator(18), dateCannotBeTheFuture()],
+        ],
+        tel1: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
+        region: ['', Validators.required],
+        zone: ['', Validators.required],
+        woreda: ['', Validators.required],
+        kebele: ['', Validators.required],
+        houseNo: [''],
+        remark: [''],
+        photo: ['', Validators.required],
+      },
+      {
+        updateOn: 'change', 
+      }
+    );
   }
 
   onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
-
-    // Ensure we don't exceed max length
+    let value = input.value.replace(/\D/g, ''); 
     if (value.length > 9) {
       value = value.substring(0, 9);
     }
@@ -306,7 +311,7 @@ export class TemporaryRegistraionComponent implements OnInit {
 
       const reader = new FileReader();
       reader.onload = () => {
-        const base64 = (reader.result as string).split(',')[1]; 
+        const base64 = (reader.result as string).split(',')[1];
         this.base64Photo = base64;
         this.imagePreview = reader.result;
       };

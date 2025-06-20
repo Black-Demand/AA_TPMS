@@ -12,75 +12,70 @@
       <div class="profile-header">
         <div class="photo-container">
           <div class="photo-wrapper">
-           <img
-  *ngIf="imageSrc; else placeholder"
-  [src]="imageSrc"
-  alt="Driver Photo"
-  class="driver-photo"
-/>
+            <img *ngIf="imageSrc; else placeholder" [src]="imageSrc" alt="Driver Photo" class="driver-photo" />
 
-<ng-template #placeholder>
-  <div class="no-photo">No Photo Available</div>
-</ng-template>
+            <ng-template #placeholder>
+              <div class="no-photo">No Photo Available</div>
+            </ng-template>
 
             <div class="status-badge active"></div>
           </div>
         </div>
-  
+
         <div class="driver-info">
           <h2>{{ form.value.fullName }}</h2>
         </div>
       </div>
 
-    <!-- Details Section -->
-    <div class="details-section">
-      
-      <div class="form-grid">
-        <!-- Row 1 -->
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>{{'SEARCH.FULL_NAME' | translate }}</mat-label>
-          <input matInput [readonly]="true" formControlName="fullName">
-          <mat-icon matPrefix>badge</mat-icon>
-        </mat-form-field>
+      <!-- Details Section -->
+      <div class="details-section">
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>{{'SEARCH.NATIONALITY_PLACEHOLDER' | translate }}</mat-label>
-          <input matInput [readonly]="true" formControlName="nationality">
-          <mat-icon matPrefix>public</mat-icon>
-        </mat-form-field>
+        <div class="form-grid">
+          <!-- Row 1 -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{'SEARCH.FULL_NAME' | translate }}</mat-label>
+            <input matInput [readonly]="true" formControlName="fullName">
+            <mat-icon matPrefix>badge</mat-icon>
+          </mat-form-field>
 
-        <!-- Row 2 -->
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>{{'TEMP.SEX' | translate }}</mat-label>
-          <input matInput [readonly]="true" formControlName="gender">
-          <mat-icon matPrefix>transgender</mat-icon>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{'SEARCH.NATIONALITY_PLACEHOLDER' | translate }}</mat-label>
+            <input matInput [readonly]="true" formControlName="nationality">
+            <mat-icon matPrefix>public</mat-icon>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>{{'TEMP.DOB_PLACEHOLDER' | translate }}</mat-label>
-          <input matInput [readonly]="true" formControlName="birthDate">
-          <mat-icon matPrefix>cake</mat-icon>
-        </mat-form-field>
+          <!-- Row 2 -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{'TEMP.SEX' | translate }}</mat-label>
+            <input matInput [readonly]="true" formControlName="gender">
+            <mat-icon matPrefix>transgender</mat-icon>
+          </mat-form-field>
 
-        <!-- Row 3 -->
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>{{'SEARCH.REGION_PLACEHOLDER' | translate }}</mat-label>
-          <input matInput [readonly]="true" formControlName="address">
-          <mat-icon matPrefix>home</mat-icon>
-        </mat-form-field>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{'TEMP.DOB_PLACEHOLDER' | translate }}</mat-label>
+            <input matInput [readonly]="true" formControlName="birthDate">
+            <mat-icon matPrefix>cake</mat-icon>
+          </mat-form-field>
 
-        <mat-form-field appearance="outline" class="form-field">
-          <mat-label>{{'SEARCH.WOREDA_PLACEHOLDER' | translate }}</mat-label>
-          <input matInput [readonly]="true" formControlName="town">
-          <mat-icon matPrefix>home</mat-icon>
-        </mat-form-field>
+          <!-- Row 3 -->
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{'SEARCH.REGION_PLACEHOLDER' | translate }}</mat-label>
+            <input matInput [readonly]="true" formControlName="address">
+            <mat-icon matPrefix>home</mat-icon>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{'SEARCH.LICENCE_AREA_PLACEHOLDER' | translate }}</mat-label>
+            <input matInput [readonly]="true" formControlName="town">
+            <mat-icon matPrefix>home</mat-icon>
+          </mat-form-field>
+        </div>
       </div>
-    </div>
-  </form>
+    </form>
   </div>
 
   <div mat-dialog-actions class="dialog-actions">
-    <button mat-raised-button   mat-dialog-close class="close-btn" color="primary">
+    <button mat-raised-button mat-dialog-close class="close-btn" color="primary">
       <mat-icon>close</mat-icon> {{'SEARCH.CLOSE_BUT' | translate }}
     </button>
   </div>

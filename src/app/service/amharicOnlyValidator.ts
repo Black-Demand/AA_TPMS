@@ -11,3 +11,16 @@ export function amharicOnlyValidator(): ValidatorFn {
     return null;
   };
 }
+
+
+export function englishOnlyValidator(): ValidatorFn {
+const regex = /^[A-Za-z\s]*$/;
+
+  return (control: AbstractControl): ValidationErrors | null => {
+    const value = control.value;
+    if (value && !regex.test(value)) {
+      return { englishonly: true };
+    }
+    return null;
+  };
+}

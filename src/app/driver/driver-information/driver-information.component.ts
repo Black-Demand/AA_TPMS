@@ -70,7 +70,6 @@ export class DriverInformationComponent implements OnInit {
       });
     console.log('Photo:', driverData.photo);
 
-      // ✅ Load base64 photo
       if (driverData.photo) {
         this.imageSrc = `data:image/jpeg;base64,${driverData.photo.trim()}`;
       }
@@ -87,9 +86,9 @@ export class DriverInformationComponent implements OnInit {
   private getGender(code: number): string {
     switch (code) {
       case 0:
-        return 'Male';
+        return 'ወንድ';
       case 1:
-        return 'Female';
+        return 'ሴት';
       default:
         return '';
     }

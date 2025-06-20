@@ -165,7 +165,7 @@ export class SuspensionSearchComponent {
     const nameControls = ['firstName', ];
     const licenseControls = ['region', 'level', 'licenseNumber'];
 
-    if (this.searchType === 'license') {
+    if (this.searchType === 'name') {
       licenseControls.forEach((control) => {
         this.searchForm.get(control)?.clearValidators();
         this.searchForm.get(control)?.reset();

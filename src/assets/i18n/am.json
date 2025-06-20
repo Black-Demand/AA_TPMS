@@ -106,6 +106,7 @@
     "DOB_REQUIRED": "የልደት ቀን አስፈላጊ ነው",
     "DATE_REQUIRED": "ቀን አስፈላጊ ነው",
     "INVALID_AMHARIC_CHARACTERS": "የአማርኛ ፊደል ብቻ ይጠቀሙ",
+    "INVALID_ENGLISH_CHARACTERS": "የእንግሊዘኛ ፊደል ብቻ ይጠቀሙ",
     "LOGIN_UN": "ኢሜይል ወይም መግቢያ ስም ያስፈልጋል",
     "LOGIN_PAS": "የይለፍ ቃሉ ቢያንስ 6 ፊደላት መሆን አለበት",
     "Min_LE" : "መንጃ ፈቃድ ቁጥር 6 ፊደል መሆን አለበት",

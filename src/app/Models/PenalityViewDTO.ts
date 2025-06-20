@@ -1,8 +1,8 @@
 export interface PenalityViewDTO {
   penalityId: number;
   ticketNo: string;
-  violationDate: string; // or Date
-  dateAccused: string; // or Date
+  violationDate: string; 
+  dateAccused: string; 
   violationGrade: string;
   penalityPoints: number;
   totalAmount: number;

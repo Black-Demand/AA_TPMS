@@ -146,7 +146,7 @@ export class TrafficComponent  implements OnInit {
       newPlateNo: ['', [Validators.required, Validators.minLength(6), Validators.maxLength(6)]],
       violationPlace: ['', Validators.required],
       dateAccused: new FormControl<Date | null>(null, [Validators.required, dateCannotBeTheFuture()]),
-      amount: [{ value: '', disabled: true }, Validators.required],
+      amount: [{ value: '', disabled: true }],
       ticketNo: [{ value: '', disabled: true }, Validators.required],
       vehicleType: ['', Validators.required],
       violationTime: ['', Validators.required],
@@ -337,29 +337,32 @@ export class TrafficComponent  implements OnInit {
 
 
   onSubmit(): void {
-    
-  if (this.trafficForm.valid) {
-    const formValue = {
-      ...this.trafficForm.getRawValue(), 
-      fullName: this.selectedDriver.fullName,
-      licenseNumber: this.selectedDriver.licenseNumber,
-      ticket: this.trafficForm.get('ticketNo')?.value,
-    
-    };
+    if (this.trafficForm.valid) {
+      const formValue = {
+        ...this.trafficForm.getRawValue(),
+        fullName: this.selectedDriver.fullName,
+        licenseNumber: this.selectedDriver.licenseNumber,
+        ticket: this.trafficForm.get('ticketNo')?.value,
+      };
 
-    console.log('🚀 Form Submitted:', formValue); 
+      console.log('🚀 Form Submitted:', formValue);
 
-    this.penalityForTraffic.createPenalityForTraffic(formValue, formValue.licenseNumber).subscribe({
-      next: () => this.toastr.success("Penalty created successfully"),
-      error: err => {
-        console.error('❌ Backend error:', err);
-        this.toastr.error("Error creating penalty");
-      }
-    });
-  } else {
-    this.trafficForm.markAllAsTouched();
+      this.penalityForTraffic
+        .createPenalityForTraffic(formValue, formValue.licenseNumber)
+        .subscribe({
+          next: () =>
+            this.toastr.success(
+              this.translate.instant('TOASTER.SUCCESS.PENAL')
+            ),
+          error: (err) => {
+            console.error('❌ Backend error:', err);
+           this.toastr.error( this.translate.instant('TOASTER.ERROR.PENAL'));
+          },
+        });
+    } else {
+      this.trafficForm.markAllAsTouched();
+    }
   }
-}
 
 
   onReset(): void {

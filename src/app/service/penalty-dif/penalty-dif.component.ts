@@ -211,7 +211,7 @@ export class PenaltyDifComponent implements OnInit {
       return;
     }
 
-    const formValue = this.penaltyForm.getRawValue(); // Use getRawValue() to get disabled fields
+    const formValue = this.penaltyForm.getRawValue();
 
     const request: OrderWithPenalityRequest = {
       orderDetailDTO: {
@@ -234,7 +234,7 @@ export class PenaltyDifComponent implements OnInit {
       next: (response) => {
         this.toastr.success(this.translate.instant('TOASTER.SUCCESS.MISL'));
         console.log('Miscellaneous penality Created successfully:', response);
-        this.onReset();
+        // this.onReset();
       },
       error: (error) => {
         this.toastr.error(this.translate.instant('TOASTER.ERROR.MISL'));
@@ -244,8 +244,8 @@ export class PenaltyDifComponent implements OnInit {
   }
 
   onReset(): void {
-    // this.penaltyForm.reset();
-    // this.generateTicketNumber();
-    // this.violationtypes = [];
+    this.penaltyForm.reset();
+    this.generateTicketNumber();
+    this.violationtypes = [];
   }
 }
