@@ -1,109 +1,134 @@
 .traffic-toolbar {
-    position: sticky;
-    top: 0;
-    z-index: 1000;
-    background: linear-gradient(135deg, #008080 0%, #006666 100%);
-    color: white;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
-    padding: 0 16px;
-  }
-  
-  .app-title {
-    display: flex;
-    align-items: center;
-    margin-left: 16px;
-    font-size: 1.2rem;
-    font-weight: 500;
-    letter-spacing: 0.5px;
-  }
-  
-  .title-text {
-    margin-right: 8px;
-  }
-  
-  
-  .spacer {
-    flex: 1 2 auto;
-  }
-  
-  .header-controls {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(135deg, #008080, #006666);
+  color: white;
+  padding: 0 16px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.app-title {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  overflow: visible;
-  position: relative;
-  margin-left: 10px;
-  width: 15%;
+  font-size: 1.2rem;
+  font-weight: 500;
+  margin-left: 16px;
+  white-space: nowrap;
 }
-  .language-selector {
-    width: 100px;
+
+.title-text {
+  margin-right: 8px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.header-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+}
+
+.language-selector {
+  background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  min-width: 110px;
+  max-width: 140px;
+  font-size: 0.95rem;
+}
+
+.language-selector .mat-form-field-outline,
+.language-selector .mat-select-arrow {
+  color: white;
+  border-color: white;
+}
+
+.language-option {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+
+.flag-icon {
+  font-size: 1.2rem;
+}
+
+.mat-select-panel {
+  min-width: 150px !important;
+  max-width: 180px;
+}
+
+.profile-button,
+.menu-button {
+  transition: transform 0.2s ease-in-out;
+}
+
+.profile-button:hover,
+.menu-button:hover {
+  transform: scale(1.1);
+}
+
+.profile-menu {
+  min-width: 200px;
+}
+
+.menu-icon {
+  margin-right: 12px;
+  color: #008080;
+}
+.language-selector .mat-form-field-outline {
+  border: none;
+}
+
+.language-selector .mat-select-trigger {
+  color: white;
+  padding: 0;
+}
+
+.language-selector .mat-select-arrow {
+  color: white;
+}
+
+
+/* Responsive Styling */
+@media (max-width: 768px) {
+  .app-title {
+    font-size: 1rem;
   }
-  
-  .language-selector .mat-form-field-outline {
-   border: none;
-  }
-  
-  .language-selector .mat-select-value-text,
-  .language-selector .mat-select-arrow {
-    color: white;
-  }
-  
-  .language-option {
-    display: flex;
-    align-items: center;
+
+  .header-controls {
     gap: 8px;
   }
-  
-  .flag-icon {
-    font-size: 1.2rem;
+}
+
+@media (max-width: 576px) {
+  .app-title .title-text {
+    display: none;
   }
-  
-  .profile-button {
-    transition: transform 0.2s;
+
+  .header-controls {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 6px;
   }
-  
-  .profile-button:hover {
-    transform: scale(1.1);
+
+  .language-selector {
+    min-width: 70px;
   }
-  
-  .profile-menu {
-    min-width: 200px;
+
+  .traffic-toolbar {
+    padding: 0 8px;
   }
-  
-  .menu-icon {
-    margin-right: 12px;
-    color: #008080;
-  }
-  
-  .menu-button {
-    transition: transform 0.2s;
-  }
-  
-  .menu-button:hover {
-    transform: scale(1.1);
-  }
-  
-  @media (max-width: 768px) {
-    .app-title {
-      font-size: 1rem;
-    }
-    
-    
-    .language-selector {
-      width: 100px;
-    }
-  }
-  
-  @media (max-width: 576px) {
-    .app-title span:first-child {
-      display: none;
-    }
-    .traffic-toolbar{
-       width: 410px;
-    }
-    .language-selector {
-      width: 100px;
-    }
-  }
-  
+}
+
+
+
+
+

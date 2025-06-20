@@ -1,56 +1,63 @@
 <mat-toolbar class="traffic-toolbar">
   <mat-toolbar-row>
+
     <!-- Menu Button -->
-    <button mat-icon-button (click)="toggleSidenav()" class="menu-button">
+    <button mat-icon-button (click)="toggleSidenav()" class="menu-button" aria-label="Toggle sidebar">
       <mat-icon>menu</mat-icon>
     </button>
 
     <!-- App Title -->
     <span class="app-title">
-      <span class="title-text">{{'SEARCH.TITLE' | translate}}</span>
-
+      <span class="title-text">{{ 'SEARCH.TITLE' | translate }}</span>
     </span>
 
     <!-- Spacer -->
     <span class="spacer"></span>
 
-    <!-- Right Side Controls -->
-      <div class="header-controls">
-        <!-- Language Selector -->
-        <mat-select [(value)]="lang" (selectionChange)="onLanguageChange($event)" >
-          <mat-option value="am">
-            <span class="language-option">
-              <span class="flag-icon"></span> {{'SEARCH.Lang' | translate }}
-            </span>
-            
-          </mat-option>
-          <mat-option value="en">
-            <span class="language-option">
-              <span class="flag-icon"></span> English
-            </span>
-          </mat-option>
-        </mat-select>
+    <!-- Right Controls -->
+    <div class="header-controls">
 
-      <!-- User Profile Menu -->
-      <button mat-icon-button [matMenuTriggerFor]="profileMenu" class="profile-button">
+      <!-- Language Selector (borderless + custom width) -->
+      <mat-select
+        class="language-selector"
+        [(value)]="lang"
+        (selectionChange)="onLanguageChange($event)"
+        disableRipple
+      >
+        <mat-option value="am">
+          <span class="language-option">
+            <span class="flag-icon"></span> {{ 'SEARCH.Lang' | translate }}
+          </span>
+        </mat-option>
+        <mat-option value="en">
+          <span class="language-option">
+            <span class="flag-icon"></span> English
+          </span>
+        </mat-option>
+      </mat-select>
+
+      <!-- Profile Icon -->
+      <button mat-icon-button [matMenuTriggerFor]="profileMenu" class="profile-button" matTooltip="User Menu">
         <mat-icon>account_circle</mat-icon>
       </button>
 
+      <!-- Profile Dropdown -->
       <mat-menu #profileMenu="matMenu" class="profile-menu">
         <button mat-menu-item>
           <mat-icon class="menu-icon">person</mat-icon>
-          <span>{{'SEARCH.PROFILE' | translate}}</span>
+          <span>{{ 'SEARCH.PROFILE' | translate }}</span>
         </button>
         <button mat-menu-item>
           <mat-icon class="menu-icon">settings</mat-icon>
-          <span>{{'SEARCH.SETTING' | translate}}</span>
+          <span>{{ 'SEARCH.SETTING' | translate }}</span>
         </button>
         <mat-divider></mat-divider>
         <button mat-menu-item [routerLink]="['/login']">
           <mat-icon class="menu-icon">exit_to_app</mat-icon>
-          <span>{{'SEARCH.LOGOUT' | translate}}</span>
+          <span>{{ 'SEARCH.LOGOUT' | translate }}</span>
         </button>
       </mat-menu>
     </div>
+
   </mat-toolbar-row>
-</mat-toolbar>  
+</mat-toolbar>
