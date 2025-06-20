@@ -265,8 +265,8 @@ export class TrafficComponent  implements OnInit {
      if (field?.hasError('required')) {
       return this.translate.instant('ERROR.REQUIRED');
     }
-    if (field?.hasError('dateNotTheFuture')) {
-      return field.getError('dateNotTheFuture').message;
+    if (field?.hasError('dateCannotBeTheFuture')) {
+      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE')
     }
 
     return '';
@@ -278,15 +278,31 @@ export class TrafficComponent  implements OnInit {
     if (field?.hasError('required')) {
       return this.translate.instant('ERROR.REQUIRED');
     }
-    if (field?.hasError('dateNotTheFuture')) {
-      return field.getError('dateNotTheFuture').message;
+    if (field?.hasError('dateCannotBeTheFuture')) {
+      return this.translate.instant('ERROR.DATE_NOT_IN_FUTURE')
     }
 
     if (this.trafficForm.hasError('dateRangeInvalid')) {
-      return 'Yetkessbte Ken must be greater than or equal to Yetfesmbte Ken';
+      return this.translate.instant('ERROR.DATE_RANGE_INVALID')
     }
     return '';
   }
+
+
+   getErrorForPlateNumber(): string {
+    const field = this.trafficForm.get('newPlateNo');
+
+    if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.REQUIRED');
+    }
+    if (field?.hasError('minlength')) {
+      return this.translate.instant('ERROR.Min_LE')
+    }
+
+   
+    return '';
+  }
+
 
 
   generateTicketNumber() {

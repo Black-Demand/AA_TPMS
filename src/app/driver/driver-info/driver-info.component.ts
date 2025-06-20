@@ -41,6 +41,7 @@ interface Driver {
   nationality?:  string;
   sex?: number;
   birthDate?: string;
+  photo: string;
 }
 @Component({
   selector: 'app-driver-info',
@@ -267,7 +268,9 @@ export class DriverInfoComponent {
       nationality: dto.nationality ?
       this.getNationality(dto.nationality) : 'Unknown',
       sex: dto.sex != null ? +dto.sex :undefined,
-      birthDate: dto.birthDate || ''
+      birthDate: dto.birthDate || '',
+      photo: dto.photo || '' // ✅ Add this line
+
     };
   }
 
@@ -325,6 +328,8 @@ export class DriverInfoComponent {
       birthDate: driver.birthDate,
       address: driver.issuerRegion,
       town: driver.issuerCity,
+      photo: driver.photo 
+
     });
     this.dialog.open(DriverInformationComponent,{
       enterAnimationDuration:enteranimation,

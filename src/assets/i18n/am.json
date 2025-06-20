@@ -62,12 +62,13 @@
     "PAY_BUTTON": "ተከፍሏል",
     "BACK_BUTTON": "ወድ ኋላ ተመልስ",
     "TIE": "የትራፊክ መረጃ ማስገቢያ",
-    "OFFENCE_POINT": "የጥፋት ነጥብ",
-    "OFFENCE_PAYMENT_AMOUNT": "የጥፋት ክፍያ መጠን",
-    "DELAY_PAIED_AMOUNT": "የተከፈለበት መጠን መዘግየት",
-    "DELAY_PAIED_POINT": "የተከፈለበት ነጥብ መዘግየት",
-    "STORED_POINT": "የተከማቸ ነጥብ",
+    "OFFENCE_POINT": "የእርከኑ ነጥብ",
+    "OFFENCE_PAYMENT_AMOUNT": "የእርከኑ ክፍያ መጠን",
+    "DELAY_PAIED_AMOUNT": "ዘግይቶ የመክፈል(ክፍያ)",
+    "DELAY_PAIED_POINT": "ዘግይቶ የመክፈል ነጥብ",
+    "STORED_POINT": "ውዝፍ ነጥብ",
     "TOTAL_POINT": "ጠቅላላ ነጥብ",
+    "TOTAL_AMOUNT" : "ጠቅላላ ቅጣት(ክፍያ)",
     "DRI_INFO": "የአሽከርካሪ መረጃ",
     "CLOSE_BUT": "ዝጋ",
     "Lang" : "አማርኛ"
@@ -106,7 +107,10 @@
     "DATE_REQUIRED": "ቀን አስፈላጊ ነው",
     "INVALID_AMHARIC_CHARACTERS": "የአማርኛ ፊደል ብቻ ይጠቀሙ",
     "LOGIN_UN": "ኢሜይል ወይም መግቢያ ስም ያስፈልጋል",
-    "LOGIN_PAS": "የይለፍ ቃሉ ቢያንስ 6 ፊደላት መሆን አለበት"
+    "LOGIN_PAS": "የይለፍ ቃሉ ቢያንስ 6 ፊደላት መሆን አለበት",
+    "Min_LE" : "መንጃ ፈቃድ ቁጥር 6 ፊደል መሆን አለበት",
+    "PHONE_PATTERN": "እባክዎ በትክክል 9 ቁጥሮች ያስገቡ (ከ +251 በኋላ)"
+
   },
   "COMMON": {
     "DASHBOARD": "ዳሽቦርድ",

@@ -1,7 +1,7 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { dateCannotBeTheFuture, minAgeValidator } from '../age.validate';
- 
+
 // Material Modules
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,7 +11,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
-import { MatRadioModule } from "@angular/material/radio";
+import { MatRadioModule } from '@angular/material/radio';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatStepperModule } from '@angular/material/stepper';
@@ -29,6 +29,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { Router } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { amharicOnlyValidator } from '../../service/amharicOnlyValidator';
+import { dateNotTheFutures } from '../../service/date.validate';
 @Component({
   selector: 'app-temporary-registraion',
   standalone: true,
@@ -72,6 +73,7 @@ export class TemporaryRegistraionComponent implements OnInit {
   licenceAreas: Lookup.LicenceAreaDTO[] = [];
   licenceCatagories: Lookup.LicenceCategoryDTO[] = [];
   nationalities: Lookup.LookupDTO[] = [];
+  base64Photo: string | null = null;
 
   selectedRegionCode!: number;
   selectedZoneCode!: number;
@@ -106,7 +108,10 @@ export class TemporaryRegistraionComponent implements OnInit {
       grandName: ['', Validators.required],
       nationality: ['', Validators.required],
       sex: ['', Validators.required],
-      birthDate: ['', [Validators.required, minAgeValidator(18)]],
+      birthDate: [
+        '',
+        [Validators.required, minAgeValidator(18), dateCannotBeTheFuture()],
+      ],
       tel1: ['', [Validators.required, Validators.pattern(/^[0-9]{9}$/)]],
       region: ['', Validators.required],
       zone: ['', Validators.required],
@@ -114,7 +119,7 @@ export class TemporaryRegistraionComponent implements OnInit {
       kebele: ['', Validators.required],
       houseNo: [''],
       remark: [''],
-      photo: [null, Validators.required],
+      photo: ['', Validators.required],
     });
   }
 
@@ -138,6 +143,20 @@ export class TemporaryRegistraionComponent implements OnInit {
 
   get licenseNumberControl() {
     return this.registrationForm.get('licenseNumber');
+  }
+
+  getErrorForPhonrNo(): string {
+    const field = this.registrationForm.get('tel1');
+
+    if (field?.hasError('required')) {
+      return this.translate.instant('ERROR.REQUIRED');
+    }
+
+    if (field?.hasError('pattern')) {
+      return this.translate.instant('ERROR.PHONE_PATTERN');
+    }
+
+    return '';
   }
 
   getErrorForLicenseNumber(): string {
@@ -173,6 +192,12 @@ export class TemporaryRegistraionComponent implements OnInit {
     if (minAgeError) {
       return this.translate.instant(minAgeError.messageKey, minAgeError.params);
     }
+
+    const futureDateError = field?.getError('dateCannotBeTheFuture');
+    if (futureDateError) {
+      return this.translate.instant(futureDateError.messageKey);
+    }
+
     return '';
   }
   ngOnInit(): void {
@@ -265,26 +290,24 @@ export class TemporaryRegistraionComponent implements OnInit {
     if (input.files && input.files.length > 0) {
       const file = input.files[0];
 
-      // Validate file type
       if (!['image/jpeg', 'image/png'].includes(file.type)) {
         this.registrationForm.get('photo')?.setErrors({ fileType: true });
         return;
       }
 
-      // Validate file size (5MB)
       if (file.size > 5 * 1024 * 1024) {
         this.registrationForm.get('photo')?.setErrors({ fileSize: true });
         return;
       }
 
-      // Update form control
       this.selectedPhotoFile = file;
       this.registrationForm.patchValue({ photo: file });
       this.registrationForm.get('photo')?.updateValueAndValidity();
 
-      // Create preview
       const reader = new FileReader();
       reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1]; 
+        this.base64Photo = base64;
         this.imagePreview = reader.result;
       };
       reader.readAsDataURL(file);
@@ -297,11 +320,12 @@ export class TemporaryRegistraionComponent implements OnInit {
     if (this.registrationForm.valid) {
       const driver: DriverDTO = this.registrationForm.value;
 
+      driver.photo = this.base64Photo;
+
       this.tdrs.createDriver(driver).subscribe({
         next: (response) => {
-          // alert('Driver created successfully');
           this.toastr.success(this.translate.instant('TOASTER.SUCCESS.TEMP'));
-          //this.router.navigate(['/penality']);
+          // this.router.navigate(['/penality']);
         },
         error: (err) => {
           console.error('Error creating driver:', err);
